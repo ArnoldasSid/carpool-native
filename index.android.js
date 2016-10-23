@@ -11,6 +11,7 @@ import {
   Text,
   View
 } from 'react-native';
+import Map from './app/Map'
 
 export default class CarpoolNative extends Component {
   render() {
@@ -26,6 +27,7 @@ export default class CarpoolNative extends Component {
           Double tap R on your keyboard to reload,{'\n'}
           Shake or press menu button for dev menu
         </Text>
+        <Map />
       </View>
     );
   }

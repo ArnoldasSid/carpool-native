@@ -12,9 +12,11 @@ import {
   View
 } from 'react-native';
 import Map from './app/Map'
+import PushController from './app/PushController';
 
 export default class CarpoolNative extends Component {
   render() {
+    console.log('Hello');
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>
@@ -28,6 +30,7 @@ export default class CarpoolNative extends Component {
           Shake or press menu button for dev menu
         </Text>
         <Map />
+        <PushController />
       </View>
     );
   }
@@ -36,7 +39,7 @@ export default class CarpoolNative extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
   },

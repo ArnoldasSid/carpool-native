@@ -10,6 +10,7 @@
     "react": "15.3.2",
     "react-native": "0.35.0",
     "react-native-maps": "^0.10.2",
+    "react-native-mauron85-background-geolocation": "^0.2.0-alpha.5",
     "react-native-push-notification": "^2.1.1"
   },
   "jest": {

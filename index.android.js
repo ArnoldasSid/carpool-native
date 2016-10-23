@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import Map from './app/Map'
 import PushController from './app/PushController';
+import BackgroundGeolocationController from './app/BackgroundGeolocationController';
 
 export default class CarpoolNative extends Component {
   render() {
@@ -31,6 +32,7 @@ export default class CarpoolNative extends Component {
         </Text>
         <Map />
         <PushController />
+        <BackgroundGeolocationController />
       </View>
     );
   }

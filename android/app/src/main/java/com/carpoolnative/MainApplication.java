@@ -4,6 +4,7 @@ import android.app.Application;
 import android.util.Log;
 
 import com.facebook.react.ReactApplication;
+import com.geektime.reactnativeonesignal.ReactNativeOneSignalPackage;
 import com.marianhello.react.BackgroundGeolocationPackage;
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import com.airbnb.android.react.maps.MapsPackage;
@@ -27,6 +28,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new ReactNativeOneSignalPackage(),
             new BackgroundGeolocationPackage(),
             new ReactNativePushNotificationPackage(),
             new MapsPackage()

@@ -19,14 +19,14 @@ export default class PushController extends React.Component {
     });
     AppState.addEventListener('change', this.handleAppStateChange);
 
-    setTimeout(() => {
-      console.log(PushNotification);
-      console.log(new Date(Date.now() + (3 * 1000) - (7 * 1000 * 60 * 60)));
-      const dateToSchedule =
-        PushNotification.localNotification({
-          message: "Local message", // (required)
-        })
-    })
+    // setTimeout(() => {
+    //   console.log(PushNotification);
+    //   console.log(new Date(Date.now() + (3 * 1000) - (7 * 1000 * 60 * 60)));
+    //   const dateToSchedule =
+    //     PushNotification.localNotification({
+    //       message: "Local message", // (required)
+    //     })
+    // })
   }
 
   handleAppStateChange (state) {

@@ -45,7 +45,7 @@ export default class BackgroundGeolocationController extends React.Component {
       desiredAccuracy: 10,
       stationaryRadius: 50,
       distanceFilter: 50,
-      debug: true,
+      debug: false, // Enable/disable sounds
       locationProvider: BackgroundGeolocation.provider.ANDROID_DISTANCE_FILTER_PROVIDER,
       interval: 5000,
       fastestInterval: 5000,

@@ -11,29 +11,19 @@ import {
   Text,
   View
 } from 'react-native';
-import Map from './app/Map'
-import PushController from './app/PushController';
-import BackgroundGeolocationController from './app/BackgroundGeolocationController';
+import { Provider } from 'react-redux';
+import createStore from './app/redux/createStore';
+
+const store = createStore();
+
+import DumbRouter from './app/DumbRouter';
 
 export default class CarpoolNative extends Component {
   render() {
-    console.log('Hello');
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.android.js
-        </Text>
-        <Text style={styles.instructions}>
-          Double tap R on your keyboard to reload,{'\n'}
-          Shake or press menu button for dev menu
-        </Text>
-        <Map />
-        <PushController />
-        <BackgroundGeolocationController />
-      </View>
+      <Provider store={store}>
+        <DumbRouter />
+      </Provider>
     );
   }
 }

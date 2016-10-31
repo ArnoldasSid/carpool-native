@@ -9,7 +9,7 @@ import Button from 'react-native-button';
 import authInfoSelector from '../redux/selectors/authInfo';
 import Map from '../components/Map';
 
-import { saveLocation, subscribeToUsersLocation } from '../redux/api';
+import { saveLocation, subscribeToUsersLocation, requestRide } from '../redux/api';
 
 class Home extends React.Component {
 
@@ -21,6 +21,7 @@ class Home extends React.Component {
     super(props);
 
     this.sendLocation = this.sendLocation.bind(this);
+    this.requestRide = this.requestRide.bind(this);
 
     this.state = {
       latitude: 37.78825,
@@ -52,6 +53,10 @@ class Home extends React.Component {
     );
   }
 
+  requestRide () {
+    requestRide(this.props.authInfo.userId);
+  }
+
   render () {
     return (
       <View>
@@ -63,6 +68,11 @@ class Home extends React.Component {
         />
         <Button style={{ marginTop: 370 }} onPress={this.sendLocation}>
           Send Location
+        </Button>
+        <Button
+          onPress={this.requestRide}
+        >
+          Request Ride
         </Button>
       </View>
     )

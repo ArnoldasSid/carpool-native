@@ -66,6 +66,10 @@ export const registerDevice = (deviceId) => {
   return call('api.v1.registerDevice', deviceId);
 };
 
+export const requestRide = (userId) => {
+  return call('api.v1.requestRide', userId);
+};
+
 export const saveLocation = (location) => {
   return call('api.v1.saveLocation', location);
 };

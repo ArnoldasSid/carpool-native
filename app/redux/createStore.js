@@ -33,6 +33,12 @@ export default function createAppStore () {
         type: ONESIGNAL_ID_AVAILABLE,
         payload: device,
       });
+    },
+    onNotification: (...args) => {
+      console.log('Notification', args)
+    },
+    onNotificationOpened: (...args) => {
+      console.log('Notification opened', args);
     }
   });
 

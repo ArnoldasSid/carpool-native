@@ -62,13 +62,16 @@ export const register = (email, password) => {
   return call('createUser', { email, password });
 };
 
+export const registerDevice = (deviceId) => {
+  return call('api.v1.registerDevice', deviceId);
+};
+
 export const saveLocation = (location) => {
-  console.log('Saving location', location);
-  return call('api.saveLocation', location);
+  return call('api.v1.saveLocation', location);
 };
 
 export const subscribeToUsersLocation = (userId, numLocations) => {
-  subscribe('locations', userId, numLocations);
+  return subscribe('locations', userId, numLocations);
 };
 
 ddp.on('connected', () => {

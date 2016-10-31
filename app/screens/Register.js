@@ -5,9 +5,17 @@ import {
   TextInput,
 } from 'react-native';
 import Button from 'react-native-button';
-import { register } from '../redux/modules/auth/actions';
+import { connect } from 'react-redux';
 
-export default class Register extends React.Component {
+import { register } from '../redux/modules/auth/actions';
+import authInfoSelector from '../redux/selectors/authInfo';
+
+class Register extends React.Component {
+
+  static propTypes = {
+    authInfo: React.PropTypes.object.isRequired,
+    dispatch: React.PropTypes.func.isRequired,
+  };
 
   static contextTypes = {
     goTo: React.PropTypes.func.isRequired,
@@ -19,6 +27,7 @@ export default class Register extends React.Component {
     super(props);
 
     this.register = this.register.bind(this);
+    this.checkIfLoggedIn = this.checkIfLoggedIn.bind(this);
 
     this.state = {
       email: '',
@@ -28,12 +37,23 @@ export default class Register extends React.Component {
     }
   }
 
+  componentWillReceiveProps (nextProps) {
+    this.checkIfLoggedIn(nextProps.authInfo);
+  }
+
+  checkIfLoggedIn (authInfo) {
+    if (authInfo.loggedIn) {
+      console.log('Logged in');
+      this.context.goTo('home');
+    }
+  }
+
   register () {
     if (this.state.password !== this.state.password2) {
       return alert('Passwords don\'t match');
     }
 
-    register(this.state.email, this.state.password);
+    this.props.dispatch(register(this.state.email, this.state.password));
   }
 
   render () {
@@ -76,3 +96,7 @@ export default class Register extends React.Component {
     )
   }
 }
+
+export default connect(state => ({
+  authInfo: authInfoSelector(state),
+}))(Register);

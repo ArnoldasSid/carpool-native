@@ -1,6 +1,6 @@
 import { ofType } from 'redux-observable-adapter-most';
 import { just, merge } from 'most';
-import { login, register } from '../../api';
+import { login, register, registerDevice } from '../../api';
 
 import {
   LOGIN_REQUESTED,
@@ -9,11 +9,15 @@ import {
   REGISTRATION_REQUESTED,
   REGISTRATION_SUCCEEDED,
   REGISTRATION_FAILED,
+  ONESIGNAL_ID_REGISTERED,
+  ONESIGNAL_ID_REGISTRATION_FAILED,
 } from './constants';
 
-export default function authEpic (action$) {
+export default function authEpic (action$, store) {
   const loginRequest$ = ofType(LOGIN_REQUESTED, action$);
   const registrationRequest$ = ofType(REGISTRATION_REQUESTED, action$);
+  const loginSuccess$ = ofType(LOGIN_SUCCEEDED, action$);
+  const registrationSuccess$ = ofType(REGISTRATION_SUCCEEDED, action$);
 
   const loginEffect$ = loginRequest$
     .chain((action) =>
@@ -41,5 +45,18 @@ export default function authEpic (action$) {
         }))
     );
 
-  return merge(loginEffect$, registrationEffect$);
+  const oneSignalEffect$ = merge(loginSuccess$, registrationSuccess$)
+    .chain((action =>
+      registerDevice(store.getState().auth.oneSignalUserId)
+        .map(res => ({
+          type: ONESIGNAL_ID_REGISTERED,
+          payload: res,
+        }))
+        .recoverWith(err => just({
+          type: ONESIGNAL_ID_REGISTRATION_FAILED,
+          payload: err,
+        }))
+    ));
+
+  return merge(loginEffect$, registrationEffect$, oneSignalEffect$);
 }

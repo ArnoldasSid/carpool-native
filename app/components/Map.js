@@ -6,8 +6,6 @@ import MapView from 'react-native-maps';
 const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
-    height: 400,
-    width: 400,
     justifyContent: 'flex-end',
     alignItems: 'center',
   },
@@ -17,15 +15,22 @@ const styles = StyleSheet.create({
 });
 
 export default class Map extends React.Component {
+
+  static propTypes = {
+    width: React.PropTypes.number.isRequired,
+    height: React.PropTypes.number.isRequired,
+    latitude: React.PropTypes.number.isRequired,
+    longitude: React.PropTypes.number.isRequired,
+  };
+
   render () {
-    console.log('Rendering map');
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, { width: this.props.width, height: this.props.height }]}>
         <MapView
           style={styles.map}
           region={{
-            latitude: 37.78825,
-            longitude: -122.4324,
+            latitude: this.props.latitude,
+            longitude: this.props.longitude,
             latitudeDelta: 0.015,
             longitudeDelta: 0.0121,
           }}

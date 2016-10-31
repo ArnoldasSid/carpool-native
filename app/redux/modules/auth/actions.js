@@ -14,6 +14,7 @@ export const login = (email, password) => {
 };
 
 export const register = (email, password) => {
+  console.log('ACTION');
   return {
     type: REGISTRATION_REQUESTED,
     payload: {

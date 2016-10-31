@@ -45,7 +45,6 @@ class Login extends React.Component {
 
   login () {
     this.props.dispatch(login(this.state.email, this.state.password));
-
   }
 
   render () {

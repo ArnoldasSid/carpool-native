@@ -1,6 +1,7 @@
 import { ofType } from 'redux-observable-adapter-most';
-import { just, merge } from 'most';
-import { login, register, registerDevice } from '../../api';
+import { AsyncStorage } from 'react-native';
+import { just, merge, fromPromise, never } from 'most';
+import { login, logout, register, registerDevice } from '../../api';
 
 import {
   LOGIN_REQUESTED,
@@ -11,6 +12,9 @@ import {
   REGISTRATION_FAILED,
   ONESIGNAL_ID_REGISTERED,
   ONESIGNAL_ID_REGISTRATION_FAILED,
+  AUTH_INFO_LOADED,
+  LOGOUT_REQUESTED,
+  LOGOUT_SUCCEEDED,
 } from './constants';
 
 export default function authEpic (action$, store) {
@@ -18,6 +22,8 @@ export default function authEpic (action$, store) {
   const registrationRequest$ = ofType(REGISTRATION_REQUESTED, action$);
   const loginSuccess$ = ofType(LOGIN_SUCCEEDED, action$);
   const registrationSuccess$ = ofType(REGISTRATION_SUCCEEDED, action$);
+  const appInit$ = ofType('APP_INIT', action$);
+  const logoutRequest$ = ofType(LOGOUT_REQUESTED, action$);
 
   const loginEffect$ = loginRequest$
     .chain((action) =>
@@ -46,7 +52,7 @@ export default function authEpic (action$, store) {
     );
 
   const oneSignalEffect$ = merge(loginSuccess$, registrationSuccess$)
-    .chain((action =>
+    .chain(action =>
       registerDevice(store.getState().auth.oneSignalUserId)
         .map(res => ({
           type: ONESIGNAL_ID_REGISTERED,
@@ -56,7 +62,38 @@ export default function authEpic (action$, store) {
           type: ONESIGNAL_ID_REGISTRATION_FAILED,
           payload: err,
         }))
-    ));
+    );
 
-  return merge(loginEffect$, registrationEffect$, oneSignalEffect$);
+  const saveAuthToken$ = merge(loginSuccess$, registrationSuccess$)
+    .chain(action => {
+      AsyncStorage.setItem('authInfo', JSON.stringify(action.payload));
+      return never();
+    });
+
+  const loadAuthToken$ = appInit$
+    .chain(() =>
+      fromPromise(AsyncStorage.getItem('authInfo'))
+        .map(res => {
+          if (res == null) {
+            return { type: '' };
+          }
+          return {
+            type: AUTH_INFO_LOADED,
+            payload: JSON.parse(res),
+          };
+        })
+    );
+
+  const logout$ = logoutRequest$
+    .chain(() =>
+      logout()
+        .map(res => {
+          AsyncStorage.removeItem('authInfo');
+          return {
+            type: LOGOUT_SUCCEEDED,
+          }
+        })
+    );
+
+  return merge(loginEffect$, registrationEffect$, oneSignalEffect$, saveAuthToken$, loadAuthToken$, logout$);
 }

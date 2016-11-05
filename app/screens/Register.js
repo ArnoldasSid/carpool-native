@@ -6,6 +6,7 @@ import {
 } from 'react-native';
 import Button from 'react-native-button';
 import { connect } from 'react-redux';
+import { replaceRoute } from '../redux/modules/router/actions';
 
 import { register } from '../redux/modules/auth/actions';
 import authInfoSelector from '../redux/selectors/authInfo';
@@ -17,17 +18,11 @@ class Register extends React.Component {
     dispatch: React.PropTypes.func.isRequired,
   };
 
-  static contextTypes = {
-    goTo: React.PropTypes.func.isRequired,
-    setAuthToken: React.PropTypes.func.isRequired,
-    setUserId: React.PropTypes.func.isRequired,
-  };
-
   constructor (props) {
     super(props);
 
     this.register = this.register.bind(this);
-    this.checkIfLoggedIn = this.checkIfLoggedIn.bind(this);
+    this.switchToLogin = this.switchToLogin.bind(this);
 
     this.state = {
       email: '',
@@ -35,17 +30,11 @@ class Register extends React.Component {
       password: '',
       password2: '',
     }
+
   }
 
-  componentWillReceiveProps (nextProps) {
-    this.checkIfLoggedIn(nextProps.authInfo);
-  }
-
-  checkIfLoggedIn (authInfo) {
-    if (authInfo.loggedIn) {
-      console.log('Logged in');
-      this.context.goTo('home');
-    }
+  switchToLogin () {
+    this.props.dispatch(replaceRoute('login'));
   }
 
   register () {
@@ -88,7 +77,7 @@ class Register extends React.Component {
           Register
         </Button>
         <Button
-          onPress={() => this.context.goTo('login')}
+          onPress={this.switchToLogin}
         >
           Go to Login
         </Button>

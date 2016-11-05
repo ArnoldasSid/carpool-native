@@ -8,6 +8,7 @@ import Button from 'react-native-button';
 import { login } from '../redux/modules/auth/actions';
 import { connect } from 'react-redux';
 import authInfoSelector from '../redux/selectors/authInfo';
+import { replaceRoute } from '../redux/modules/router/actions';
 
 class Login extends React.Component {
 
@@ -16,15 +17,11 @@ class Login extends React.Component {
     authInfo: React.PropTypes.object.isRequired,
   };
 
-  static contextTypes = {
-    goTo: React.PropTypes.func.isRequired,
-  };
-
   constructor (props) {
     super(props);
 
     this.login = this.login.bind(this);
-    this.checkIfLoggedIn = this.checkIfLoggedIn.bind(this);
+    this.switchToRegister = this.switchToRegister.bind(this);
 
     this.state = {
       email: '',
@@ -32,19 +29,12 @@ class Login extends React.Component {
     }
   }
 
-  componentWillReceiveProps (nextProps) {
-    this.checkIfLoggedIn(nextProps.authInfo);
-  }
-
-  checkIfLoggedIn (authInfo) {
-    if (authInfo.loggedIn) {
-      console.log('Logged in');
-      this.context.goTo('home');
-    }
-  }
-
   login () {
     this.props.dispatch(login(this.state.email, this.state.password));
+  }
+
+  switchToRegister () {
+    this.props.dispatch(replaceRoute('register'));
   }
 
   render () {
@@ -68,7 +58,7 @@ class Login extends React.Component {
           Login
         </Button>
         <Button
-          onPress={() => this.context.goTo('register')}
+          onPress={this.switchToRegister}
         >
           Go to Register
         </Button>

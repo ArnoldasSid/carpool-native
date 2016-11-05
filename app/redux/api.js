@@ -62,6 +62,10 @@ export const register = (email, password) => {
   return call('createUser', { email, password });
 };
 
+export const logout = () => {
+  return call('logout');
+};
+
 export const registerDevice = (deviceId) => {
   return call('api.v1.registerDevice', deviceId);
 };

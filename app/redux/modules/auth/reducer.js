@@ -8,6 +8,8 @@ import {
   ONESIGNAL_ID_AVAILABLE,
   ONESIGNAL_ID_REGISTERED,
   ONESIGNAL_ID_REGISTRATION_FAILED,
+  AUTH_INFO_LOADED,
+  LOGOUT_SUCCEEDED,
 } from './constants';
 
 const initialState = {
@@ -80,6 +82,20 @@ export default function authReducer (state = initialState, action) {
   } else if (action.type === ONESIGNAL_ID_REGISTRATION_FAILED) {
     alert('Could not register device');
     return state;
+  } else if (action.type === AUTH_INFO_LOADED) {
+    return {
+      ...state,
+      authToken: action.payload.token,
+      userId: action.payload.id,
+      loggedIn: true,
+    }
+  } else if (action.type === LOGOUT_SUCCEEDED) {
+    return {
+      ...state,
+      authToken: null,
+      userId: null,
+      loggedIn: false,
+    }
   }
   return state;
 }

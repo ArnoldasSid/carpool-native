@@ -14,33 +14,6 @@ export default class BackgroundGeolocationController extends React.Component {
   }
 
   componentWillMount() {
-    function logError (msg) {
-      console.log(`[ERROR] getLocations: ${msg}`);
-    }
-
-    function handleHistoricLocations (locations) {
-      let region = {};
-      const now = Date.now();
-      const latitudeDelta = 0.01;
-      const longitudeDelta = 0.01;
-      const sameDayDiffInMillis = 24 * 3600 * 1000;
-      const currentLocations = this.state.locations.slice(0);
-      let locationsCount = currentLocations.length;
-
-      locations.forEach((location, idx) => {
-        if ((now - location.time) <= sameDayDiffInMillis) {
-          region = Object.assign({}, location, { latitudeDelta, longitudeDelta });
-          const histLocation = Object.assign({}, location, { key: locationsCount++ });
-          console.log('[DEBUG] historic location', histLocation.key);
-          currentLocations.push(histLocation);
-        }
-      });
-      if (currentLocations.length > 0) {
-        this.setState({ locations: currentLocations, region });
-      }
-    }
-
-    BackgroundGeolocation.getLocations(handleHistoricLocations.bind(this), logError);
     BackgroundGeolocation.configure({
       desiredAccuracy: 10,
       stationaryRadius: 50,
@@ -51,12 +24,8 @@ export default class BackgroundGeolocationController extends React.Component {
       fastestInterval: 5000,
       stopOnStillActivity: false,
       stopOnTerminate: false,
-      url: 'http://192.168.81.15:3000/locations',
       syncThreshold: 50,
       maxLocations: 100,
-      httpHeaders: {
-        'X-FOO': 'bar'
-      }
     });
 
     BackgroundGeolocation.on('location', (location) => {
@@ -70,12 +39,6 @@ export default class BackgroundGeolocationController extends React.Component {
       locations.push(keyedLocation);
       this.setState({ locations, region });
     });
-
-    BackgroundGeolocation.getConfig(
-      function(config) {console.log('[DEBUG] getConfig', config);}
-    );
-
-    this.startTracking();
   }
 
 

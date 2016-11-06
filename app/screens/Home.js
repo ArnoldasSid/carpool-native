@@ -29,7 +29,15 @@ export default class Home extends React.Component {
 
   render () {
     return (
-      <ScrollableTabView initialPage={1} page={this.state.page} onChangeTab={this.tabChanged}>
+      <ScrollableTabView
+        initialPage={1}
+        page={this.state.page}
+        onChangeTab={this.tabChanged}
+        tabBarTextStyle={{
+          fontFamily: 'roboto',
+          lineHeight: 30,
+        }}
+      >
         <MapScreen tabLabel="Map" />
         <NotificationsScreen tabLabel="Notifications" />
         <SettingsScreen tabLabel="Settings" />

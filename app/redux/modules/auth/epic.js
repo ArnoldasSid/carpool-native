@@ -1,7 +1,7 @@
 import { ofType } from 'redux-observable-adapter-most';
 import { AsyncStorage } from 'react-native';
 import { just, merge, fromPromise, never } from 'most';
-import { login, logout, register, registerDevice } from '../../api';
+import { login, logout, register, registerDevice, unsubAll } from '../../api';
 
 import {
   LOGIN_REQUESTED,
@@ -30,7 +30,11 @@ export default function authEpic (action$, store) {
       login(action.payload.email, action.payload.password)
         .map(res => ({
           type: LOGIN_SUCCEEDED,
-          payload: res,
+          payload: {
+            ...res,
+            email: action.payload.email,
+            password: action.payload.password,
+          },
         }))
         .recoverWith(err => just({
           type: LOGIN_FAILED,
@@ -43,7 +47,11 @@ export default function authEpic (action$, store) {
       register(action.payload.email, action.payload.password)
         .map(res => ({
           type: REGISTRATION_SUCCEEDED,
-          payload: res,
+          payload: {
+            ...res,
+            email: action.payload.email,
+            password: action.payload.password,
+          },
         }))
         .recoverWith(err => just({
           type: REGISTRATION_FAILED,
@@ -77,9 +85,13 @@ export default function authEpic (action$, store) {
           if (res == null) {
             return { type: '' };
           }
+          const parsedRes = JSON.parse(res);
           return {
-            type: AUTH_INFO_LOADED,
-            payload: JSON.parse(res),
+            type: LOGIN_REQUESTED,
+            payload: {
+              email: parsedRes.email,
+              password: parsedRes.password,
+            },
           };
         })
     );
@@ -89,6 +101,7 @@ export default function authEpic (action$, store) {
       logout()
         .map(res => {
           AsyncStorage.removeItem('authInfo');
+          unsubAll();
           return {
             type: LOGOUT_SUCCEEDED,
           }

@@ -2,30 +2,39 @@ import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { combineEpics, createEpicMiddleware } from 'redux-observable';
 import mostAdapter from 'redux-observable-adapter-most';
 import * as OneSignal from 'react-native-onesignal';
+import { composeWithDevTools } from 'remote-redux-devtools';
 
-import authReducer from './modules/auth/reducer';
+import auth from './modules/auth/reducer';
 import authEpic from './modules/auth/epic';
 import notifications from './modules/notifications/reducer';
+import notificationsEpic from './modules/notifications/epic';
+import currentTrip from './modules/currentTrip/reducer';
+import currentTripEpic from './modules/currentTrip/epic';
+import locations from './modules/locations/reducer';
+import locationsEpic from './modules/locations/epic';
 import router from './modules/router/reducer';
-import search from './modules/search/reducer';
 import { ONESIGNAL_ID_AVAILABLE } from './modules/auth/constants'
 
 export default function createAppStore () {
 
   const rootEpic = combineEpics(
-    authEpic
+    authEpic,
+    notificationsEpic,
+    currentTripEpic,
+    locationsEpic,
   );
 
   const reducer = combineReducers({
-    auth: authReducer,
+    auth,
     notifications,
-    search,
+    currentTrip,
     router,
+    locations,
   });
 
   const store = createStore(
     reducer,
-    applyMiddleware(createEpicMiddleware(rootEpic, { adapter: mostAdapter }))
+    composeWithDevTools(applyMiddleware(createEpicMiddleware(rootEpic, { adapter: mostAdapter }))),
   );
 
   store.dispatch({
@@ -51,10 +60,6 @@ export default function createAppStore () {
     onNotificationsRegistered: (...args) => {
       console.log('Notification registered', args);
     }
-  });
-
-  OneSignal.getTags((receivedTags) => {
-    console.log('Tags', receivedTags);
   });
 
   return store;

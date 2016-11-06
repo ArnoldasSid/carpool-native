@@ -8,65 +8,43 @@ import Map from '../components/Map';
 import Button from 'react-native-button';
 import { connect } from 'react-redux';
 import authInfoSelector from '../redux/selectors/authInfo';
-import { saveLocation, subscribeToUsersLocation, requestRide } from '../redux/api';
+import { requestRide } from '../redux/modules/currentTrip/actions';
+import locationsSelector from '../redux/selectors/locations';
 
 class MapScreen extends React.Component {
 
   static propTypes = {
     authInfo: React.PropTypes.object.isRequired,
+    locations: React.PropTypes.object.isRequired,
+    dispatch: React.PropTypes.func.isRequired,
   };
 
   constructor(props) {
     super(props);
 
-    this.sendLocation = this.sendLocation.bind(this);
     this.requestRide = this.requestRide.bind(this);
-
-    this.state = {
-      latitude: 37.78825,
-      longitude: -122.4324,
-    }
-  }
-
-  componentDidMount () {
-    const sub$ = subscribeToUsersLocation(this.props.authInfo.userId, 1);
-    const loc$ = sub$.filter(val => val.msg === 'added').map(val => val.fields.loc)
-
-    loc$.debounce(100).subscribe({
-      next: (loc) => {
-        this.setState({
-          latitude: loc[1],
-          longitude: loc[0],
-        });
-      }
-    });
-  }
-
-  sendLocation () {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        saveLocation([position.coords.longitude, position.coords.latitude]);
-      },
-      (error) => alert(JSON.stringify(error)),
-      {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
-    );
   }
 
   requestRide () {
-    requestRide(this.props.authInfo.userId);
+    this.props.dispatch(requestRide(this.props.authInfo.userEmail, this.props.authInfo.userId));
   }
+
   render () {
+    const { locations } = this.props;
+    const markers = [];
+    const locKeys = Object.keys(locations);
+    locKeys.forEach(key => {
+      markers.push(locations[key]);
+    });
+
     return (
-      <View>
+      <View style={{flex: 1}}>
         <Map
           width={360}
           height={360}
-          latitude={this.state.latitude}
-          longitude={this.state.longitude}
+          markers={markers}
         />
-        <Button style={{ marginTop: 370 }} onPress={this.sendLocation}>
-          Send Location
-        </Button>
+        <View style={{width: 360, height: 370}}></View>
         <Button
           onPress={this.requestRide}
         >
@@ -80,4 +58,5 @@ class MapScreen extends React.Component {
 
 export default connect(state => ({
   authInfo: authInfoSelector(state),
+  locations: locationsSelector(state),
 }))(MapScreen);

@@ -20,6 +20,7 @@ const initialState = {
   registrationError: null,
   authToken: null,
   userId: null,
+  userEmail: null,
   oneSignalUserId: null,
   oneSignalPushToken: null,
   oneSignalIdRegistered: false,
@@ -39,6 +40,7 @@ export default function authReducer (state = initialState, action) {
       loginError: null,
       authToken: action.payload.token,
       userId: action.payload.id,
+      userEmail: action.payload.email,
     };
   } else if (action.type === LOGIN_FAILED) {
     return {
@@ -60,6 +62,7 @@ export default function authReducer (state = initialState, action) {
       loggedIn: true,
       authToken: action.payload.token,
       userId: action.payload.id,
+      userEmail: action.payload.email,
     };
   } else if (action.type === REGISTRATION_FAILED) {
     return {
@@ -88,6 +91,7 @@ export default function authReducer (state = initialState, action) {
       authToken: action.payload.token,
       userId: action.payload.id,
       loggedIn: true,
+      userEmail: action.payload.email,
     }
   } else if (action.type === LOGOUT_SUCCEEDED) {
     return {

@@ -14,7 +14,6 @@ class DumbRouter extends React.Component {
 
   render () {
     const { route } = this.props.routerState;
-    console.log('Router', route);
     if (route === 'login') {
       return <Login />
     } else if (route === 'register') {

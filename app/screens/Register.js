@@ -79,7 +79,7 @@ class Register extends React.Component {
         <Button
           onPress={this.switchToLogin}
         >
-          Go to Login
+          Already have an account?
         </Button>
       </View>
     )

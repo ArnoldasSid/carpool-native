@@ -4,11 +4,20 @@ import {
   Text,
   TextInput,
 } from 'react-native';
+import { MKTextField, MKButton } from 'react-native-material-kit';
 import Button from 'react-native-button';
 import { login } from '../redux/modules/auth/actions';
 import { connect } from 'react-redux';
 import authInfoSelector from '../redux/selectors/authInfo';
 import { replaceRoute } from '../redux/modules/router/actions';
+
+const RaisedButton = MKButton.coloredButton()
+  .withStyle({ marginTop: 20 })
+  .build();
+
+const RegisterButton = MKButton.coloredButton()
+  .withStyle({ marginTop: 10 })
+  .build();
 
 class Login extends React.Component {
 
@@ -38,30 +47,56 @@ class Login extends React.Component {
   }
 
   render () {
+    const width = 226;
     return (
-      <View>
-        <Text>Login</Text>
-        <TextInput
-          onChangeText={(email) => this.setState({ email })}
-          value={this.state.email}
-          placeholder="Email"
-        />
-        <TextInput
-          onChangeText={(password) => this.setState({ password })}
-          value={this.state.password}
-          placeholder="Password"
-          secureTextEntry
-        />
-        <Button
-          onPress={this.login}
+      <View
+        style={{
+          paddingTop: 50,
+          flex: 1,
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
+        <View
+          style={{
+            flex: 1,
+            flexDirection: 'column',
+            alignItems: 'center',
+            width: width,
+          }}
         >
-          Login
-        </Button>
-        <Button
-          onPress={this.switchToRegister}
-        >
-          Go to Register
-        </Button>
+          <MKTextField
+            style={{ width: width }}
+            floatingLabelEnabled={true}
+            onChangeText={(email) => this.setState({ email })}
+            value={this.state.email}
+            placeholder="Email"
+          />
+          <MKTextField
+            style={{ width: width }}
+            floatingLabelEnabled={true}
+            onChangeText={(password) => this.setState({ password })}
+            value={this.state.password}
+            placeholder="Password"
+            secureTextEntry
+          />
+          <RaisedButton
+            onPress={this.login}
+            width={width}
+          >
+            <Text style={{ color: 'white', fontWeight: 'bold' }}>
+              Login
+            </Text>
+          </RaisedButton>
+          <RegisterButton
+            onPress={this.switchToRegister}
+            width={width}
+          >
+            <Text style={{ color: 'white', fontWeight: 'bold' }}>
+              Create Account
+            </Text>
+          </RegisterButton>
+        </View>
       </View>
     )
   }

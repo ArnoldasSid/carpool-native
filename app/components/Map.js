@@ -37,6 +37,7 @@ export default class Map extends React.Component {
           {this.props.markers.map((marker, i) => (
             <MapView.Marker
               key={i}
+              pinColor={marker.isYourPosition ? 'blue' : null}
               coordinate={{
                 latitude: marker.latitude,
                 longitude: marker.longitude,

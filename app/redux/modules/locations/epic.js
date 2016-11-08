@@ -48,7 +48,7 @@ export default function currentTripEpic (action$, store) {
             userId: msg.fields.userId,
             location: msg.fields.loc,
           },
-        }));
+        })).until(logoutSuccess$);
     });
 
   const usersRideAccepted$ = ofType(USERS_RIDE_REQUEST_GOT_ACCEPTED, action$)
@@ -61,7 +61,7 @@ export default function currentTripEpic (action$, store) {
             userId: msg.fields.userId,
             location: msg.fields.loc,
           },
-        }));
+        })).until(logoutSuccess$);
     });
 
   return merge($1, $2, userLocation$, usersRideAccepted$);

@@ -5,11 +5,15 @@ import {
 } from 'react-native';
 
 import Map from '../components/Map';
-import Button from 'react-native-button';
+import { MKButton } from 'react-native-material-kit';
 import { connect } from 'react-redux';
 import authInfoSelector from '../redux/selectors/authInfo';
 import { requestRide } from '../redux/modules/currentTrip/actions';
 import locationsSelector from '../redux/selectors/locations';
+
+const RequestRideButton = MKButton.coloredButton()
+  .withStyle({ marginTop: 15 })
+  .build();
 
 class MapScreen extends React.Component {
 
@@ -34,22 +38,29 @@ class MapScreen extends React.Component {
     const markers = [];
     const locKeys = Object.keys(locations);
     locKeys.forEach(key => {
-      markers.push(locations[key]);
+      let marker = locations[key];
+      if (key === this.props.authInfo.userId) {
+        marker = Object.assign({}, marker, { isYourPosition: true });
+      }
+      markers.push(marker);
     });
 
     return (
-      <View style={{flex: 1}}>
+      <View style={{ flex: 1, alignItems: 'center' }}>
         <Map
           width={360}
           height={360}
           markers={markers}
         />
-        <View style={{width: 360, height: 370}}></View>
-        <Button
+        <View style={{width: 360, height: 360}}></View>
+        <RequestRideButton
           onPress={this.requestRide}
+          width={300}
         >
-          Request Ride
-        </Button>
+          <Text style={{ color: 'white', fontWeight: 'bold' }}>
+            Request Ride
+          </Text>
+        </RequestRideButton>
       </View>
     );
   }

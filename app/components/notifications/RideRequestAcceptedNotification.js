@@ -4,11 +4,14 @@ import {
   Text,
   StyleSheet,
 } from 'react-native';
-import Button from 'react-native-button';
+import { getTheme } from 'react-native-material-kit';
 import { connect } from 'react-redux';
-import { markNotificationAsRead } from '../../redux/api';
 
+import { markNotificationAsRead } from '../../redux/api';
+import NotificationActionButton from './NotificationActionButton';
 import { acceptRideRequest } from '../../redux/modules/notifications/actions';
+
+const theme = getTheme();
 
 const styles = StyleSheet.create({
   notificationWrap: {
@@ -19,6 +22,7 @@ const styles = StyleSheet.create({
     borderColor: 'black',
   },
   actionsWrap: {
+    marginTop: 10,
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-around',
@@ -46,15 +50,27 @@ class RideRequestAcceptedNotification extends React.Component {
 
   render () {
     return (
-      <View style={styles.notificationWrap}>
-        <Text>Ride request accepted by
-          <Text style={{ fontWeight: 'bold' }}>{' ' + this.props.requesterName}</Text>
+      <View style={[styles.notificationWrap, theme.cardStyle]}>
+        <Text style={{
+          backgroundColor: "transparent",
+          color: "#000000",
+          fontSize: 24,
+          left: 10,
+          padding: 16,
+          paddingBottom: 0,
+        }}>Ride request accepted</Text>
+        <Text style={theme.cardContentStyle}>
+          {this.props.requesterName} has accepted your ride request
         </Text>
         <View style={styles.actionsWrap}>
-          <Button onPress={this.markAsRead}>Ok</Button>
+          <NotificationActionButton onPress={this.markAsRead}>
+            <Text style={{ color: '#3f51b5' }}>
+              Ok
+            </Text>
+          </NotificationActionButton>
         </View>
       </View>
-    )
+    );
   }
 }
 

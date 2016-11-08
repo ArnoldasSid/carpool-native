@@ -6,20 +6,23 @@ import {
 } from 'react-native';
 import Button from 'react-native-button';
 import { connect } from 'react-redux';
+import { getTheme } from 'react-native-material-kit';
 import { markNotificationAsRead } from '../../redux/api';
 
 import { acceptRideRequest } from '../../redux/modules/currentTrip/actions';
 import authInfoSelector from '../../redux/selectors/authInfo';
+import NotificationActionButton from './NotificationActionButton';
+
+const theme = getTheme();
 
 const styles = StyleSheet.create({
   notificationWrap: {
-    padding: 10,
     margin: 10,
-    borderStyle: 'solid',
-    borderWidth: 1,
-    borderColor: 'black',
   },
   actionsWrap: {
+    borderStyle: "solid",
+    borderTopColor: "rgba(0, 0, 0, 0.1)",
+    borderTopWidth: 1,
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-around',
@@ -53,13 +56,29 @@ class RideRequestNotification extends React.Component {
 
   render () {
     return (
-      <View style={styles.notificationWrap}>
-        <Text>Ride request notification from
-          <Text style={{ fontWeight: 'bold' }}>{' ' + this.props.requesterName}</Text>
+      <View style={[styles.notificationWrap, theme.cardStyle]}>
+        <Text style={{
+          backgroundColor: "transparent",
+          color: "#000000",
+          fontSize: 24,
+          left: 10,
+          padding: 16,
+          paddingBottom: 0,
+        }}>Ride request received</Text>
+        <Text style={theme.cardContentStyle}>
+          {this.props.requesterName} is requesting a ride
         </Text>
         <View style={styles.actionsWrap}>
-          <Button onPress={this.acceptRideRequest}>Accept</Button>
-          <Button onPress={this.declineRideRequest}>Decline</Button>
+          <NotificationActionButton onPress={this.acceptRideRequest}>
+            <Text style={{ color: '#3f51b5' }}>
+              Accept
+            </Text>
+          </NotificationActionButton>
+          <NotificationActionButton onPress={this.declineRideRequest}>
+            <Text style={{ color: '#3f51b5' }}>
+              Decline
+            </Text>
+          </NotificationActionButton>
         </View>
       </View>
     )

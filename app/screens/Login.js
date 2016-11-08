@@ -5,10 +5,10 @@ import {
   TextInput,
 } from 'react-native';
 import { MKTextField, MKButton } from 'react-native-material-kit';
-import Button from 'react-native-button';
 import { login } from '../redux/modules/auth/actions';
 import { connect } from 'react-redux';
 import authInfoSelector from '../redux/selectors/authInfo';
+import loginStatusSelector from '../redux/selectors/loginStatus';
 import { replaceRoute } from '../redux/modules/router/actions';
 
 const RaisedButton = MKButton.coloredButton()
@@ -24,6 +24,7 @@ class Login extends React.Component {
   static propTypes = {
     dispatch: React.PropTypes.func.isRequired,
     authInfo: React.PropTypes.object.isRequired,
+    loginStatus: React.PropTypes.object.isRequired,
   };
 
   constructor (props) {
@@ -62,9 +63,15 @@ class Login extends React.Component {
             flex: 1,
             flexDirection: 'column',
             alignItems: 'center',
-            width: width,
           }}
         >
+          {this.props.loginStatus.error ? (
+            <View>
+              <Text style={{ color: 'red' }}>
+                Error: {this.props.loginStatus.error}
+              </Text>
+            </View>
+          ) : null}
           <MKTextField
             style={{ width: width }}
             floatingLabelEnabled={true}
@@ -78,7 +85,7 @@ class Login extends React.Component {
             onChangeText={(password) => this.setState({ password })}
             value={this.state.password}
             placeholder="Password"
-            secureTextEntry
+            password
           />
           <RaisedButton
             onPress={this.login}
@@ -104,4 +111,5 @@ class Login extends React.Component {
 
 export default connect(state => ({
   authInfo: authInfoSelector(state),
+  loginStatus: loginStatusSelector(state),
 }))(Login);

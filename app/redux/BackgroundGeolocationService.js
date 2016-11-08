@@ -12,6 +12,7 @@ export const initBackgroundGeolocation = () => {
       stationaryRadius: 50,
       distanceFilter: 50,
       debug: false, // Enable/disable sounds
+      startForeground: false,
       locationProvider: BackgroundGeolocation.provider.ANDROID_DISTANCE_FILTER_PROVIDER,
       interval: 5000,
       fastestInterval: 5000,
@@ -20,7 +21,6 @@ export const initBackgroundGeolocation = () => {
       syncThreshold: 50,
       maxLocations: 100,
     });
-    console.log(2);
 
     BackgroundGeolocation.on('location', (location) => {
       location$.next(location);
@@ -35,7 +35,6 @@ export const startTracking = () => {
 
   if (!initialized) {
     initBackgroundGeolocation();
-    console.log('Initialized geolocation successfuly');
   }
 
 
@@ -43,10 +42,6 @@ export const startTracking = () => {
     if (enabled) {
       BackgroundGeolocation.start(
         () => {
-          // service started successfully
-          // you should adjust your app UI for example change switch element to indicate
-          // that service is running
-          console.log('[DEBUG] BackgroundGeolocation started successfully');
           isTracking = true;
         },
         (error) => {

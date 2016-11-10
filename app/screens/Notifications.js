@@ -38,7 +38,6 @@ class Notifications extends React.Component {
     return (
       <ScrollView>
         {this.props.notifications.map(notification => {
-          console.log(notification);
           if (notification.action === 'requestRide') {
             return (
               <RideRequestNotification

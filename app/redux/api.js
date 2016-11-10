@@ -80,11 +80,18 @@ export const markNotificationAsRead = (notificationId) => {
 };
 
 export const saveLocation = (location) => {
+  console.log('Saving location');
   return call('api.v1.saveLocation', location);
 };
 
 export const subscribeToUsersLocation = (userId, numLocations = 1) => {
-  return subscribe('locations', userId, numLocations);
+  const locationSub = subscribe('locations', userId, numLocations)
+  locationSub.subscribe({
+    next (val) {
+      console.log('Location', val);
+    }
+  });
+  return locationSub;
 };
 
 export const subscribeToNotifications = () => {

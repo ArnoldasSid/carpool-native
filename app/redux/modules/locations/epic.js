@@ -1,10 +1,11 @@
 import { ofType } from 'redux-observable-adapter-most';
-import { merge, never } from 'most';
+import { merge, never, periodic } from 'most';
 import {
   LOGOUT_SUCCEEDED,
 } from '../auth/constants';
 import {
   USERS_RIDE_REQUEST_GOT_ACCEPTED,
+  USER_ACCEPTED_RIDE_REQUEST,
 } from '../currentTrip/constants';
 import {
   START_BACKGROUND_TRACKING,
@@ -51,18 +52,24 @@ export default function currentTripEpic (action$, store) {
         })).until(logoutSuccess$);
     });
 
-  const usersRideAccepted$ = ofType(USERS_RIDE_REQUEST_GOT_ACCEPTED, action$)
-    .chain(action => {
-      return subscribeToUsersLocation(action.payload.userId)
-        .filter(msg => msg.msg === 'added')
-        .map(msg => ({
-          type: USER_LOCATION_RECEIVED,
-          payload: {
-            userId: msg.fields.userId,
-            location: msg.fields.loc,
-          },
-        })).until(logoutSuccess$);
-    });
+  const usersRideAccepted$ =
+    merge(
+      ofType(USERS_RIDE_REQUEST_GOT_ACCEPTED, action$),
+      ofType(USER_ACCEPTED_RIDE_REQUEST, action$)
+        .map(action => {action.payload.userId = action.payload.requesterId; return action})
+    )
+      .chain(action => {
+        console.log('HERE', action);
+        return subscribeToUsersLocation(action.payload.userId)
+          .filter(msg => msg.msg === 'added')
+          .map(msg => ({
+            type: USER_LOCATION_RECEIVED,
+            payload: {
+              userId: msg.fields.userId,
+              location: msg.fields.loc,
+            },
+          })).until(logoutSuccess$);
+      });
 
   return merge($1, $2, userLocation$, usersRideAccepted$);
 }

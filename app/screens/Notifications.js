@@ -45,6 +45,7 @@ class Notifications extends React.Component {
                 id={notification.id}
                 requesterId={notification.payload.userId || notification.payload}
                 requesterName={notification.payload.userEmail || 'some user'}
+                timestamp={notification.tss.$date}
               />
             );
           } else if (notification.action === 'acceptRideRequest') {
@@ -54,6 +55,7 @@ class Notifications extends React.Component {
                 id={notification.id}
                 requesterId={notification.payload.userId || notification.payload}
                 requesterName={notification.payload.userEmail || 'some user'}
+                timestamp={notification.tss.$date}
               />
             )
           }

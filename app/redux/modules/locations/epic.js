@@ -52,14 +52,13 @@ export default function currentTripEpic (action$, store) {
         })).until(logoutSuccess$);
     });
 
-  const usersRideAccepted$ =
+  const otherUserLocation$ =
     merge(
       ofType(USERS_RIDE_REQUEST_GOT_ACCEPTED, action$),
       ofType(USER_ACCEPTED_RIDE_REQUEST, action$)
         .map(action => {action.payload.userId = action.payload.requesterId; return action})
     )
       .chain(action => {
-        console.log('HERE', action);
         return subscribeToUsersLocation(action.payload.userId)
           .filter(msg => msg.msg === 'added')
           .map(msg => ({
@@ -71,5 +70,5 @@ export default function currentTripEpic (action$, store) {
           })).until(logoutSuccess$);
       });
 
-  return merge($1, $2, userLocation$, usersRideAccepted$);
+  return merge($1, $2, userLocation$, otherUserLocation$);
 }

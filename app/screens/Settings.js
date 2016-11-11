@@ -8,6 +8,7 @@ import Button from 'react-native-button';
 import { logout } from '../redux/modules/auth/actions';
 import { stopTracking } from '../redux/modules/locations/actions';
 import { MKButton } from 'react-native-material-kit';
+import authInfoSelector from '../redux/selectors/authInfo';
 
 const RaisedButton = MKButton.coloredButton()
   .withStyle({ marginTop: 15 })
@@ -49,6 +50,11 @@ class Settings extends React.Component {
             Stop background tracking
           </Text>
         </RaisedButton>
+        <View style={{ marginTop: 55 }} >
+          <Text>
+            {`Logged in as: ${this.props.authInfo.userEmail}`}
+          </Text>
+        </View>
         <LogoutButton
           onPress={this.logout}
           width={250}
@@ -63,5 +69,5 @@ class Settings extends React.Component {
 }
 
 export default connect(state => ({
-
+  authInfo: authInfoSelector(state),
 }))(Settings);

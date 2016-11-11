@@ -80,8 +80,12 @@ export const markNotificationAsRead = (notificationId) => {
 };
 
 export const saveLocation = (location) => {
-  console.log('Saving location');
-  return call('api.v1.saveLocation', location);
+  const timestamp = new Date().valueOf();
+
+  return call('api.v1.saveLocation', {
+    ...location,
+    timestamp,
+  });
 };
 
 export const subscribeToUsersLocation = (userId, numLocations = 1) => {

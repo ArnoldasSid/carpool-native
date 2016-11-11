@@ -7,6 +7,7 @@ import {
 import Button from 'react-native-button';
 import { connect } from 'react-redux';
 import { getTheme } from 'react-native-material-kit';
+import moment from 'moment';
 import { markNotificationAsRead } from '../../redux/api';
 
 import { acceptRideRequest } from '../../redux/modules/currentTrip/actions';
@@ -37,6 +38,7 @@ class RideRequestNotification extends React.Component {
     requesterName: React.PropTypes.string.isRequired,
     requesterId: React.PropTypes.string.isRequired,
     dispatch: React.PropTypes.func.isRequired,
+    timestamp: React.PropTypes.number.isRequired,
   };
 
   constructor (props) {
@@ -54,17 +56,29 @@ class RideRequestNotification extends React.Component {
     markNotificationAsRead(this.props.id);
   }
 
+  getTimeDiff (notificationTimestamp) {
+    return moment(notificationTimestamp).from(moment());
+  }
+
   render () {
     return (
       <View style={[styles.notificationWrap, theme.cardStyle]}>
         <Text style={{
-          backgroundColor: "transparent",
-          color: "#000000",
-          fontSize: 24,
           left: 10,
           padding: 16,
           paddingBottom: 0,
-        }}>Ride request received</Text>
+        }}>
+          <Text
+            style={{
+              backgroundColor: "transparent",
+              color: "#000000",
+              fontSize: 24,
+            }}
+          >
+            Ride request received
+          </Text>
+          {` (${this.getTimeDiff(this.props.timestamp)})`}
+        </Text>
         <Text style={theme.cardContentStyle}>
           {this.props.requesterName} is requesting a ride
         </Text>

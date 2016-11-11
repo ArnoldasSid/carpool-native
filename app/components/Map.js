@@ -21,6 +21,46 @@ export default class Map extends React.Component {
     markers: React.PropTypes.array.isRequired,
   };
 
+  constructor (props) {
+    super(props);
+
+    this.getMarkerColor = this.getMarkerColor.bind(this);
+
+    this.state = {
+      currTime: new Date().valueOf(),
+    }
+  }
+
+  componentDidMount () {
+    const timeUpdateInterval = setInterval(() => {
+      this.setState({
+        currTime: new Date().valueOf(),
+      });
+    }, 5000);
+    this.setState({
+      timeUpdateInterval,
+    });
+  }
+
+  componentWillUnmount () {
+    clearTimeout(this.state.timeUpdateInterval);
+  }
+
+  getMarkerColor (marker) {
+    const tDiff = this.state.currTime - marker.timestamp;
+    if (marker.isYourPosition) {
+      if (tDiff > 60000) {
+        return 'lightblue';
+      }
+      return 'blue';
+    } else {
+      if (tDiff > 60000) {
+        return 'orange';
+      }
+      return 'red';
+    }
+  }
+
   render () {
     console.log(this.props.markers);
     return (
@@ -37,7 +77,7 @@ export default class Map extends React.Component {
           {this.props.markers.map((marker, i) => (
             <MapView.Marker
               key={i}
-              pinColor={marker.isYourPosition ? 'blue' : null}
+              pinColor={this.getMarkerColor(marker)}
               coordinate={{
                 latitude: marker.latitude,
                 longitude: marker.longitude,

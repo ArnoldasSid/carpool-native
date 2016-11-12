@@ -20,8 +20,8 @@ import { ONESIGNAL_ID_AVAILABLE } from './app/redux/modules/auth/constants'
 
 const store = createStore();
 
-OneSignal.enableNotificationsWhenActive(true);
-OneSignal.enableInAppAlertNotification(true);
+OneSignal.enableNotificationsWhenActive(false);
+OneSignal.enableInAppAlertNotification(false);
 
 OneSignal.configure({
   onIdsAvailable: function(device) {
@@ -31,6 +31,8 @@ OneSignal.configure({
     });
   },
   onNotificationOpened: function(message, data, isActive) {
+    console.log('Notification opened', message, data, isActive);
+    alert('Notification received: ' + message);
     // TODO: Dispatch on notification opened action here
   }
 });

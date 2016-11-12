@@ -31,7 +31,9 @@ export const initBackgroundGeolocation = () => {
 };
 
 export const startTracking = () => {
-  if (isTracking) { return; }
+  if (isTracking) {
+    return location$;
+  }
 
   if (!initialized) {
     initBackgroundGeolocation();

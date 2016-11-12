@@ -16,10 +16,9 @@ import {
 import { startTracking, stopTracking } from '../../BackgroundGeolocationService'
 import { saveLocation, subscribeToUsersLocation } from '../../api';
 
-export default function currentTripEpic (action$, store) {
+export default function locationsEpic (action$, store) {
   const stopBackgroundTracking$ = ofType(STOP_BACKGROUND_TRACKING, action$);
   const logoutSuccess$ = ofType(LOGOUT_SUCCEEDED, action$);
-  console.log(store.getState().auth.userId);
 
   const $1 = ofType(START_BACKGROUND_TRACKING, action$).chain(action => {
     const location$ = startTracking();

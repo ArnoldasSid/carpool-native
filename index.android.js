@@ -12,11 +12,28 @@ import {
   View
 } from 'react-native';
 import { Provider } from 'react-redux';
+import OneSignal from 'react-native-onesignal';
+
+import DumbRouter from './app/DumbRouter';
 import createStore from './app/redux/createStore';
+import { ONESIGNAL_ID_AVAILABLE } from './app/redux/modules/auth/constants'
 
 const store = createStore();
 
-import DumbRouter from './app/DumbRouter';
+OneSignal.enableNotificationsWhenActive(true);
+OneSignal.enableInAppAlertNotification(true);
+
+OneSignal.configure({
+  onIdsAvailable: function(device) {
+    store.dispatch({
+      type: ONESIGNAL_ID_AVAILABLE,
+      payload: device,
+    });
+  },
+  onNotificationOpened: function(message, data, isActive) {
+    // TODO: Dispatch on notification opened action here
+  }
+});
 
 export default class CarpoolNative extends Component {
   render() {

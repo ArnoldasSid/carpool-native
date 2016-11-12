@@ -12,12 +12,13 @@ import {
   REGISTRATION_FAILED,
   ONESIGNAL_ID_REGISTERED,
   ONESIGNAL_ID_REGISTRATION_FAILED,
+  ONESIGNAL_ID_AVAILABLE,
   AUTH_INFO_LOADED,
   LOGOUT_REQUESTED,
   LOGOUT_SUCCEEDED,
 } from './constants';
 
-export default function authEpic (action$, store) {
+export default function authEpic (action$) {
   const loginRequest$ = ofType(LOGIN_REQUESTED, action$);
   const registrationRequest$ = ofType(REGISTRATION_REQUESTED, action$);
   const loginSuccess$ = ofType(LOGIN_SUCCEEDED, action$);
@@ -59,18 +60,20 @@ export default function authEpic (action$, store) {
         }))
     );
 
-  const oneSignalEffect$ = merge(loginSuccess$, registrationSuccess$)
-    .chain(action =>
-      registerDevice(store.getState().auth.oneSignalUserId)
-        .map(res => ({
-          type: ONESIGNAL_ID_REGISTERED,
-          payload: res,
-        }))
-        .recoverWith(err => just({
-          type: ONESIGNAL_ID_REGISTRATION_FAILED,
-          payload: err,
-        }))
-    );
+  const oneSignalEffect$ =
+    merge(loginSuccess$, registrationSuccess$)
+      .combine((authInfo, oneSignalInfo) => oneSignalInfo.payload.userId, ofType(ONESIGNAL_ID_AVAILABLE, action$))
+      .chain(oneSignalUserId =>
+        registerDevice(oneSignalUserId)
+          .map(res => ({
+            type: ONESIGNAL_ID_REGISTERED,
+            payload: res,
+          }))
+          .recoverWith(err => just({
+            type: ONESIGNAL_ID_REGISTRATION_FAILED,
+            payload: err,
+          }))
+      );
 
   const saveAuthToken$ = merge(loginSuccess$, registrationSuccess$)
     .chain(action => {

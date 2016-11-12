@@ -1,6 +1,6 @@
 import SockJS from 'sockjs-client';
 import DDP from 'ddp.js';
-import { fromPromise, fromEvent, merge } from 'most';
+import { fromPromise, fromEvent, merge, empty } from 'most';
 
 const ddp = new DDP({
   // endpoint: 'http://localhost:3000/sockjs',
@@ -64,6 +64,10 @@ export const logout = () => {
 };
 
 export const registerDevice = (deviceId) => {
+  if (deviceId == null) {
+    alert('Incorrect device id');
+    return empty();
+  }
   return call('api.v1.registerDevice', deviceId);
 };
 

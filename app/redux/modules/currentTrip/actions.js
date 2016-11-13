@@ -13,12 +13,13 @@ export const requestRide = (userEmail, userId) => {
   };
 };
 
-export const acceptRideRequest = (payload, requesterId) => {
+export const acceptRideRequest = (payload, requesterId, notificationId) => {
   return {
     type: USER_ACCEPTED_RIDE_REQUEST,
     payload: {
       payload,
       requesterId,
+      notificationId,
     },
   };
 };

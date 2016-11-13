@@ -1,5 +1,5 @@
-import { merge, just, concat } from 'most';
-import { subscribeToNotifications, acceptRequest } from '../../api';
+import { merge, just, concat, empty } from 'most';
+import { subscribeToNotifications, markNotificationAsRead } from '../../api';
 import { ofType } from 'redux-observable-adapter-most';
 import {
   LOGIN_SUCCEEDED,
@@ -14,6 +14,7 @@ import {
   NOTIFICATIONS_SUB_READY,
   NOTIFICATION_RECEIVED,
   NOTIFICATION_UPDATED,
+  MARK_NOTIFICATION_AS_READ_REQUESTED,
 } from './constants';
 
 export default function notificationsEpic (action$) {
@@ -61,5 +62,11 @@ export default function notificationsEpic (action$) {
         }).until(logoutSuccess$)
     );
 
-  return merge(notificationsSubscription$);
+  const notificationRead$ = ofType(MARK_NOTIFICATION_AS_READ_REQUESTED, action$)
+    .chain(action => {
+      markNotificationAsRead(action.payload.notificationId);
+      return empty();
+    });
+
+  return merge(notificationsSubscription$, notificationRead$);
 }

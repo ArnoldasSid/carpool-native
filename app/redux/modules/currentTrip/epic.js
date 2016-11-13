@@ -12,6 +12,9 @@ import {
 import {
   ADD_SNACKBAR_MESSAGE,
 } from '../snackbar/constants';
+import {
+  MARK_NOTIFICATION_AS_READ_REQUESTED,
+} from '../notifications/constants';
 
 export default function currentTripEpic (action$) {
   const rideRequest$ = ofType(USER_REQUESTED_RIDE, action$)
@@ -29,7 +32,7 @@ export default function currentTripEpic (action$) {
               type: ADD_SNACKBAR_MESSAGE,
               payload: {
                 text: 'Your ride request has been sent',
-                duration: 4000,
+                duration: 3000,
               },
             })
           )
@@ -46,6 +49,19 @@ export default function currentTripEpic (action$) {
             }),
             just({
               type: USERS_LOCATION_SUBSCRIPTION_REQUESTED,
+            }),
+            just({
+              type: ADD_SNACKBAR_MESSAGE,
+              payload: {
+                text: 'You have accepted a ride request',
+                duration: 3000,
+              }
+            }),
+            just({
+              type: MARK_NOTIFICATION_AS_READ_REQUESTED,
+              payload: {
+                notificationId: action.payload.notificationId,
+              }
             })
           )
         )

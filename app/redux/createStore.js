@@ -12,6 +12,7 @@ import currentTripEpic from './modules/currentTrip/epic';
 import locations from './modules/locations/reducer';
 import locationsEpic from './modules/locations/epic';
 import router from './modules/router/reducer';
+import snackbar from './modules/snackbar/reducer';
 
 export default function createAppStore () {
 
@@ -28,6 +29,7 @@ export default function createAppStore () {
     currentTrip,
     router,
     locations,
+    snackbar,
   });
 
   const store = createStore(

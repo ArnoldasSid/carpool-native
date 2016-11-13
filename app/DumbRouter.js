@@ -1,9 +1,14 @@
 import React from 'react';
+import {
+  View,
+  Dimensions,
+} from 'react-native';
+import { connect } from 'react-redux';
 
+import Snackbar from './components/Snackbar';
 import Home from './screens/Home';
 import Login from './screens/Login';
 import Register from './screens/Register';
-import { connect } from 'react-redux';
 import routerStateSelector from './redux/selectors/routerState';
 
 class DumbRouter extends React.Component {
@@ -12,7 +17,7 @@ class DumbRouter extends React.Component {
     routerState: React.PropTypes.object.isRequired,
   };
 
-  render () {
+  getCurrentRoute () {
     const { route } = this.props.routerState;
     if (route === 'login') {
       return <Login />
@@ -21,6 +26,34 @@ class DumbRouter extends React.Component {
     } else if (route === 'home') {
       return <Home />
     }
+  }
+
+  render () {
+    const { width, height } = Dimensions.get('window');
+    console.log(width, height);
+    return (
+      <View
+        style={{
+          flex: 1,
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
+        <View
+          style={{
+            width,
+            height: height - 25,
+            flex: 1,
+            flexDirection: 'column',
+          }}
+        >
+          {this.getCurrentRoute()}
+        </View>
+        <Snackbar
+          screenWidth={width}
+        />
+      </View>
+    )
   }
 }
 

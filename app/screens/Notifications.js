@@ -35,6 +35,8 @@ class Notifications extends React.Component {
       )
     }
 
+    console.log(this.props.notifications);
+
     return (
       <ScrollView>
         {this.props.notifications.map(notification => {

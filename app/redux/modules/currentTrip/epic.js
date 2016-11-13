@@ -9,6 +9,9 @@ import {
   USER_REQUESTED_RIDE,
   USER_ACCEPTED_RIDE_REQUEST,
 } from './constants';
+import {
+  ADD_SNACKBAR_MESSAGE,
+} from '../snackbar/constants';
 
 export default function currentTripEpic (action$) {
   const rideRequest$ = ofType(USER_REQUESTED_RIDE, action$)
@@ -21,6 +24,13 @@ export default function currentTripEpic (action$) {
             }),
             just({
               type: USERS_LOCATION_SUBSCRIPTION_REQUESTED,
+            }),
+            just({
+              type: ADD_SNACKBAR_MESSAGE,
+              payload: {
+                text: 'Your ride request has been sent',
+                duration: 4000,
+              },
             })
           )
         )

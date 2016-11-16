@@ -9,20 +9,21 @@ export const initBackgroundGeolocation = () => {
   if (!initialized) {
     BackgroundGeolocation.configure({
       desiredAccuracy: 1,
-      stationaryRadius: 50,
-      distanceFilter: 50,
+      // stationaryRadius: 50,
+      // distanceFilter: 50,
       debug: false, // Enable/disable sounds
       startForeground: false,
-      locationProvider: BackgroundGeolocation.provider.ANDROID_DISTANCE_FILTER_PROVIDER,
-      interval: 5000,
+      locationProvider: BackgroundGeolocation.provider.ANDROID_ACTIVITY_PROVIDER,
+      interval: 10000,
       fastestInterval: 5000,
       stopOnStillActivity: false,
-      stopOnTerminate: false,
+      stopOnTerminate: true,
       syncThreshold: 50,
       maxLocations: 100,
     });
 
     BackgroundGeolocation.on('location', (location) => {
+      console.log('Location detected', location);
       location$.next(location);
     });
     initialized = true;

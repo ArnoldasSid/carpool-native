@@ -1,5 +1,5 @@
 import { ofType } from 'redux-observable-adapter-most';
-import { merge, never, periodic } from 'most';
+import { merge, never, periodic, just } from 'most';
 import {
   LOGOUT_SUCCEEDED,
 } from '../auth/constants';
@@ -29,7 +29,10 @@ export default function locationsEpic (action$, store) {
           saveLocation(location)
         },
       });
-    return never();
+
+    return never().startWith({
+      type: STOP_BACKGROUND_TRACKING
+    }).delay(30 * 60 * 1000);
   });
 
   const $2 = ofType(STOP_BACKGROUND_TRACKING, LOGOUT_SUCCEEDED, action$).chain(action => {

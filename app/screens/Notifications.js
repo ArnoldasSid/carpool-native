@@ -62,16 +62,13 @@ class Notifications extends React.Component {
       )
     }
 
-    if (this.props.notifications.length === 0) {
-      return (
-        <View>
-          <Text>You currently have no notifications</Text>
-        </View>
-      )
-    }
-
     return (
       <ScrollView>
+        {this.props.notifications.length === 0 ? (
+          <View>
+            <Text>You currently have no notifications</Text>
+          </View>
+        ) : null}
         <TransitionMotion
           styles={this.getStyles()}
           willLeave={this.willLeave}

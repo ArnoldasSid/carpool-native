@@ -4,21 +4,15 @@ import {
   Text,
   TextInput,
 } from 'react-native';
-import { MKTextField, MKButton } from 'react-native-material-kit';
+import { MKTextField } from 'react-native-material-kit';
 import { connect } from 'react-redux';
 import { replaceRoute } from '../redux/modules/router/actions';
 
 import { register } from '../redux/modules/auth/actions';
 import authInfoSelector from '../redux/selectors/authInfo';
 import registrationStatusSelector from '../redux/selectors/registrationStatus';
-
-const RegisterButton = MKButton.coloredButton()
-  .withStyle({ marginTop: 20 })
-  .build();
-
-const GoToLoginButton = MKButton.coloredButton()
-  .withStyle({ marginTop: 10 })
-  .build();
+import RaisedButton from '../components/material/RaisedButton.js';
+import FlatButton from '../components/material/FlatButton.js';
 
 class Register extends React.Component {
 
@@ -103,22 +97,25 @@ class Register extends React.Component {
             placeholder="Password again"
             password
           />
-          <RegisterButton
+          <RaisedButton
+            colored
+            style={{
+              width,
+              marginTop: 25,
+            }}
             onPress={this.register}
-            width={width}
-          >
-            <Text style={{ color: 'white', fontWeight: 'bold' }}>
-              Register
-            </Text>
-          </RegisterButton>
-          <GoToLoginButton
-            width={width}
+            label="Register"
+            loading={this.props.registrationStatus.inProgress}
+          />
+          <FlatButton
+            colored
+            style={{
+              width,
+              marginTop: 15,
+            }}
             onPress={this.switchToLogin}
-          >
-            <Text style={{ color: 'white', fontWeight: 'bold' }}>
-              Already have an account?
-            </Text>
-          </GoToLoginButton>
+            label="Already have an account?"
+          />
         </View>
       </View>
     )

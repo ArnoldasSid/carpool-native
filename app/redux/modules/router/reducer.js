@@ -10,7 +10,7 @@ import {
 } from '../auth/constants';
 
 const initialState = {
-  route: 'login',
+  route: 'landing',
 };
 
 export default function routerReducer (state = initialState, action) {

@@ -9,6 +9,7 @@ import Snackbar from './components/Snackbar';
 import Home from './screens/Home';
 import Login from './screens/Login';
 import Register from './screens/Register';
+import Landing from './screens/Landing.js';
 import routerStateSelector from './redux/selectors/routerState';
 
 class DumbRouter extends React.Component {
@@ -25,6 +26,8 @@ class DumbRouter extends React.Component {
       return <Register />
     } else if (route === 'home') {
       return <Home />
+    } else if (route === 'landing') {
+      return <Landing />
     }
   }
 

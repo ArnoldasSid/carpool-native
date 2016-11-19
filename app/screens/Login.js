@@ -4,20 +4,14 @@ import {
   Text,
   TextInput,
 } from 'react-native';
-import { MKTextField, MKButton } from 'react-native-material-kit';
+import { MKTextField, MKButton, MKColor } from 'react-native-material-kit';
 import { login } from '../redux/modules/auth/actions';
 import { connect } from 'react-redux';
 import authInfoSelector from '../redux/selectors/authInfo';
 import loginStatusSelector from '../redux/selectors/loginStatus';
 import { replaceRoute } from '../redux/modules/router/actions';
-
-const RaisedButton = MKButton.coloredButton()
-  .withStyle({ marginTop: 20 })
-  .build();
-
-const RegisterButton = MKButton.coloredButton()
-  .withStyle({ marginTop: 10 })
-  .build();
+import RaisedButton from '../components/material/RaisedButton.js';
+import FlatButton from '../components/material/FlatButton.js';
 
 class Login extends React.Component {
 
@@ -48,6 +42,7 @@ class Login extends React.Component {
   }
 
   render () {
+    console.log(this.props.loginStatus.inProgress);
     const width = 226;
     return (
       <View
@@ -89,20 +84,24 @@ class Login extends React.Component {
           />
           <RaisedButton
             onPress={this.login}
-            width={width}
-          >
-            <Text style={{ color: 'white', fontWeight: 'bold' }}>
-              Login
-            </Text>
-          </RaisedButton>
-          <RegisterButton
+            colored
+            label="Login"
+            style={{
+              width,
+              marginTop: 25,
+            }}
+
+            loading={this.props.loginStatus.inProgress}
+          />
+          <FlatButton
             onPress={this.switchToRegister}
-            width={width}
-          >
-            <Text style={{ color: 'white', fontWeight: 'bold' }}>
-              Create Account
-            </Text>
-          </RegisterButton>
+            colored
+            label="Create an account"
+            style={{
+              width,
+              marginTop: 15,
+            }}
+          />
         </View>
       </View>
     )

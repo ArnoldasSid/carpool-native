@@ -18,6 +18,10 @@ import {
   LOGOUT_SUCCEEDED,
 } from './constants';
 
+import {
+  ROUTE_REPLACE_REQUESTED,
+} from '../router/constants.js'
+
 export default function authEpic (action$) {
   const loginRequest$ = ofType(LOGIN_REQUESTED, action$);
   const registrationRequest$ = ofType(REGISTRATION_REQUESTED, action$);
@@ -25,6 +29,38 @@ export default function authEpic (action$) {
   const registrationSuccess$ = ofType(REGISTRATION_SUCCEEDED, action$);
   const appInit$ = ofType('APP_INIT', action$);
   const logoutRequest$ = ofType(LOGOUT_REQUESTED, action$);
+
+  const loadAuthToken$ = appInit$
+    .chain(() =>
+      fromPromise(AsyncStorage.getItem('authInfo'))
+        .chain(res => {
+          if (res == null) {
+            return just({
+              type: ROUTE_REPLACE_REQUESTED,
+              payload: {
+                route: 'login',
+              }
+            });
+          }
+          const parsedRes = JSON.parse(res);
+          return login(parsedRes.email, parsedRes.password)
+            .map(res => ({
+                type: LOGIN_SUCCEEDED,
+                payload: {
+                  ...res,
+                  email: parsedRes.email,
+                  password: parsedRes.password,
+                },
+              })
+            )
+            .recoverWith(err => just({
+              type: ROUTE_REPLACE_REQUESTED,
+              payload: {
+                route: 'login',
+              }
+            }));
+        })
+    );
 
   const loginEffect$ = loginRequest$
     .chain((action) =>
@@ -80,24 +116,6 @@ export default function authEpic (action$) {
       AsyncStorage.setItem('authInfo', JSON.stringify(action.payload));
       return never();
     });
-
-  const loadAuthToken$ = appInit$
-    .chain(() =>
-      fromPromise(AsyncStorage.getItem('authInfo'))
-        .map(res => {
-          if (res == null) {
-            return { type: '' };
-          }
-          const parsedRes = JSON.parse(res);
-          return {
-            type: LOGIN_REQUESTED,
-            payload: {
-              email: parsedRes.email,
-              password: parsedRes.password,
-            },
-          };
-        })
-    );
 
   const logout$ = logoutRequest$
     .chain(() =>

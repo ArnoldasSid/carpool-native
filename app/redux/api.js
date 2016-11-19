@@ -26,12 +26,12 @@ const call = (cmd, ...params) =>
     })
   }));
 
-ddp.on('nosub', args => {
-  console.log('Nosub', args);
-});
-ddp.on('removed', args => {
-  console.log('removed', args);
-});
+// ddp.on('nosub', args => {
+//   console.log('Nosub', args);
+// });
+// ddp.on('removed', args => {
+//   console.log('removed', args);
+// });
 
 const add$ = fromEvent('added', ddp);
 const ready$ = fromEvent('ready', ddp);

@@ -1,6 +1,7 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Image } from 'react-native';
 import MapView from 'react-native-maps';
+import MyLocationIcon from '../icons/my-location.png';
 
 const styles = StyleSheet.create({
   container: {
@@ -62,7 +63,6 @@ export default class Map extends React.Component {
   }
 
   render () {
-    console.log(this.props.markers);
     return (
       <View style={[styles.container, { width: this.props.width, height: this.props.height }]}>
         <MapView
@@ -77,12 +77,15 @@ export default class Map extends React.Component {
           {this.props.markers.map((marker, i) => (
             <MapView.Marker
               key={i}
-              pinColor={this.getMarkerColor(marker)}
               coordinate={{
                 latitude: marker.latitude,
                 longitude: marker.longitude,
               }}
-            />
+              image={MyLocationIcon}
+              centerOffset={{x: 0, y: 24}}
+              anchor={{x: 0.5, y: 0.5}}
+            >
+            </MapView.Marker>
           ))}
         </MapView>
       </View>

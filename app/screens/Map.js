@@ -5,32 +5,58 @@ import {
 } from 'react-native';
 
 import Map from '../components/Map';
-import { MKButton } from 'react-native-material-kit';
 import { connect } from 'react-redux';
 import authInfoSelector from '../redux/selectors/authInfo';
-import { requestRide } from '../redux/modules/currentTrip/actions';
+import { requestRide, tripCompleted } from '../redux/modules/currentTrip/actions';
 import locationsSelector from '../redux/selectors/locations';
-
-const RequestRideButton = MKButton.coloredButton()
-  .withStyle({ marginTop: 15 })
-  .build();
+import currentTripSelector from '../redux/selectors/currentTrip.js';
+import RaisedButton from '../components/material/RaisedButton.js';
 
 class MapScreen extends React.Component {
 
   static propTypes = {
     authInfo: React.PropTypes.object.isRequired,
-    locations: React.PropTypes.object.isRequired,
+    currentTrip: React.PropTypes.object.isRequired,
     dispatch: React.PropTypes.func.isRequired,
+    locations: React.PropTypes.object.isRequired,
   };
 
-  constructor(props) {
-    super(props);
+  renderButton () {
+    function buttonPressed () {
+      const requesting = this.props.currentTrip.status === 'requestingRide'
+      const inTrip = this.props.currentTrip.status === 'driver' || this.props.currentTrip.status === 'rider'
+      if (requesting) {
+        alert('Withdrawing ride requests not implemented');
+        return;
+      } else if (inTrip) {
+        this.props.dispatch(tripCompleted());
+      } else {
+        this.props.dispatch(requestRide(this.props.authInfo.userEmail, this.props.authInfo.userId));
+      }
+    }
+    const requesting = this.props.currentTrip.status === 'requestingRide'
+    const inTrip = this.props.currentTrip.status === 'driver' || this.props.currentTrip.status === 'rider'
 
-    this.requestRide = this.requestRide.bind(this);
-  }
+    let buttonLabel;
+    if (requesting) {
+      buttonLabel = 'Withdraw Request';
+    } else if (inTrip) {
+      buttonLabel = 'Trip Completed';
+    } else {
+      buttonLabel = 'Request Ride';
+    }
 
-  requestRide () {
-    this.props.dispatch(requestRide(this.props.authInfo.userEmail, this.props.authInfo.userId));
+    return (
+      <RaisedButton
+        colored
+        onPress={buttonPressed.bind(this)}
+        style={{
+          width: 300,
+          marginTop: 15,
+        }}
+        label={buttonLabel}
+      />
+    )
   }
 
   render () {
@@ -41,6 +67,16 @@ class MapScreen extends React.Component {
       let marker = locations[key];
       if (key === this.props.authInfo.userId) {
         marker = Object.assign({}, marker, { isYourPosition: true });
+      } else if(key === this.props.currentTrip.driver.userId) {
+        marker = Object.assign({}, marker, { isDriverPosition: true });
+      } else {
+        const riderIds = this.props.currentTrip.riders.map(rider => rider.userId);
+        if (riderIds.indexOf(key) !== -1) {
+          marker = Object.assign({}, marker, { isRiderPosition: true });
+        }
+      }
+      if (this.props.currentTrip.status === 'rider' && !marker.isYourPosition && !marker.isDriverPosition) {
+        return
       }
       markers.push(marker);
     });
@@ -53,14 +89,7 @@ class MapScreen extends React.Component {
           markers={markers}
         />
         <View style={{width: 360, height: 360}}></View>
-        <RequestRideButton
-          onPress={this.requestRide}
-          width={300}
-        >
-          <Text style={{ color: 'white', fontWeight: 'bold' }}>
-            Request Ride
-          </Text>
-        </RequestRideButton>
+        {this.renderButton()}
       </View>
     );
   }
@@ -70,4 +99,5 @@ class MapScreen extends React.Component {
 export default connect(state => ({
   authInfo: authInfoSelector(state),
   locations: locationsSelector(state),
+  currentTrip: currentTripSelector(state),
 }))(MapScreen);

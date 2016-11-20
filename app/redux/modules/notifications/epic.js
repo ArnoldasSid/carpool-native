@@ -1,4 +1,4 @@
-import { merge, just, concat, empty } from 'most';
+import { merge, just, empty } from 'most';
 import { subscribeToNotifications, markNotificationAsRead } from '../../api';
 import { ofType } from 'redux-observable-adapter-most';
 import {
@@ -8,6 +8,7 @@ import {
   LOGOUT_SUCCEEDED
 } from '../auth/constants'
 import {
+  USER_RECEIVED_RIDE_REQUEST,
   USERS_RIDE_REQUEST_GOT_ACCEPTED,
 } from '../currentTrip/constants';
 import {
@@ -38,18 +39,21 @@ export default function notificationsEpic (action$) {
                 ...msg.fields,
               }
             });
-
+            const actionsToDispatch = [notificationReceived$]
+            if (msg.fields.action === 'requestRide' && !msg.fields.recievedAt) {
+              actionsToDispatch.push(just({
+                type: USER_RECEIVED_RIDE_REQUEST,
+                payload: msg.fields.payload,
+              }));
+            }
             if (msg.fields.action === 'acceptRideRequest' && !msg.fields.recievedAt) {
-              return concat(
-                just({
-                  type: USERS_RIDE_REQUEST_GOT_ACCEPTED,
-                  payload: msg.fields.payload,
-                }),
-                notificationReceived$
-              )
+              actionsToDispatch.push(just({
+                type: USERS_RIDE_REQUEST_GOT_ACCEPTED,
+                payload: msg.fields.payload,
+              }));
             }
 
-            return notificationReceived$;
+            return merge(...actionsToDispatch);
           } else if(msg.msg === 'changed') {
             return just({
               type: NOTIFICATION_UPDATED,

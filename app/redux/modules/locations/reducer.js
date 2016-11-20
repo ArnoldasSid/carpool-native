@@ -4,6 +4,9 @@ import {
 import {
   USER_LOCATION_RECEIVED,
 } from './constants';
+import {
+  TRIP_COMPLETED
+} from '../currentTrip/constants.js';
 
 const initialState = {
 };
@@ -18,7 +21,7 @@ export default function locationsReducer (state = initialState, action) {
       }
     }
     return state;
-  } else if (action.type === LOGOUT_SUCCEEDED) {
+  } else if (action.type === LOGOUT_SUCCEEDED || action.type === TRIP_COMPLETED) {
     return initialState;
   }
   return state;

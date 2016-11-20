@@ -4,8 +4,10 @@ import {
   LOGOUT_SUCCEEDED,
 } from '../auth/constants';
 import {
+  USER_RECEIVED_RIDE_REQUEST,
   USERS_RIDE_REQUEST_GOT_ACCEPTED,
   USER_ACCEPTED_RIDE_REQUEST,
+  TRIP_COMPLETED,
 } from '../currentTrip/constants';
 import {
   START_BACKGROUND_TRACKING,
@@ -19,11 +21,12 @@ import { saveLocation, subscribeToUsersLocation } from '../../api';
 export default function locationsEpic (action$, store) {
   const stopBackgroundTracking$ = ofType(STOP_BACKGROUND_TRACKING, action$);
   const logoutSuccess$ = ofType(LOGOUT_SUCCEEDED, action$);
+  const tripCompleted$ = ofType(TRIP_COMPLETED, action$);
 
   const $1 = ofType(START_BACKGROUND_TRACKING, action$).chain(action => {
     const location$ = startTracking();
     location$
-      .until(merge(stopBackgroundTracking$, logoutSuccess$))
+      .until(merge(stopBackgroundTracking$, logoutSuccess$, tripCompleted$))
       .subscribe({
         next: location => {
           saveLocation(location)
@@ -51,12 +54,12 @@ export default function locationsEpic (action$, store) {
             userId: msg.fields.userId,
             location: msg.fields.loc,
           },
-        })).until(logoutSuccess$);
+        })).until(merge(logoutSuccess$, tripCompleted$));
     });
 
   const otherUserLocation$ =
     merge(
-      ofType(USERS_RIDE_REQUEST_GOT_ACCEPTED, action$),
+      ofType(USER_RECEIVED_RIDE_REQUEST, USERS_RIDE_REQUEST_GOT_ACCEPTED, action$),
       ofType(USER_ACCEPTED_RIDE_REQUEST, action$)
         .map(action => {action.payload.userId = action.payload.requesterId; return action})
     )
@@ -69,7 +72,7 @@ export default function locationsEpic (action$, store) {
               userId: msg.fields.userId,
               location: msg.fields.loc,
             },
-          })).until(logoutSuccess$);
+          })).until(merge(logoutSuccess$, tripCompleted$));
       });
 
   return merge($1, $2, userLocation$, otherUserLocation$);

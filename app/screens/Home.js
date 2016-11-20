@@ -38,7 +38,7 @@ export default class Home extends React.Component {
           lineHeight: 30,
         }}
       >
-        <MapScreen tabLabel="Map" />
+        <MapScreen tabLabel="Trip" />
         <NotificationsScreen tabLabel="Notifications" />
         <SettingsScreen tabLabel="Settings" />
       </ScrollableTabView>

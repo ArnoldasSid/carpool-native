@@ -1,6 +1,9 @@
 import React from 'react';
 import { View, StyleSheet, Image } from 'react-native';
 import MapView from 'react-native-maps';
+import DriverIcon from '../icons/car.png';
+import RiderIcon from '../icons/account-check.png';
+import RideRequesterIcon from '../icons/account.png';
 import MyLocationIcon from '../icons/my-location.png';
 
 const styles = StyleSheet.create({
@@ -62,7 +65,20 @@ export default class Map extends React.Component {
     }
   }
 
+  getMarkerIcon (marker) {
+    if (marker.isYourPosition) {
+      return MyLocationIcon;
+    } else if (marker.isDriverPosition) {
+      return DriverIcon;
+    } else if (marker.isRiderPosition) {
+      return RiderIcon;
+    } else {
+      return RideRequesterIcon;
+    }
+  }
+
   render () {
+    console.log(this.props.markers);
     return (
       <View style={[styles.container, { width: this.props.width, height: this.props.height }]}>
         <MapView
@@ -81,7 +97,7 @@ export default class Map extends React.Component {
                 latitude: marker.latitude,
                 longitude: marker.longitude,
               }}
-              image={MyLocationIcon}
+              image={this.getMarkerIcon(marker)}
               centerOffset={{x: 0, y: 24}}
               anchor={{x: 0.5, y: 0.5}}
             >

@@ -6,6 +6,9 @@ const ddp = new DDP({
   // endpoint: 'http://localhost:3000/sockjs',
   endpoint: 'http://stg.arciau.lt/sockjs',
   SocketConstructor: SockJS,
+  autoConnect: true,
+  autoReconnect: true,
+  reconnectInterval: 5000,
 });
 
 let subs = [];

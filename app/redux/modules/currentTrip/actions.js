@@ -1,6 +1,7 @@
 import {
   USER_REQUESTED_RIDE,
   USER_ACCEPTED_RIDE_REQUEST,
+  TRIP_COMPLETED,
 } from './constants';
 
 export const requestRide = (userEmail, userId) => {
@@ -21,5 +22,11 @@ export const acceptRideRequest = (payload, requesterId, notificationId) => {
       requesterId,
       notificationId,
     },
+  };
+};
+
+export const tripCompleted = () => {
+  return {
+    type: TRIP_COMPLETED,
   };
 };

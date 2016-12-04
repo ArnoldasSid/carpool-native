@@ -1,6 +1,8 @@
 import { merge, just, empty } from 'most';
 import { subscribeToNotifications, markNotificationAsRead } from '../../api';
 import { ofType } from 'redux-observable-adapter-most';
+import moment from 'moment';
+
 import {
   LOGIN_SUCCEEDED,
   REGISTRATION_SUCCEEDED,
@@ -18,7 +20,7 @@ import {
   MARK_NOTIFICATION_AS_READ_REQUESTED,
 } from './constants';
 
-export default function notificationsEpic (action$) {
+export default function notificationsEpic (action$, store) {
 
   const authSuccess$ = ofType(LOGIN_SUCCEEDED, REGISTRATION_SUCCEEDED, AUTH_INFO_LOADED, action$);
   const logoutSuccess$ = ofType(LOGOUT_SUCCEEDED, action$);
@@ -32,6 +34,14 @@ export default function notificationsEpic (action$) {
               type: NOTIFICATIONS_SUB_READY,
             });
           } else if (msg.msg === 'added') {
+            // Ignore old notifications
+            if (msg.fields.action === 'requestRide' || msg.fields.action === 'acceptRideRequest') {
+              const timeAfterNotification = moment().valueOf() - msg.fields.tss.$date;
+              if (timeAfterNotification > 30 * 60 * 1000) {
+                return empty();
+              }
+            }
+
             const notificationReceived$ = just({
               type: NOTIFICATION_RECEIVED,
               payload: {
@@ -39,14 +49,15 @@ export default function notificationsEpic (action$) {
                 ...msg.fields,
               }
             });
-            const actionsToDispatch = [notificationReceived$]
+            const actionsToDispatch = [notificationReceived$];
+
             if (msg.fields.action === 'requestRide' && !msg.fields.recievedAt) {
               actionsToDispatch.push(just({
                 type: USER_RECEIVED_RIDE_REQUEST,
                 payload: msg.fields.payload,
               }));
             }
-            if (msg.fields.action === 'acceptRideRequest' && !msg.fields.recievedAt) {
+            if (msg.fields.action === 'acceptRideRequest' && !msg.fields.recievedAt && store.getState().notifications.subReady) {
               actionsToDispatch.push(just({
                 type: USERS_RIDE_REQUEST_GOT_ACCEPTED,
                 payload: msg.fields.payload,

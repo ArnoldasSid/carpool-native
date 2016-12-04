@@ -15,15 +15,15 @@ let subs = [];
 
 const call = (cmd, ...params) =>
   fromPromise(new Promise((resolve, reject) => {
-    console.log('Calling', cmd, params);
+    // console.log('Calling', cmd, params);
     const methodId = ddp.method(cmd, params);
     ddp.on('result', (message) => {
       if (message.id === methodId) {
         if (message.error) {
-          console.log('ERROR', message.error);
+          // console.log('ERROR', message.error);
           reject(message.error)
         } else {
-          console.log('Success', message);
+          // console.log('Success', message);
           resolve(message.result);
         }
       }

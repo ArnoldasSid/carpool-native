@@ -4,7 +4,7 @@ import { fromPromise } from 'most';
 import { startTracking, stopTracking } from '../../BackgroundGeolocationService';
 import { saveLocation, subscribeToUsersLocation, unsub, acceptRequest, requestRide } from '../../api';
 
-const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+const delay = (ms) => new Promise(resolve => setTimeout(() => resolve(true), ms));
 
 import {
   FAST_TRACKING_STARTED,
@@ -28,6 +28,10 @@ import {
   LOGIN_SUCCEEDED,
   REGISTRATION_SUCCEEDED,
 } from '../auth/constants';
+
+import {
+  TAB_IND_UPDATED,
+} from '../router/constants';
 
 import {
   MARK_NOTIFICATION_AS_READ_REQUESTED,
@@ -88,7 +92,7 @@ function* fastTrackingFlow () {
 }
 
 function* saveUsersLocation () {
-  const slowTrackingUpdateRate = 30 * 1000;
+  const slowTrackingUpdateRate = 2 * 60 * 1000;
 
   try {
     while (true) {
@@ -96,8 +100,8 @@ function* saveUsersLocation () {
         (position) => {
           saveLocation({
             ...position.coords,
-            // latitude: 54.6872 + Math.random() * 0.08 - 0.04,
-            // longitude: 25.2797 + Math.random() * 0.08 - 0.04,
+            latitude: 54.6872 + Math.random() * 0.08 - 0.04,
+            longitude: 25.2797 + Math.random() * 0.08 - 0.04,
           });
         },
         (error) => console.log(JSON.stringify(error)),
@@ -285,12 +289,40 @@ function* usersRoleFlow () {
           newRole: 'DRIVER',
         },
       });
+      yield put({
+        type: TAB_IND_UPDATED,
+        payload: {
+          tabInd: 0,
+        },
+      });
       yield take(TRIP_COMPLETED);
       yield put({
         type: USERS_ROLE_UPDATED,
         payload: {
           newRole: 'NONE',
         },
+      });
+    }
+  }
+}
+
+function* tripTimeoutFlow () {
+  const maxTripDuration = 15 * 60 * 1000;
+  while (true) {
+    yield race({
+      userAcceptedRideRequest: take(USER_ACCEPTED_RIDE_REQUEST),
+      usersRideRequestGotAccepted: take(USERS_RIDE_REQUEST_GOT_ACCEPTED),
+    });
+
+    const { timeout, tripCompleted } = yield race({
+      timeout: delay(maxTripDuration),
+      tripCompleted: take(TRIP_COMPLETED),
+    });
+
+    if (timeout) {
+      alert(`Your trip has been automatically completed because ${maxTripDuration / 60000} minutes after its start have passed`);
+      yield put({
+        type: TRIP_COMPLETED,
       });
     }
   }
@@ -305,5 +337,6 @@ export default function* tripSaga (getState) {
     fork(ridersDataFlow),
     fork(requestersDataFlow),
     fork(usersRoleFlow),
+    fork(tripTimeoutFlow),
   ];
 }

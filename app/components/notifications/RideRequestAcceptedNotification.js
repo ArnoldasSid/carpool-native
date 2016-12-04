@@ -84,7 +84,7 @@ class RideRequestAcceptedNotification extends React.Component {
             <View style={styles.actionsWrap}>
               <NotificationActionButton onPress={this.markAsRead}>
                 <Text style={{ color: '#3f51b5' }}>
-                  Awesome!
+                  Hide
                 </Text>
               </NotificationActionButton>
             </View>

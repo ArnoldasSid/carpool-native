@@ -1,10 +1,16 @@
 import React from 'react';
 import { View, StyleSheet, Image } from 'react-native';
 import MapView from 'react-native-maps';
+import moment from 'moment';
+
 import DriverIcon from '../icons/car.png';
+import DriverIcon1 from '../icons/car_1.png';
 import RiderIcon from '../icons/walk.png';
+import RiderIcon1 from '../icons/walk_1.png';
 import RideRequesterIcon from '../icons/account-alert.png';
+import RideRequesterIcon1 from '../icons/account-alert_1.png';
 import MyLocationIcon from '../icons/target.png';
+import MyLocationIcon1 from '../icons/target_1.png';
 
 const styles = StyleSheet.create({
   container: {
@@ -66,14 +72,17 @@ export default class Map extends React.Component {
   }
 
   getMarkerIcon (marker) {
+    const greyTime = 2 * 60 * 1000;
+    const isIconGrey = moment().valueOf() - marker.timestamp > greyTime;
+    
     if (marker.isYourPosition) {
-      return MyLocationIcon;
+      return isIconGrey ? MyLocationIcon1 : MyLocationIcon;
     } else if (marker.isDriverPosition) {
-      return DriverIcon;
+      return isIconGrey ? DriverIcon1 : DriverIcon;
     } else if (marker.isRiderPosition) {
-      return RiderIcon;
+      return isIconGrey ? RiderIcon1 : RiderIcon;
     } else {
-      return RideRequesterIcon;
+      return isIconGrey ? RideRequesterIcon1 : RideRequesterIcon;
     }
   }
 

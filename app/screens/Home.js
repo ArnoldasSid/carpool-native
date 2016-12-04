@@ -3,13 +3,21 @@ import {
   View,
   Text,
 } from 'react-native';
+import { connect } from 'react-redux';
+import ScrollableTabView from 'react-native-scrollable-tab-view';
 
 import MapScreen from './Map';
 import NotificationsScreen from './Notifications';
 import SettingsScreen from './Settings';
-import ScrollableTabView from 'react-native-scrollable-tab-view';
+import activeTabIndexSelector from '../redux/selectors/activeTabIndex';
+import { changeTab } from '../redux/modules/router/actions';
 
-export default class Home extends React.Component {
+class Home extends React.Component {
+
+  static propTypes = {
+    dispatch: React.PropTypes.func.isRequired,
+    activeTabIndex: React.PropTypes.number.isRequired,
+  };
 
   constructor (props) {
     super(props);
@@ -22,15 +30,13 @@ export default class Home extends React.Component {
   }
 
   tabChanged (tabChangeInfo) {
-    this.setState({
-      page: tabChangeInfo.i,
-    });
+    this.props.dispatch(changeTab(tabChangeInfo.i));
   }
 
   render () {
     return (
       <ScrollableTabView
-        page={this.state.page}
+        page={this.props.activeTabIndex}
         onChangeTab={this.tabChanged}
         tabBarTextStyle={{
           fontFamily: 'roboto',
@@ -44,3 +50,7 @@ export default class Home extends React.Component {
     )
   }
 }
+
+export default connect(state => ({
+  activeTabIndex: activeTabIndexSelector(state),
+}))(Home);

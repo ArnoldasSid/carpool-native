@@ -1,5 +1,6 @@
 import {
   ROUTE_REPLACE_REQUESTED,
+  TAB_IND_UPDATED,
 } from './constants';
 
 import {
@@ -11,6 +12,7 @@ import {
 
 const initialState = {
   route: 'landing',
+  tabInd: 0,
 };
 
 export default function routerReducer (state = initialState, action) {
@@ -28,6 +30,11 @@ export default function routerReducer (state = initialState, action) {
     return {
       ...state,
       route: 'login',
+    }
+  } else if (action.type === TAB_IND_UPDATED) {
+    return {
+      ...state,
+      tabInd: action.payload.tabInd,
     }
   }
   return state;

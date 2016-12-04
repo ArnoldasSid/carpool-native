@@ -9,7 +9,6 @@ import { connect } from 'react-redux';
 
 import { markNotificationAsRead } from '../../redux/modules/notifications/actions';
 import NotificationActionButton from './NotificationActionButton';
-import { acceptRideRequest } from '../../redux/modules/notifications/actions';
 import moment from 'moment';
 
 const theme = getTheme();

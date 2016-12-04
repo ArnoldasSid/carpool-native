@@ -10,7 +10,7 @@ import { getTheme } from 'react-native-material-kit';
 import moment from 'moment';
 import { markNotificationAsRead } from '../../redux/modules/notifications/actions';
 
-import { acceptRideRequest } from '../../redux/modules/currentTrip/actions';
+import { acceptRideRequest } from '../../redux/modules/trip/actions';
 import authInfoSelector from '../../redux/selectors/authInfo';
 import NotificationActionButton from './NotificationActionButton';
 

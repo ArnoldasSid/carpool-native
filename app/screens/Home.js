@@ -17,7 +17,7 @@ export default class Home extends React.Component {
     this.tabChanged = this.tabChanged.bind(this);
 
     this.state = {
-      page: 1,
+      page: 0,
     };
   }
 
@@ -30,7 +30,6 @@ export default class Home extends React.Component {
   render () {
     return (
       <ScrollableTabView
-        initialPage={1}
         page={this.state.page}
         onChangeTab={this.tabChanged}
         tabBarTextStyle={{

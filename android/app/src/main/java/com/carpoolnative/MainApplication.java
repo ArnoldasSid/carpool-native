@@ -8,7 +8,6 @@ import com.oblador.vectoricons.VectorIconsPackage;
 import com.github.xinthink.rnmk.ReactMaterialKitPackage;
 import com.geektime.reactnativeonesignal.ReactNativeOneSignalPackage;
 import com.marianhello.react.BackgroundGeolocationPackage;
-import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import com.airbnb.android.react.maps.MapsPackage;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
@@ -34,7 +33,6 @@ public class MainApplication extends Application implements ReactApplication {
             new ReactMaterialKitPackage(),
             new ReactNativeOneSignalPackage(),
             new BackgroundGeolocationPackage(),
-            new ReactNativePushNotificationPackage(),
             new MapsPackage()
       );
     }

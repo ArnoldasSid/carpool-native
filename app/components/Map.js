@@ -2,9 +2,9 @@ import React from 'react';
 import { View, StyleSheet, Image } from 'react-native';
 import MapView from 'react-native-maps';
 import DriverIcon from '../icons/car.png';
-import RiderIcon from '../icons/account-check.png';
-import RideRequesterIcon from '../icons/account.png';
-import MyLocationIcon from '../icons/my-location.png';
+import RiderIcon from '../icons/walk.png';
+import RideRequesterIcon from '../icons/account-alert.png';
+import MyLocationIcon from '../icons/target.png';
 
 const styles = StyleSheet.create({
   container: {
@@ -78,7 +78,7 @@ export default class Map extends React.Component {
   }
 
   render () {
-    console.log(this.props.markers);
+    // console.log(this.props.markers);
     return (
       <View style={[styles.container, { width: this.props.width, height: this.props.height }]}>
         <MapView

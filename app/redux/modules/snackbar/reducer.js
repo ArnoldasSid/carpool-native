@@ -10,7 +10,6 @@ const initialState = {
 
 export default function snackbarReducer (state = initialState, action) {
   if (action.type === ADD_SNACKBAR_MESSAGE) {
-    console.log('Should add snackbar message');
     return {
       ...state,
       text: action.payload.text,

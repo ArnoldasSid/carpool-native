@@ -15,6 +15,7 @@ let subs = [];
 
 const call = (cmd, ...params) =>
   fromPromise(new Promise((resolve, reject) => {
+    console.log('Calling', cmd, params);
     const methodId = ddp.method(cmd, params);
     ddp.on('result', (message) => {
       if (message.id === methodId) {
@@ -51,7 +52,16 @@ const subscribe = (subName, ...params) => {
   const subAdd$ = add$.filter(msg => msg.collection === collectionName);
   const subChange$ = changed$.filter(msg => msg.collection === collectionName);
   const subReady$ = ready$.filter(msg => msg.subs.indexOf(subId) !== -1);
-  return merge(subAdd$, subChange$, subReady$);
+  const stream = merge(subAdd$, subChange$, subReady$);
+
+  if (subName === 'locations') {
+    return {
+      stream,
+      subId
+    }
+  }
+
+  return stream;
 };
 
 export const login = (email, password) => {
@@ -75,6 +85,7 @@ export const registerDevice = (deviceId) => {
 };
 
 export const requestRide = (userEmail, userId) => {
+  // return fromPromise(Promise.resolve(3));
   return call('api.v1.requestRide', { userEmail, userId }, "MLjB32uWCXyZjRN5X");
 };
 
@@ -96,17 +107,19 @@ export const saveLocation = (location) => {
 };
 
 export const subscribeToUsersLocation = (userId, numLocations = 1) => {
-  const locationSub = subscribe('locations', userId, numLocations)
-  locationSub.subscribe({
-    next (val) {
-      console.log('Location', val);
-    }
-  });
-  return locationSub;
+  const { stream, subId } = subscribe('locations', userId, numLocations);
+  return {
+    subId,
+    location$: stream.filter(msg => msg.msg === 'ready' || msg.fields.userId === userId),
+  }
 };
 
 export const subscribeToNotifications = () => {
   return subscribe('notifications');
+};
+
+export const unsub = (subId) => {
+  ddp.unsub(subId);
 };
 
 export const unsubAll = () => {

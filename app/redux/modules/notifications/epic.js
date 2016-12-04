@@ -10,7 +10,7 @@ import {
 import {
   USER_RECEIVED_RIDE_REQUEST,
   USERS_RIDE_REQUEST_GOT_ACCEPTED,
-} from '../currentTrip/constants';
+} from '../trip/constants';
 import {
   NOTIFICATIONS_SUB_READY,
   NOTIFICATION_RECEIVED,
@@ -67,10 +67,10 @@ export default function notificationsEpic (action$) {
     );
 
   const notificationRead$ = ofType(MARK_NOTIFICATION_AS_READ_REQUESTED, action$)
-    .chain(action => {
+    .tap(console.log.bind(console))
+    .observe(action => {
       markNotificationAsRead(action.payload.notificationId);
-      return empty();
     });
 
-  return merge(notificationsSubscription$, notificationRead$);
+  return merge(notificationsSubscription$);
 }

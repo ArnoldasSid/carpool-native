@@ -1,0 +1,89 @@
+// @flow
+import {
+  LOGOUT_SUCCEEDED,
+} from '../auth/constants';
+import {
+  USERS_ROLE_UPDATED,
+  TRIP_COMPLETED,
+  USER_DATA_UPDATED,
+  DRIVER_DATA_UPDATED,
+  RIDER_DATA_UPDATED,
+  REQUESTER_DATA_UPDATED,
+} from './constants';
+type Location = {
+  latitude: number,
+  longitude: number,
+}
+type User = {
+  id: string,
+  email: string,
+  location: Location,
+}
+type UserStatus = 'NONE' | 'RIDER' | 'DRIVER' | 'REQUESTER'
+type TripState = {
+  usersRole: UserStatus,
+  user: ?User,
+  driver: ?User,
+  riders: {[id:string]: User},
+  requesters: {[id:string]: User},
+  tripStartTime: any,
+}
+const initialState: TripState = {
+  usersRole: 'NONE',
+  user: null,
+  driver: null,
+  riders: {},
+  requesters: {},
+  tripStartTime: null,
+};
+export default function tripReducer (state: TripState = initialState, action: any) {
+  if (action.type === LOGOUT_SUCCEEDED) {
+    return initialState;
+  } else if (action.type === USERS_ROLE_UPDATED) {
+    return {
+      ...state,
+      usersRole: action.payload.newRole,
+    };
+  } else if (action.type === TRIP_COMPLETED) {
+    if (state.usersRole === 'DRIVER' || state.usersRole === 'RIDER') {
+      return {
+        ...state,
+        usersRole: 'NONE',
+        driver: null,
+        riders: {},
+      }
+    }
+  } else if (action.type === USER_DATA_UPDATED) {
+    return {
+      ...state,
+      user: action.payload,
+    }
+  } else if (action.type === DRIVER_DATA_UPDATED) {
+    return {
+      ...state,
+      driver: action.payload,
+    }
+  } else if (action.type === RIDER_DATA_UPDATED) {
+    const requesters = state.requesters;
+    delete requesters[action.payload.id];
+    return {
+      ...state,
+      requesters: {
+        ...requesters,
+      },
+      riders: {
+        ...state.riders,
+        [action.payload.id]: action.payload,
+      }
+    }
+  } else if (action.type === REQUESTER_DATA_UPDATED) {
+    return {
+      ...state,
+      requesters: {
+        ...state.requesters,
+        [action.payload.id]: action.payload,
+      }
+    }
+  }
+  return state;
+}

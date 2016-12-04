@@ -48,8 +48,8 @@ class Notifications extends React.Component {
 
   willLeave() {
     return {
-      height: spring(0, { stiffness: 200, damping: 23 }),
-      opacity: spring(0, { stiffness: 200, damping: 23 }),
+      height: spring(0, { stiffness: 200, damping: 25 }),
+      opacity: spring(0, { stiffness: 200, damping: 25 }),
     };
   }
 

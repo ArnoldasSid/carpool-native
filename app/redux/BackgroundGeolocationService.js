@@ -8,7 +8,7 @@ let location$ = subject();
 export const initBackgroundGeolocation = () => {
   if (!initialized) {
     BackgroundGeolocation.configure({
-      desiredAccuracy: 1,
+      desiredAccuracy: 0,
       // stationaryRadius: 50,
       // distanceFilter: 50,
       debug: false, // Enable/disable sounds

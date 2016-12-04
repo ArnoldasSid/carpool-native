@@ -74,7 +74,7 @@ export default class Map extends React.Component {
   getMarkerIcon (marker) {
     const greyTime = 2 * 60 * 1000;
     const isIconGrey = moment().valueOf() - marker.timestamp > greyTime;
-    
+
     if (marker.isYourPosition) {
       return isIconGrey ? MyLocationIcon1 : MyLocationIcon;
     } else if (marker.isDriverPosition) {

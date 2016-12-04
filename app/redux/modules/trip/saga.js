@@ -100,8 +100,8 @@ function* saveUsersLocation () {
         (position) => {
           saveLocation({
             ...position.coords,
-            latitude: 54.6872 + Math.random() * 0.08 - 0.04,
-            longitude: 25.2797 + Math.random() * 0.08 - 0.04,
+            // latitude: 54.6872 + Math.random() * 0.08 - 0.04,
+            // longitude: 25.2797 + Math.random() * 0.08 - 0.04,
           });
         },
         (error) => console.log(JSON.stringify(error)),

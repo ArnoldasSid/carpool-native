@@ -1,7 +1,10 @@
 // @flow
+import moment from 'moment'
+
 import {
   LOGOUT_SUCCEEDED,
-} from '../auth/constants';
+} from '../auth/constants'
+
 import {
   USERS_ROLE_UPDATED,
   TRIP_COMPLETED,
@@ -9,41 +12,53 @@ import {
   DRIVER_DATA_UPDATED,
   RIDER_DATA_UPDATED,
   REQUESTER_DATA_UPDATED,
-} from './constants';
+  TRIP_LOADED,
+} from './constants'
+
 type Location = {
   latitude: number,
   longitude: number,
 }
+
 type User = {
   id: string,
   email: string,
   location: Location,
 }
+
 type UserStatus = 'NONE' | 'RIDER' | 'DRIVER' | 'REQUESTER'
+
 type TripState = {
   usersRole: UserStatus,
   user: ?User,
   driver: ?User,
   riders: {[id:string]: User},
   requesters: {[id:string]: User},
-  tripStartTime: any,
+  otherUsers: {[id:string]: User},
+  tripStartTime: number,
+  lastUpdateTime: number,
 }
+
 const initialState: TripState = {
   usersRole: 'NONE',
   user: null,
   driver: null,
   riders: {},
   requesters: {},
-  tripStartTime: null,
-};
+  otherUsers: {},
+  tripStartTime: 0,
+  lastUpdateTime: 0,
+}
+
 export default function tripReducer (state: TripState = initialState, action: any) {
   if (action.type === LOGOUT_SUCCEEDED) {
-    return initialState;
+    return initialState
   } else if (action.type === USERS_ROLE_UPDATED) {
     return {
       ...state,
       usersRole: action.payload.newRole,
-    };
+      lastUpdateTime: action.payload.newRole === state.usersRole ? state.lastUpdateTime : moment().valueOf()
+    }
   } else if (action.type === TRIP_COMPLETED) {
     if (state.usersRole === 'DRIVER' || state.usersRole === 'RIDER') {
       return {
@@ -64,8 +79,8 @@ export default function tripReducer (state: TripState = initialState, action: an
       driver: action.payload,
     }
   } else if (action.type === RIDER_DATA_UPDATED) {
-    const requesters = state.requesters;
-    delete requesters[action.payload.id];
+    const requesters = state.requesters
+    delete requesters[action.payload.id]
     return {
       ...state,
       requesters: {
@@ -84,6 +99,8 @@ export default function tripReducer (state: TripState = initialState, action: an
         [action.payload.id]: action.payload,
       }
     }
+  } else if (action.type === TRIP_LOADED) {
+    return action.payload
   }
-  return state;
+  return state
 }

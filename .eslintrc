@@ -1,0 +1,13 @@
+{
+  "extends": "react-app",
+  "rules": {
+    // Couple personal choices
+    "space-before-function-paren": [2, "always"],
+    "semi": [2, "never"],
+
+    // Disabling rules because of not found exceptions
+    "import/no-webpack-loader-syntax": 0,
+    "react/no-danger-with-children": 0,
+    "react/style-prop-object": 0
+  }
+}

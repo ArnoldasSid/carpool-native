@@ -4,9 +4,10 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "test": "jest"
+    "test": "jest --watch"
   },
   "dependencies": {
+    "date-fns": "^1.16.0",
     "ddp.js": "^2.2.0",
     "moment": "^2.16.0",
     "most": "^1.0.4",

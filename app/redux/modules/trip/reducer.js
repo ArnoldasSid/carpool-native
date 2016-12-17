@@ -1,106 +1,82 @@
 // @flow
-import moment from 'moment'
+import R from 'ramda'
+
+import type { UsersRole, Location, User } from '../../../models.js'
 
 import {
   LOGOUT_SUCCEEDED,
 } from '../auth/constants'
 
 import {
-  USERS_ROLE_UPDATED,
+  YOUR_ROLE_UPDATED,
+  YOUR_LOCATION_UPDATED,
   TRIP_COMPLETED,
-  USER_DATA_UPDATED,
-  DRIVER_DATA_UPDATED,
-  RIDER_DATA_UPDATED,
-  REQUESTER_DATA_UPDATED,
   TRIP_LOADED,
+  OTHER_USERS_LOCATION_UPDATED,
+  OTHER_USERS_ROLE_UPDATED,
+  OTHER_USER_ADDED,
+  OTHER_USER_REMOVED,
 } from './constants'
 
-type Location = {
-  latitude: number,
-  longitude: number,
-}
-
-type User = {
-  id: string,
-  email: string,
-  location: Location,
-}
-
-type UserStatus = 'NONE' | 'RIDER' | 'DRIVER' | 'REQUESTER'
-
 type TripState = {
-  usersRole: UserStatus,
-  user: ?User,
-  driver: ?User,
-  riders: {[id:string]: User},
-  requesters: {[id:string]: User},
-  otherUsers: {[id:string]: User},
-  tripStartTime: number,
+  yourRole: UsersRole,
+  yourLocation: ?Location,
+  otherUsers: {[id: string]: User},
   lastUpdateTime: number,
 }
 
 const initialState: TripState = {
-  usersRole: 'NONE',
-  user: null,
-  driver: null,
-  riders: {},
-  requesters: {},
+  yourRole: 'NONE',
+  yourLocation: null,
   otherUsers: {},
-  tripStartTime: 0,
   lastUpdateTime: 0,
 }
 
-export default function tripReducer (state: TripState = initialState, action: any) {
-  if (action.type === LOGOUT_SUCCEEDED) {
-    return initialState
-  } else if (action.type === USERS_ROLE_UPDATED) {
-    return {
-      ...state,
-      usersRole: action.payload.newRole,
-      lastUpdateTime: action.payload.newRole === state.usersRole ? state.lastUpdateTime : moment().valueOf()
-    }
+function getTripUpdates (state: TripState, action: any): ((tripState: TripState) => TripState) {
+  if (action.type === YOUR_ROLE_UPDATED) {
+    const { newRole } = action.payload
+    return R.evolve({
+      yourRole: () => newRole,
+      lastUpdateTime: state.yourRole !== newRole ? new Date().valueOf() : state.lastUpdateTime,
+    })
+  } else if (action.type === YOUR_LOCATION_UPDATED) {
+    const { location } = action.payload
+    return R.evolve({
+      yourLocation: () => location,
+    })
   } else if (action.type === TRIP_COMPLETED) {
-    if (state.usersRole === 'DRIVER' || state.usersRole === 'RIDER') {
-      return {
-        ...state,
-        usersRole: 'NONE',
-        driver: null,
-        riders: {},
-      }
-    }
-  } else if (action.type === USER_DATA_UPDATED) {
-    return {
-      ...state,
-      user: action.payload,
-    }
-  } else if (action.type === DRIVER_DATA_UPDATED) {
-    return {
-      ...state,
-      driver: action.payload,
-    }
-  } else if (action.type === RIDER_DATA_UPDATED) {
-    const requesters = state.requesters
-    delete requesters[action.payload.id]
-    return {
-      ...state,
-      requesters: {
-        ...requesters,
-      },
-      riders: {
-        ...state.riders,
-        [action.payload.id]: action.payload,
-      }
-    }
-  } else if (action.type === REQUESTER_DATA_UPDATED) {
-    return {
-      ...state,
-      requesters: {
-        ...state.requesters,
-        [action.payload.id]: action.payload,
-      }
-    }
+    return R.evolve({
+      usersRole: () => 'NONE',
+      otherUsers: R.pickBy(user => user.role !== 'RIDER' && user.role !== 'DRIVER'),
+    })
   } else if (action.type === TRIP_LOADED) {
-    return action.payload
+    const newTrip = action.payload
+    return R.always(newTrip)
+  } else if (action.type === OTHER_USERS_LOCATION_UPDATED) {
+    const { id, location } = action.payload
+    return R.assocPath(['otherUsers', id, 'location'], location)
+  } else if (action.type === OTHER_USERS_ROLE_UPDATED) {
+    console.log('TODO:', action)
+    return R.identity
+  } else if (action.type === OTHER_USER_ADDED) {
+    const newUser = action.payload
+    if (!(newUser.id in state.otherUsers)) {
+      return R.evolve({
+        otherUsers: R.assoc(newUser.id, newUser)
+      })
+    }
+
+    return R.identity
+  } else if (action.type === OTHER_USER_REMOVED) {
+    console.log('TODO:', action)
+    return R.identity
+  } else if (action.type === LOGOUT_SUCCEEDED) {
+    console.log('TODO:', action)
+    return R.always(initialState)
   }
-  return state
+  return R.identity
+}
+
+export default function tripReducer (state: TripState = initialState, action: any): TripState {
+  return getTripUpdates(state, action)(state)
 }

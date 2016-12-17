@@ -4,6 +4,7 @@
     // Couple personal choices
     "space-before-function-paren": [2, "always"],
     "semi": [2, "never"],
+    "comma-dangle": [2, "always-multiline"],
 
     // Disabling rules because of not found exceptions
     "import/no-webpack-loader-syntax": 0,

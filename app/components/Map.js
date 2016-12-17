@@ -1,16 +1,19 @@
-import React from 'react';
-import { View, StyleSheet, Image } from 'react-native';
-import MapView from 'react-native-maps';
-import moment from 'moment';
+// @flow
+import React from 'react'
+import { View, StyleSheet, Image } from 'react-native'
+import MapView from 'react-native-maps'
+import moment from 'moment'
 
-import DriverIcon from '../icons/car.png';
-import DriverIcon1 from '../icons/car_1.png';
-import RiderIcon from '../icons/walk.png';
-import RiderIcon1 from '../icons/walk_1.png';
-import RideRequesterIcon from '../icons/account-alert.png';
-import RideRequesterIcon1 from '../icons/account-alert_1.png';
-import MyLocationIcon from '../icons/target.png';
-import MyLocationIcon1 from '../icons/target_1.png';
+import type { Location, User, UsersRole } from '../models.js'
+
+import DriverIcon from '../icons/car.png'
+import DriverIcon1 from '../icons/car_1.png'
+import RiderIcon from '../icons/walk.png'
+import RiderIcon1 from '../icons/walk_1.png'
+import RideRequesterIcon from '../icons/account-alert.png'
+import RideRequesterIcon1 from '../icons/account-alert_1.png'
+import MyLocationIcon from '../icons/target.png'
+import MyLocationIcon1 from '../icons/target_1.png'
 
 const styles = StyleSheet.create({
   container: {
@@ -21,23 +24,29 @@ const styles = StyleSheet.create({
   map: {
     ...StyleSheet.absoluteFillObject,
   },
-});
+})
+
+type Props = {
+  width: number,
+  height: number,
+  yourLocation: Location,
+  otherUsers: User[],
+}
 
 export default class Map extends React.Component {
+  props: Props
 
-  static propTypes = {
-    width: React.PropTypes.number.isRequired,
-    height: React.PropTypes.number.isRequired,
-    markers: React.PropTypes.array.isRequired,
-  };
+  state: {
+    currTime: number,
+    timeUpdateInterval: ?number,
+  }
 
-  constructor (props) {
-    super(props);
-
-    this.getMarkerColor = this.getMarkerColor.bind(this);
+  constructor (props: Props) {
+    super(props)
 
     this.state = {
       currTime: new Date().valueOf(),
+      timeUpdateInterval: null,
     }
   }
 
@@ -45,49 +54,36 @@ export default class Map extends React.Component {
     const timeUpdateInterval = setInterval(() => {
       this.setState({
         currTime: new Date().valueOf(),
-      });
-    }, 5000);
+      })
+    }, 5000)
     this.setState({
       timeUpdateInterval,
-    });
+    })
   }
 
   componentWillUnmount () {
-    clearTimeout(this.state.timeUpdateInterval);
+    clearTimeout(this.state.timeUpdateInterval)
   }
 
-  getMarkerColor (marker) {
-    const tDiff = this.state.currTime - marker.timestamp;
-    if (marker.isYourPosition) {
-      if (tDiff > 60000) {
-        return 'lightblue';
-      }
-      return 'blue';
-    } else {
-      if (tDiff > 60000) {
-        return 'orange';
-      }
-      return 'red';
-    }
-  }
+  getMarkerIcon (role: UsersRole | 'YOU', time: number) {
+    const greyTime = 2 * 60 * 1000
+    const isIconGrey = moment().valueOf() - time > greyTime
 
-  getMarkerIcon (marker) {
-    const greyTime = 2 * 60 * 1000;
-    const isIconGrey = moment().valueOf() - marker.timestamp > greyTime;
-
-    if (marker.isYourPosition) {
-      return isIconGrey ? MyLocationIcon1 : MyLocationIcon;
-    } else if (marker.isDriverPosition) {
-      return isIconGrey ? DriverIcon1 : DriverIcon;
-    } else if (marker.isRiderPosition) {
-      return isIconGrey ? RiderIcon1 : RiderIcon;
-    } else {
-      return isIconGrey ? RideRequesterIcon1 : RideRequesterIcon;
+    if (role === 'YOU') {
+      return isIconGrey ? MyLocationIcon1 : MyLocationIcon
+    } else if (role === 'DRIVER') {
+      return isIconGrey ? DriverIcon1 : DriverIcon
+    } else if (role === 'RIDER') {
+      return isIconGrey ? RiderIcon1 : RiderIcon
+    } else if (role === 'REQUESTER') {
+      return isIconGrey ? RideRequesterIcon1 : RideRequesterIcon
     }
   }
 
   render () {
-    // console.log(this.props.markers);
+    const { yourLocation, otherUsers } = this.props
+    console.log('MAP', otherUsers)
+
     return (
       <View style={[styles.container, { width: this.props.width, height: this.props.height }]}>
         <MapView
@@ -99,21 +95,25 @@ export default class Map extends React.Component {
             longitudeDelta: 0.1,
           }}
         >
-          {this.props.markers.map((marker, i) => (
+          {yourLocation ? (
             <MapView.Marker
-              key={i}
-              coordinate={{
-                latitude: marker.latitude,
-                longitude: marker.longitude,
-              }}
-              image={this.getMarkerIcon(marker)}
+              coordinate={yourLocation}
+              image={this.getMarkerIcon('YOU', yourLocation.time)}
               centerOffset={{x: 0, y: 24}}
               anchor={{x: 0.5, y: 0.5}}
-            >
-            </MapView.Marker>
-          ))}
+            />
+          ) : null}
+          {otherUsers.map(user => user.location ? (
+            <MapView.Marker
+              key={user.id}
+              coordinate={user.location}
+              image={this.getMarkerIcon(user.role, user.location.time)}
+              centerOffset={{x: 0, y: 24}}
+              anchor={{x: 0.5, y: 0.5}}
+            />
+          ) : null)}
         </MapView>
       </View>
-    );
+    )
   }
 }

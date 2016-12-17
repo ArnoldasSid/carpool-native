@@ -1,1 +1,0 @@
-export default state => state.trip.user ? state.trip.user.location : null;

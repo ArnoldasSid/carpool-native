@@ -1,10 +1,10 @@
-import BackgroundGeolocation from 'react-native-mauron85-background-geolocation';
-import { subject } from 'most-subject';
+import BackgroundGeolocation from 'react-native-mauron85-background-geolocation'
+import { subject } from 'most-subject'
 
-let initialized = false;
-let isTracking = false;
-let shouldStart = false;
-let location$ = subject();
+let initialized = false
+let isTracking = false
+let shouldStart = false
+let location$ = subject()
 
 const commonConfig = {
   desiredAccuracy: 0,
@@ -19,100 +19,100 @@ const commonConfig = {
   stopOnTerminate: true,
   syncThreshold: 50,
   maxLocations: 10,
-};
+}
 
 export const initBackgroundGeolocation = () => {
   if (!initialized) {
-    BackgroundGeolocation.configure(commonConfig);
+    BackgroundGeolocation.configure(commonConfig)
 
     BackgroundGeolocation.on('location', (location) => {
-      console.log('Location detected', location);
-      location$.next(location);
-    });
-    initialized = true;
+      console.log('Location detected', location)
+      location$.next(location)
+    })
+    initialized = true
   }
-  return location$;
-};
+  return location$
+}
 
 function startGeolocation () {
   if (!isTracking) {
     BackgroundGeolocation.start(
       () => {
-        isTracking = true;
+        isTracking = true
       },
       (error) => {
         // Tracking has not started because of error
         // you should adjust your app UI for example change switch element to indicate
         // that service is not running
         if (error.code === 2) {
-          BackgroundGeolocation.showAppSettings();
+          BackgroundGeolocation.showAppSettings()
         } else {
-          console.log('[ERROR] Start failed: ' + error.message);
+          console.log('[ERROR] Start failed: ' + error.message)
         }
-        isTracking = false;
+        isTracking = false
       }
-    );
+    )
   }
 }
 
 export const startTracking = () => {
   if (isTracking) {
-    return location$;
+    return location$
   }
 
   if (!initialized) {
-    initBackgroundGeolocation();
+    initBackgroundGeolocation()
   }
 
 
   BackgroundGeolocation.isLocationEnabled((enabled) => {
     if (enabled) {
-      startGeolocation();
+      startGeolocation()
     } else {
       // Location services are disabled
-      BackgroundGeolocation.showLocationSettings();
+      BackgroundGeolocation.showLocationSettings()
 
-      shouldStart = true;
+      shouldStart = true
       BackgroundGeolocation.watchLocationMode(geolocationEnabled => {
         if (geolocationEnabled && shouldStart) {
-          shouldStart = false;
-          startGeolocation();
+          shouldStart = false
+          startGeolocation()
         }
-      });
+      })
     }
-  });
+  })
 
-  return location$;
-};
+  return location$
+}
 
 export const stopTracking = () => {
-  // if (!isTracking) { return; }
+  // if (!isTracking) { return }
 
-  shouldStart = false;
-  BackgroundGeolocation.stop();
-  isTracking = false;
-};
+  shouldStart = false
+  BackgroundGeolocation.stop()
+  isTracking = false
+}
 
 export const switchToSlowTracking = () => {
 
-  stopTracking();
+  stopTracking()
 
   BackgroundGeolocation.configure({
     ...commonConfig,
-  });
+  })
 
-  startTracking();
-};
+  startTracking()
+}
 
 export const switchToFastTracking = () => {
 
-  stopTracking();
+  stopTracking()
 
   BackgroundGeolocation.configure({
     ...commonConfig,
     interval: 10 * 1000,
     fastestInterval: 5 * 1000,
-  });
+  })
 
-  startTracking();
-};
+  startTracking()
+}

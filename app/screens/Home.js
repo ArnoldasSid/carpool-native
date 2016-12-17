@@ -20,17 +20,17 @@ class Home extends React.Component {
   };
 
   constructor (props) {
-    super(props);
+    super(props)
 
-    this.tabChanged = this.tabChanged.bind(this);
+    this.tabChanged = this.tabChanged.bind(this)
 
     this.state = {
       page: 0,
-    };
+    }
   }
 
   tabChanged (tabChangeInfo) {
-    this.props.dispatch(changeTab(tabChangeInfo.i));
+    this.props.dispatch(changeTab(tabChangeInfo.i))
   }
 
   render () {
@@ -53,4 +53,4 @@ class Home extends React.Component {
 
 export default connect(state => ({
   activeTabIndex: activeTabIndexSelector(state),
-}))(Home);
+}))(Home)

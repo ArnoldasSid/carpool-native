@@ -1,17 +1,17 @@
-import React from 'react';
+import React from 'react'
 import {
   View,
   Text,
   StyleSheet,
-} from 'react-native';
-import { getTheme } from 'react-native-material-kit';
-import { connect } from 'react-redux';
+} from 'react-native'
+import { getTheme } from 'react-native-material-kit'
+import { connect } from 'react-redux'
 
-import { markNotificationAsRead } from '../../redux/modules/notifications/actions';
-import NotificationActionButton from './NotificationActionButton';
-import moment from 'moment';
+import { markNotificationAsRead } from '../../redux/modules/notifications/actions'
+import NotificationActionButton from './NotificationActionButton'
+import moment from 'moment'
 
-const theme = getTheme();
+const theme = getTheme()
 
 const styles = StyleSheet.create({
   actionsWrap: {
@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
   },
-});
+})
 
 
 class RideRequestAcceptedNotification extends React.Component {
@@ -37,17 +37,17 @@ class RideRequestAcceptedNotification extends React.Component {
   };
 
   constructor (props) {
-    super(props);
+    super(props)
 
-    this.markAsRead = this.markAsRead.bind(this);
+    this.markAsRead = this.markAsRead.bind(this)
   }
 
   markAsRead () {
-    this.props.dispatch(markNotificationAsRead(this.props.id));
+    this.props.dispatch(markNotificationAsRead(this.props.id))
   }
 
   getTimeDiff (notificationTimestamp) {
-    return moment().from(notificationTimestamp);
+    return moment().from(notificationTimestamp)
   }
 
   render () {
@@ -91,8 +91,8 @@ class RideRequestAcceptedNotification extends React.Component {
           </View>
         </View>
       </View>
-    );
+    )
   }
 }
 
-export default connect()(RideRequestAcceptedNotification);
+export default connect()(RideRequestAcceptedNotification)

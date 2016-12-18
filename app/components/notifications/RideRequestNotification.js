@@ -1,20 +1,19 @@
-import React from 'react';
+import React from 'react'
 import {
   View,
   Text,
   StyleSheet,
-} from 'react-native';
-import Button from 'react-native-button';
-import { connect } from 'react-redux';
-import { getTheme } from 'react-native-material-kit';
-import moment from 'moment';
-import { markNotificationAsRead } from '../../redux/modules/notifications/actions';
+} from 'react-native'
+import { connect } from 'react-redux'
+import { getTheme } from 'react-native-material-kit'
+import moment from 'moment'
+import { markNotificationAsRead } from '../../redux/modules/notifications/actions'
 
-import { acceptRideRequest } from '../../redux/modules/trip/actions';
-import authInfoSelector from '../../redux/selectors/authInfo';
-import NotificationActionButton from './NotificationActionButton';
+import { acceptRideRequest } from '../../redux/modules/trip/actions'
+import authInfoSelector from '../../redux/selectors/authInfo'
+import NotificationActionButton from './NotificationActionButton'
 
-const theme = getTheme();
+const theme = getTheme()
 
 const styles = StyleSheet.create({
   actionsWrap: {
@@ -25,7 +24,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
   },
-});
+})
 
 
 class RideRequestNotification extends React.Component {
@@ -41,28 +40,28 @@ class RideRequestNotification extends React.Component {
   };
 
   constructor (props) {
-    super(props);
+    super(props)
 
-    this.acceptRideRequest = this.acceptRideRequest.bind(this);
-    this.declineRideRequest = this.declineRideRequest.bind(this);
+    this.acceptRideRequest = this.acceptRideRequest.bind(this)
+    this.declineRideRequest = this.declineRideRequest.bind(this)
   }
 
   acceptRideRequest () {
     this.props.dispatch(acceptRideRequest({
         userId: this.props.authInfo.userId,
-        userEmail: this.props.authInfo.userEmail
+        userEmail: this.props.authInfo.userEmail,
       },
       this.props.requesterId,
       this.props.id,
-    ));
+    ))
   }
 
   declineRideRequest () {
-    this.props.dispatch(markNotificationAsRead(this.props.id));
+    this.props.dispatch(markNotificationAsRead(this.props.id))
   }
 
   getTimeDiff (notificationTimestamp) {
-    return moment(notificationTimestamp).from(moment());
+    return moment(notificationTimestamp).from(moment())
   }
 
   render () {
@@ -117,4 +116,4 @@ class RideRequestNotification extends React.Component {
 
 export default connect(state => ({
   authInfo: authInfoSelector(state),
-}))(RideRequestNotification);
+}))(RideRequestNotification)

@@ -6,12 +6,12 @@ export const USERS_ROLE_UPDATED = 'USERS_ROLE_UPDATED'
 
 
 
-export const USER_REQUESTED_RIDE = 'USER_REQUESTED_RIDE'
-export const USER_RECEIVED_RIDE_REQUEST = 'USER_RECEIVED_RIDE_REQUEST'
-export const USER_ACCEPTED_RIDE_REQUEST = 'USER_ACCEPTED_RIDE_REQUEST'
-export const USERS_RIDE_REQUEST_GOT_ACCEPTED = 'USERS_RIDE_REQUEST_GOT_ACCEPTED'
-export const USER_WITHDRAWN_RIDE_REQUEST = 'USER_WITHDRAWN_RIDE_REQUEST'
-export const TRIP_COMPLETED = 'TRIP_COMPLETED'
+export const USER_REQUESTED_RIDE = '[Trip] User requested a ride'
+export const USER_RECEIVED_RIDE_REQUEST = '[Trip] User received a ride request'
+export const USER_ACCEPTED_RIDE_REQUEST = '[Trip] User accepted a ride request'
+export const USERS_RIDE_REQUEST_GOT_ACCEPTED = '[Trip] User\'s ride request got accepted'
+export const USER_WITHDRAWN_RIDE_REQUEST = '[Trip] User withdrawn ride request'
+export const TRIP_COMPLETED = '[Trip] Trip completed'
 
 export const TRIP_LOADED = '[Trip] Trip loaded'
 

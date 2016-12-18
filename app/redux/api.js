@@ -86,7 +86,7 @@ export const registerDevice = (deviceId) => {
 
 export const requestRide = (userEmail, userId) => {
   // return fromPromise(Promise.resolve(3))
-  return call('api.v1.requestRide', { userEmail, userId }, "MLjB32uWCXyZjRN5X");
+  return call('api.v1.requestRide', { userEmail, userId }, userId)
 }
 
 export const acceptRequest = (payload, requesterId) => {

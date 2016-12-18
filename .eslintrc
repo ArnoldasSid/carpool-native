@@ -5,6 +5,7 @@
     "space-before-function-paren": [2, "always"],
     "semi": [2, "never"],
     "comma-dangle": [2, "always-multiline"],
+    "max-len": [2, 100],
 
     // Disabling rules because of not found exceptions
     "import/no-webpack-loader-syntax": 0,

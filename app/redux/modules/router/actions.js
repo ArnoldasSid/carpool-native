@@ -1,7 +1,7 @@
 import {
   ROUTE_REPLACE_REQUESTED,
   TAB_IND_UPDATED,
-} from './constants';
+} from './constants'
 
 export const replaceRoute = (newRoute) => {
   return {
@@ -9,8 +9,8 @@ export const replaceRoute = (newRoute) => {
     payload: {
       route: newRoute,
     },
-  };
-};
+  }
+}
 
 export const changeTab = (newTabInd) => {
   return {
@@ -18,5 +18,5 @@ export const changeTab = (newTabInd) => {
     payload: {
       tabInd: newTabInd,
     },
-  };
-};
+  }
+}

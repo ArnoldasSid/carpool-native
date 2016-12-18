@@ -25,7 +25,7 @@ type TripState = {
   lastUpdateTime: number,
 }
 
-const initialState: TripState = {
+export const initialState: TripState = {
   yourRole: 'NONE',
   yourLocation: null,
   otherUsers: {},
@@ -53,16 +53,17 @@ function getTripUpdates (state: TripState, action: any): ((tripState: TripState)
     const newTrip = action.payload
     return R.always(newTrip)
   } else if (action.type === OTHER_USERS_LOCATION_UPDATED) {
-    const { id, location } = action.payload
-    return R.assocPath(['otherUsers', id, 'location'], location)
+    const { id, newLocation } = action.payload
+    return R.assocPath(['otherUsers', id, 'location'], newLocation)
   } else if (action.type === OTHER_USERS_ROLE_UPDATED) {
     console.log('TODO:', action)
-    return R.identity
+    const { id, newRole } = action.payload
+    return R.assocPath(['otherUsers', id, 'role'], newRole)
   } else if (action.type === OTHER_USER_ADDED) {
     const newUser = action.payload
     if (!(newUser.id in state.otherUsers)) {
       return R.evolve({
-        otherUsers: R.assoc(newUser.id, newUser)
+        otherUsers: R.assoc(newUser.id, newUser),
       })
     }
 
@@ -71,7 +72,6 @@ function getTripUpdates (state: TripState, action: any): ((tripState: TripState)
     console.log('TODO:', action)
     return R.identity
   } else if (action.type === LOGOUT_SUCCEEDED) {
-    console.log('TODO:', action)
     return R.always(initialState)
   }
   return R.identity

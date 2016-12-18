@@ -6,7 +6,7 @@ import tripFlow from './flows/trip.js'
 import tripTimeoutFlow from './flows/tripTimeout.js'
 import tripSavingFlow from './flows/tripSaving.js'
 import tripInitFlow from './flows/tripInit.js'
-import requestReceivedFlow from './flows/requestReceived.js'
+import otherUserFlow from './flows/otherUser.js'
 
 export default function* tripSaga (): Generator<IOEffect, *, *> {
   yield [
@@ -15,6 +15,6 @@ export default function* tripSaga (): Generator<IOEffect, *, *> {
     fork(tripTimeoutFlow),
     fork(tripSavingFlow),
     fork(tripInitFlow),
-    fork(requestReceivedFlow),
+    fork(otherUserFlow),
   ]
 }

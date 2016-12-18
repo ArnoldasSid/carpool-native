@@ -9,7 +9,7 @@ import type { UsersRole, Location, User } from '../models.js'
 
 import Map from '../components/Map'
 import { connect } from 'react-redux'
-import { requestRide, tripCompleted, withdrawRideRequest } from '../redux/modules/trip/actions'
+import { requestRide, completeTrip, withdrawRideRequest } from '../redux/modules/trip/actions'
 import RaisedButton from '../components/material/RaisedButton.js'
 import authInfoSelector from '../redux/selectors/authInfo'
 import yourLocationSelector from '../redux/selectors/yourLocation.js'
@@ -51,7 +51,7 @@ class MapScreen extends React.Component {
       if (requesting) {
         this.props.dispatch(withdrawRideRequest())
       } else if (inTrip) {
-        this.props.dispatch(tripCompleted())
+        this.props.dispatch(completeTrip())
       } else {
         this.props.dispatch(requestRide(this.props.authInfo.userEmail, this.props.authInfo.userId))
       }

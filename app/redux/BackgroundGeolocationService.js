@@ -1,10 +1,10 @@
 import BackgroundGeolocation from 'react-native-mauron85-background-geolocation'
-import { subject } from 'most-subject'
+import { async } from 'most-subject'
 
 let initialized = false
 let isTracking = false
 let shouldStart = false
-let location$ = subject()
+let location$ = async()
 
 const commonConfig = {
   desiredAccuracy: 0,

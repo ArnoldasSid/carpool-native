@@ -4,6 +4,7 @@ import DDP from 'ddp.js'
 import { fromPromise, fromEvent, merge, empty } from 'most'
 import store from './createStore.js'
 import { addLogMessage } from './modules/devLog/actions.js'
+import type { Location } from '../models.js'
 
 const ddp = new DDP({
   // endpoint: 'http://localhost:3000/sockjs',
@@ -75,11 +76,11 @@ const subscribe = (subName, ...params) => {
   return stream
 }
 
-export const login = (email, password) => {
+export const login = (email: string, password: string) => {
   return call('login', { user: { email }, password })
 }
 
-export const register = (email, password) => {
+export const register = (email: string, password: string) => {
   return call('createUser', { email, password })
 }
 
@@ -87,7 +88,7 @@ export const logout = () => {
   return call('logout')
 }
 
-export const registerDevice = (deviceId) => {
+export const registerDevice = (deviceId: string) => {
   if (deviceId == null) {
     alert('Incorrect device id')
     return empty()
@@ -95,27 +96,30 @@ export const registerDevice = (deviceId) => {
   return call('api.v1.registerDevice', deviceId)
 }
 
-export const requestRide = (userEmail, userId) => {
+export const requestRide = (userEmail: string, userId: string) => {
   return call('api.v1.requestRide', { userEmail, userId }, userId)
 }
 
-export const acceptRequest = (payload, requesterId) => {
+export const acceptRequest = (payload: any, requesterId: string) => {
   return call('api.v1.acceptRideRequest', payload, requesterId)
 }
 
-export const markNotificationAsRead = (notificationId) => {
+export const markNotificationAsRead = (notificationId: string) => {
   return call('api.v1.ackNotification', notificationId)
 }
 
-export const saveLocation = (location) => {
+export const saveLocation = (location: Location) => {
   return call('api.v1.saveLocation', location)
 }
 
-function addUserToGroup (groupName, userId) {
-  return call('api.v1.addUserToGroup', groupName, userId)
-}
+// Function used by mock api, here just to avoid flowtype errors
+export function sendLocation (location: ?Location): void {}
 
-export const subscribeToUsersLocation = (userId, numLocations = 1) => {
+// function addUserToGroup (groupName, userId) {
+//   return call('api.v1.addUserToGroup', groupName, userId)
+// }
+
+export const subscribeToUsersLocation = (userId: string, numLocations: number = 1) => {
   const { stream, subId } = subscribe('locations', userId, numLocations)
   return {
     subId,
@@ -127,7 +131,7 @@ export const subscribeToNotifications = () => {
   return subscribe('notifications')
 }
 
-export const unsub = (subId) => {
+export const unsub = (subId: number) => {
   ddp.unsub(subId)
 }
 

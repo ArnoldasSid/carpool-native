@@ -2,15 +2,15 @@ import React from 'react';
 import {
   View,
   Dimensions,
-} from 'react-native';
-import { connect } from 'react-redux';
+} from 'react-native'
+import { connect } from 'react-redux'
 
-import Snackbar from './components/Snackbar';
-import Home from './screens/Home';
-import Login from './screens/Login';
-import Register from './screens/Register';
-import Landing from './screens/Landing.js';
-import routerStateSelector from './redux/selectors/routerState';
+import Snackbar from './components/Snackbar'
+import Home from './screens/Home'
+import Login from './screens/Login'
+import Register from './screens/Register'
+import Landing from './screens/Landing.js'
+import routerStateSelector from './redux/selectors/routerState'
 
 class DumbRouter extends React.Component {
 
@@ -19,7 +19,7 @@ class DumbRouter extends React.Component {
   };
 
   getCurrentRoute () {
-    const { route } = this.props.routerState;
+    const { route } = this.props.routerState
     if (route === 'login') {
       return <Login />
     } else if (route === 'register') {
@@ -32,7 +32,8 @@ class DumbRouter extends React.Component {
   }
 
   render () {
-    const { width, height } = Dimensions.get('window');
+    const { width, height } = Dimensions.get('window')
+    console.log(width, height)
     return (
       <View
         style={{
@@ -61,4 +62,4 @@ class DumbRouter extends React.Component {
 
 export default connect(state => ({
   routerState: routerStateSelector(state),
-}))(DumbRouter);
+}))(DumbRouter)

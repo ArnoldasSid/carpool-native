@@ -6,7 +6,7 @@ const initialState = {
   activationTimestamp: 0,
   text: '',
   duration: 0,
-};
+}
 
 export default function snackbarReducer (state = initialState, action) {
   if (action.type === ADD_SNACKBAR_MESSAGE) {
@@ -17,5 +17,5 @@ export default function snackbarReducer (state = initialState, action) {
     }
   }
 
-  return state;
+  return state
 };

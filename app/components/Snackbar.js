@@ -2,17 +2,11 @@ import React from 'react';
 import {
   View,
   Text,
-} from 'react-native';
-import { MKButton } from 'react-native-material-kit';
-import { connect } from 'react-redux';
-import { Motion, spring } from 'react-motion';
+} from 'react-native'
+import { connect } from 'react-redux'
+import { Motion, spring } from 'react-motion'
 
 import snackbarSelector from '../redux/selectors/snackbar'
-
-const SnackbarButton =
-  MKButton
-    .coloredFlatButton()
-    .build();
 
 class Snackbar extends React.Component {
 
@@ -22,83 +16,85 @@ class Snackbar extends React.Component {
   };
 
   constructor (props) {
-    super(props);
+    super(props)
 
     this.state = {
       snackbarVisible: false,
-      marginTop: 0,
-    };
+      bottom: -48,
+    }
   }
 
   showSnackbar () {
     this.setState({
       snackbarVisible: true,
-      marginTop: spring(-48),
-    });
+      bottom: spring(0),
+    })
   }
 
   hideSnackbar () {
     this.setState({
       snackbarVisible: false,
-      marginTop: spring(0),
+      bottom: spring(-48),
     })
   }
 
   componentWillReceiveProps (nextProps) {
-    this.showSnackbar();
+    this.showSnackbar()
 
-    setTimeout(() => this.hideSnackbar(), nextProps.snackbar.duration);
+    setTimeout(() => this.hideSnackbar(), nextProps.snackbar.duration)
   }
 
   render () {
+    console.log('Snackbar')
     return (
-      <Motion
-        defaultStyle={{ marginTop: 0 }}
-        style={{ marginTop: this.state.marginTop }}
-      >
-        {({ marginTop }) => (
-          <View
-            style={{
-              flex: 1,
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              width: this.props.screenWidth,
-              marginTop: marginTop,
-              height: 48,
-              backgroundColor: '#333',
-            }}
-          >
-            <Text
+        <Motion
+          defaultStyle={{ bottom: -48 }}
+          style={{ bottom: this.state.bottom }}
+        >
+          {({ bottom }) => (
+            <View
               style={{
-                marginLeft: 24,
-                color: 'white',
+                position: 'absolute',
+                bottom,
+                flex: 1,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                width: this.props.screenWidth,
+                height: 48,
+                backgroundColor: '#333',
               }}
             >
-              {this.props.snackbar.text || 'No text'}
-            </Text>
-            {/*
-             <SnackbarButton
-             style={{
-             marginLeft: 14,
-             marginRight: 14,
-             padding: 10,
-             }}
-             >
-             <Text
-             style={{
-             fontWeight: 'bold',
-             color: '#ff4081',
-             }}
-             >
-             Action!
-             </Text>
-             </SnackbarButton>
-             */}
-          </View>
-        )}
-      </Motion>
-    );
+              <Text
+                style={{
+                  marginLeft: 24,
+                  color: 'white',
+                }}
+              >
+                {this.props.snackbar.text || 'Empty snackbar - if you see this it\'s a bug'}
+              </Text>
+              {/*
+               <SnackbarButton
+               style={{
+               marginLeft: 14,
+               marginRight: 14,
+               padding: 10,
+               }}
+               >
+               <Text
+               style={{
+               fontWeight: 'bold',
+               color: '#ff4081',
+               }}
+               >
+               Action!
+               </Text>
+               </SnackbarButton>
+               */}
+            </View>
+          )}
+        </Motion>
+    )
   }
 }
 

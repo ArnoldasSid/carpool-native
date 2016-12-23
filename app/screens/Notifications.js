@@ -1,16 +1,17 @@
-import React from 'react';
+import React from 'react'
 import {
   View,
   Text,
   ScrollView,
-} from 'react-native';
-import { connect } from 'react-redux';
-import { TransitionMotion, presets, spring } from 'react-motion';
+} from 'react-native'
+import { connect } from 'react-redux'
+import { TransitionMotion, spring } from 'react-motion'
 
-import visibleNotificationsSelector from '../redux/selectors/visibleNotifications';
-import notificationsLoadedSelector from '../redux/selectors/notificationsLoaded';
-import RideRequestNotification from '../components/notifications/RideRequestNotification';
-import RideRequestAcceptedNotification from '../components/notifications/RideRequestAcceptedNotification';
+import visibleNotificationsSelector from '../redux/selectors/visibleNotifications'
+import notificationsLoadedSelector from '../redux/selectors/notificationsLoaded'
+import RideRequestNotification from '../components/notifications/RideRequestNotification'
+import RideRequestAcceptedNotification from
+  '../components/notifications/RideRequestAcceptedNotification'
 
 class Notifications extends React.Component {
 
@@ -20,13 +21,13 @@ class Notifications extends React.Component {
   };
 
   constructor (props) {
-    super(props);
+    super(props)
 
-    this.willEnter = this.willEnter.bind(this);
-    this.willLeave = this.willLeave.bind(this);
+    this.willEnter = this.willEnter.bind(this)
+    this.willLeave = this.willLeave.bind(this)
   }
 
-  getStyles() {
+  getStyles () {
     return this.props.notifications.map((notification, i) => {
       return {
         key: notification.id,
@@ -34,26 +35,27 @@ class Notifications extends React.Component {
         style: {
           height: spring(200, { stiffness: 25, damping: 3 }),
           opacity: spring(1, { stiffness: 25, damping: 3 }),
-        }
-      };
-    });
+        },
+      }
+    })
   }
 
-  willEnter() {
+  willEnter () {
     return {
       height: 0,
       opacity: 1,
-    };
+    }
   }
 
-  willLeave() {
+  willLeave () {
     return {
       height: spring(0, { stiffness: 200, damping: 25 }),
       opacity: spring(0, { stiffness: 200, damping: 25 }),
-    };
+    }
   }
 
   render () {
+    console.log('Notifications', this.props.notifications)
     return (
       <ScrollView>
         {!this.props.notificationsLoaded ? (
@@ -74,7 +76,7 @@ class Notifications extends React.Component {
           {styles => (
             <View>
               {styles.map(style => {
-                const notification = style.data;
+                const notification = style.data
                 if (notification.action === 'requestRide') {
                   return (
                     <RideRequestNotification
@@ -86,7 +88,7 @@ class Notifications extends React.Component {
                       height={style.style.height}
                       opacity={style.style.opacity}
                     />
-                  );
+                  )
                 } else if (notification.action === 'acceptRideRequest') {
                   return (
                     <RideRequestAcceptedNotification
@@ -100,17 +102,17 @@ class Notifications extends React.Component {
                     />
                   )
                 }
-                return null;
+                return null
               })}
             </View>
           )}
         </TransitionMotion>
       </ScrollView>
-    );
+    )
   }
 }
 
 export default connect(state => ({
   notifications: visibleNotificationsSelector(state),
   notificationsLoaded: notificationsLoadedSelector(state),
-}))(Notifications);
+}))(Notifications)

@@ -12,8 +12,9 @@ import router from './modules/router/reducer'
 import trip from './modules/trip/reducer'
 import tripSaga from './modules/trip/saga'
 import snackbar from './modules/snackbar/reducer'
+import devLog from './modules/devLog/reducer.js'
 
-export default function createAppStore () {
+export function createAppStore () {
 
   const rootEpic = combineEpics(
     authEpic,
@@ -28,11 +29,15 @@ export default function createAppStore () {
     router,
     trip,
     snackbar,
+    devLog,
   })
 
   const store = createStore(
     reducer,
-    composeWithDevTools(applyMiddleware(sagaMiddleware, createEpicMiddleware(rootEpic, { adapter: mostAdapter }))),
+    composeWithDevTools(applyMiddleware(
+      sagaMiddleware,
+      createEpicMiddleware(rootEpic, { adapter: mostAdapter })
+    ))
   )
 
   sagaMiddleware.run(tripSaga)
@@ -43,3 +48,6 @@ export default function createAppStore () {
 
   return store
 }
+
+const store = createAppStore()
+export default store

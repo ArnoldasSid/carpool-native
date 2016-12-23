@@ -33,7 +33,7 @@ function* idleFlow (): any {
   })
 
   if (r && r.userRequestedRide) {
-    yield fork(requestRide, r.userRequestedRide.payload.email, r.userRequestedRide.id)
+    yield fork(requestRide, r.userRequestedRide.payload.email, r.userRequestedRide.payload.id)
     yield put(updateYourRole('REQUESTER'))
     yield* requesterFlow()
   } else if (r && r.userAcceeptedRideRequest) {

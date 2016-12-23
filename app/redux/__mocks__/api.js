@@ -19,4 +19,4 @@ export function sendLocation (location = {latitude: Math.random(), longitude: Ma
   return location
 }
 
-const unsub = jest.fn()
+export const unsub = jest.fn()

@@ -1,7 +1,7 @@
 // @flow
 import type { UsersRole } from '../../../../models.js'
 import { take, race, put, fork, select, call, cancel, cancelled } from 'redux-saga/effects'
-import { delay } from 'redux-saga'
+import { delay, eventChannel, END } from 'redux-saga'
 import {
   USER_ACCEPTED_RIDE_REQUEST,
   USER_RECEIVED_RIDE_REQUEST,
@@ -41,26 +41,32 @@ function* otherDriversFlow (id, locationTrackingTask) {
   yield cancel(locationTrackingTask)
 }
 
+function streamToChannel (stream) {
+  return eventChannel(emitter => {
+    const sub = stream.subscribe({
+      next (msg) {
+        if (msg.msg === 'added') {
+          emitter(msg.fields.loc)
+        }
+      },
+      complete () {
+        emitter(END)
+      },
+    })
+
+    return () => {
+      sub.unsubscribe()
+    }
+  })
+}
+
 function* trackUsersLocation (id: string) {
   const { subId, location$ } = subscribeToUsersLocation(id)
-
+  const locationsChan = yield call(streamToChannel, location$)
   try {
-    let prevLocation = null
-    let currLocation = null
-
-    location$
-      .filter(msg => msg.msg === 'added')
-      .map(msg => msg.fields.loc)
-      .observe((location) => {
-        currLocation = location
-      })
-
     while (true) {
-      if (currLocation && currLocation !== prevLocation) {
-        prevLocation = currLocation
-        yield put(updateOtherUsersLocation(id, currLocation))
-      }
-      yield call(delay, 50)
+      const newLocation: any = yield take(locationsChan)
+      yield put(updateOtherUsersLocation(id, newLocation))
     }
   } finally {
     if (yield cancelled()) {

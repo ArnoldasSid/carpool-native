@@ -91,7 +91,7 @@ export function addOtherUser (userId: string, role: UsersRole) {
   return {
     type: OTHER_USER_ADDED,
     payload: {
-      userId,
+      id: userId,
       role,
     },
   }

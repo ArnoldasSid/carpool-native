@@ -1,6 +1,9 @@
+// @flow
 import SockJS from 'sockjs-client'
 import DDP from 'ddp.js'
 import { fromPromise, fromEvent, merge, empty } from 'most'
+import store from './createStore.js'
+import { addLogMessage } from './modules/devLog/actions.js'
 
 const ddp = new DDP({
   // endpoint: 'http://localhost:3000/sockjs',
@@ -11,19 +14,27 @@ const ddp = new DDP({
   reconnectInterval: 5000,
 })
 
+ddp.on('connected', () => {
+  store.dispatch(addLogMessage('Connected to ddp'))
+})
+
+ddp.on('disconnected', () => {
+  store.dispatch(addLogMessage('Disconnected from ddp'))
+})
+
 let subs = []
 
 const call = (cmd, ...params) =>
   fromPromise(new Promise((resolve, reject) => {
-    // console.log('Calling', cmd, params);
+    // console.log('Calling', cmd, params)
     const methodId = ddp.method(cmd, params)
     ddp.on('result', (message) => {
       if (message.id === methodId) {
         if (message.error) {
-          // console.log('ERROR', message.error);
+          // console.log('ERROR', message.error)
           reject(message.error)
         } else {
-          // console.log('Success', message);
+          // console.log('Success', message)
           resolve(message.result)
         }
       }
@@ -57,7 +68,7 @@ const subscribe = (subName, ...params) => {
   if (subName === 'locations') {
     return {
       stream,
-      subId
+      subId,
     }
   }
 
@@ -85,7 +96,6 @@ export const registerDevice = (deviceId) => {
 }
 
 export const requestRide = (userEmail, userId) => {
-  // return fromPromise(Promise.resolve(3))
   return call('api.v1.requestRide', { userEmail, userId }, userId)
 }
 
@@ -99,6 +109,10 @@ export const markNotificationAsRead = (notificationId) => {
 
 export const saveLocation = (location) => {
   return call('api.v1.saveLocation', location)
+}
+
+function addUserToGroup (groupName, userId) {
+  return call('api.v1.addUserToGroup', groupName, userId)
 }
 
 export const subscribeToUsersLocation = (userId, numLocations = 1) => {

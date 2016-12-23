@@ -1,25 +1,31 @@
-import React from 'react';
-import {
-  View,
-  Text,
-} from 'react-native';
-import { connect } from 'react-redux';
-import ScrollableTabView from 'react-native-scrollable-tab-view';
+// @flow
+import React from 'react'
+import { connect } from 'react-redux'
+import ScrollableTabView from 'react-native-scrollable-tab-view'
 
-import MapScreen from './Map';
-import NotificationsScreen from './Notifications';
-import SettingsScreen from './Settings';
-import activeTabIndexSelector from '../redux/selectors/activeTabIndex';
-import { changeTab } from '../redux/modules/router/actions';
+import MapScreen from './Map'
+import NotificationsScreen from './Notifications'
+import SettingsScreen from './Settings'
+import DevLogScreen from './DevLog.js'
+import activeTabIndexSelector from '../redux/selectors/activeTabIndex'
+import authInfoSelector from '../redux/selectors/authInfo.js'
+import { changeTab } from '../redux/modules/router/actions'
+
+type Props = {
+  dispatch: Function,
+  activeTabIndex: number,
+  authInfo: Object,
+}
 
 class Home extends React.Component {
 
-  static propTypes = {
-    dispatch: React.PropTypes.func.isRequired,
-    activeTabIndex: React.PropTypes.number.isRequired,
-  };
+  props: Props
+  state: {
+    page: number,
+  }
+  tabChanged: Function
 
-  constructor (props) {
+  constructor (props: Props) {
     super(props)
 
     this.tabChanged = this.tabChanged.bind(this)
@@ -46,6 +52,7 @@ class Home extends React.Component {
         <MapScreen tabLabel="Trip" />
         <NotificationsScreen tabLabel="Notifications" />
         <SettingsScreen tabLabel="Settings" />
+        <DevLogScreen tabLabel="Log" />
       </ScrollableTabView>
     )
   }
@@ -53,4 +60,5 @@ class Home extends React.Component {
 
 export default connect(state => ({
   activeTabIndex: activeTabIndexSelector(state),
+  authInfo: authInfoSelector(state),
 }))(Home)

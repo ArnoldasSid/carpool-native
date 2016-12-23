@@ -53,12 +53,11 @@ function getTripUpdates (state: TripState, action: any): ((tripState: TripState)
     const newTrip = action.payload
     return R.always(newTrip)
   } else if (action.type === OTHER_USERS_LOCATION_UPDATED) {
-    const { id, newLocation } = action.payload
-    return R.assocPath(['otherUsers', id, 'location'], newLocation)
+    const { userId, newLocation } = action.payload
+    return R.assocPath(['otherUsers', userId, 'location'], newLocation)
   } else if (action.type === OTHER_USERS_ROLE_UPDATED) {
-    console.log('TODO:', action)
-    const { id, newRole } = action.payload
-    return R.assocPath(['otherUsers', id, 'role'], newRole)
+    const { userId, newRole } = action.payload
+    return R.assocPath(['otherUsers', userId, 'role'], newRole)
   } else if (action.type === OTHER_USER_ADDED) {
     const newUser = action.payload
     if (!(newUser.id in state.otherUsers)) {

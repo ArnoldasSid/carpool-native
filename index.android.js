@@ -8,10 +8,8 @@ import { Provider } from 'react-redux'
 import OneSignal from 'react-native-onesignal'
 
 import DumbRouter from './app/DumbRouter'
-import createStore from './app/redux/createStore'
+import store from './app/redux/createStore'
 import { ONESIGNAL_ID_AVAILABLE } from './app/redux/modules/auth/constants'
-
-const store = createStore()
 
 OneSignal.enableNotificationsWhenActive(false)
 OneSignal.enableInAppAlertNotification(false)

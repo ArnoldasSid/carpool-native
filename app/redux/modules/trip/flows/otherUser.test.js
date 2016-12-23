@@ -11,7 +11,12 @@ import configureStore from 'redux-mock-store'
 jest.mock('../../../api.js')
 import otherUserFlow from './otherUser'
 import tripReducer, { initialState } from '../reducer.js'
-import { receiveRideRequest, acceptUsersRideRequest, completeTrip, acceptRideRequest } from '../actions.js'
+import {
+  receiveRideRequest,
+  acceptUsersRideRequest,
+  completeTrip,
+  acceptRideRequest,
+} from '../actions.js'
 import {
   OTHER_USER_ADDED,
   OTHER_USERS_LOCATION_UPDATED,
@@ -40,7 +45,7 @@ function checkIfLocationReceived (userId: string, store: any) {
           && action.payload.userId === userId
       )
       resolve(locationReceived)
-    }, 100)
+    })
   })
 }
 
@@ -53,7 +58,7 @@ describe('other user flow', () => {
 
       expect(store.getActions().some(action =>
         action.type === OTHER_USER_ADDED
-          && action.payload.userId === requesterId
+          && action.payload.id === requesterId
           && action.payload.role === 'REQUESTER'
       )).toBe(true)
 
@@ -75,7 +80,7 @@ describe('other user flow', () => {
         store.dispatch(acceptUsersRideRequest({ userId: driverId }))
         expect(store.getActions().some(action =>
           action.type === OTHER_USER_ADDED
-            && action.payload.userId === driverId
+            && action.payload.id === driverId
             && action.payload.role === 'DRIVER'
         )).toBe(true)
       })
@@ -112,7 +117,6 @@ describe('other user flow', () => {
         const store = getMockStore()
         store.dispatch(receiveRideRequest({ userId: riderId }))
         store.dispatch(acceptRideRequest({}, riderId, ''))
-        console.log(store.getActions())
         expect(store.getActions().some(action =>
           action.type === OTHER_USERS_ROLE_UPDATED
             && action.payload.userId === riderId

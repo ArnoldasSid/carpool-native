@@ -1,3 +1,4 @@
 <resources>
+    <string moduleConfig="true" name="reactNativeCodePush_androidDeploymentKey">tpZpeH8INeW8hQraE55xSRuYvSAF41byXqHoGx</string>
     <string name="app_name">CarpoolNative</string>
 </resources>

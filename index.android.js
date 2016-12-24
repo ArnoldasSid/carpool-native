@@ -1,5 +1,6 @@
 // @flow
 
+import codePush from 'react-native-code-push'
 import React, { Component } from 'react'
 import {
   AppRegistry,
@@ -37,5 +38,7 @@ export default class CarpoolNative extends Component {
     )
   }
 }
+
+CarpoolNative = codePush({ checkFrequency: codePush.CheckFrequency.ON_APP_RESUME })(CarpoolNative)
 
 AppRegistry.registerComponent('CarpoolNative', () => CarpoolNative)

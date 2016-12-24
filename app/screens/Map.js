@@ -33,13 +33,13 @@ class MapScreen extends React.Component {
       statusText += 'a rider'
     } else if (yourRole === 'DRIVER') {
       statusText += 'a driver'
-    } else if (yourRole === 'REQEUSTER') {
+    } else if (yourRole === 'REQUESTER') {
       statusText +=' requesting a ride'
     }
 
     return (
       <View>
-        <Text>{statusText}</Text>
+        <Text>{statusText}!</Text>
       </View>
     )
   }

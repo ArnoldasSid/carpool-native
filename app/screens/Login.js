@@ -68,14 +68,16 @@ class Login extends React.Component {
             </View>
           ) : null}
           <MKTextField
-            style={{ width: width }}
+            style={{ width: width, height: 45 }}
+            textInputStyle={{ flex: 1 }}
             floatingLabelEnabled={true}
             onChangeText={(email) => this.setState({ email })}
             value={this.state.email}
             placeholder="Email"
           />
           <MKTextField
-            style={{ width: width }}
+            style={{ width: width, height: 45, marginTop: 5 }}
+            textInputStyle={{ flex: 1 }}
             floatingLabelEnabled={true}
             onChangeText={(password) => this.setState({ password })}
             value={this.state.password}

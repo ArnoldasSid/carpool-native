@@ -75,14 +75,16 @@ class Register extends React.Component {
             </View>
           ) : null}
           <MKTextField
-            style={{ width: width }}
+            style={{ width: width, height: 45 }}
+            textInputStyle={{ flex: 1 }}
             floatingLabelEnabled={true}
             value={this.state.email}
             onChangeText={email => this.setState({ email })}
             placeholder="Email"
           />
           <MKTextField
-            style={{ width: width }}
+            style={{ width: width, height: 45, marginTop: 5 }}
+            textInputStyle={{ flex: 1 }}
             floatingLabelEnabled={true}
             value={this.state.password}
             onChangeText={password => this.setState({ password })}
@@ -90,7 +92,8 @@ class Register extends React.Component {
             password
           />
           <MKTextField
-            style={{ width: width }}
+            style={{ width: width, height: 45, marginTop: 5 }}
+            textInputStyle={{ flex: 1 }}
             floatingLabelEnabled={true}
             value={this.state.password2}
             onChangeText={password2 => this.setState({ password2 })}

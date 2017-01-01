@@ -17,7 +17,7 @@
     "react-motion": "^0.4.5",
     "react-native": "^0.39.2",
     "react-native-code-push": "^1.16.1-beta",
-    "react-native-maps": "^0.10.2",
+    "react-native-maps": "^0.12.2",
     "react-native-material-kit": "^0.3.3",
     "react-native-mauron85-background-geolocation": "^0.2.0-alpha.5",
     "react-native-onesignal": "^1.2.1",

@@ -45,8 +45,7 @@ class Home extends React.Component {
         page={this.props.activeTabIndex}
         onChangeTab={this.tabChanged}
         tabBarTextStyle={{
-          fontFamily: 'roboto',
-          lineHeight: 30,
+          paddingTop: 22,
         }}
       >
         <MapScreen tabLabel="Trip" />

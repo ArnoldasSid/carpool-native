@@ -6,7 +6,7 @@ import {
   startTracking,
   stopTracking,
   switchToFastTracking,
-  switchToSlowTracking
+  switchToSlowTracking,
 } from '../../../BackgroundGeolocationService'
 import { saveLocation } from '../../../api'
 import {
@@ -26,7 +26,6 @@ import {
 } from '../actions.js'
 
 function* trackLocation () {
-  console.log('Tracking started')
   try {
     const location$ = startTracking()
     let prevLocation = null
@@ -39,6 +38,7 @@ function* trackLocation () {
         prevLocation = currLocation
         yield put(updateYourLocation(currLocation))
         yield fork(saveLocation, currLocation)
+        console.log('Got location', currLocation)
       }
       yield delay(500)
     }

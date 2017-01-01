@@ -7,7 +7,7 @@ import {
 
 import type { UsersRole, Location, User } from '../models.js'
 
-import Map from '../components/Map'
+// import Map from '../components/Map'
 import { connect } from 'react-redux'
 import { requestRide, completeTrip, withdrawRideRequest } from '../redux/modules/trip/actions'
 import RaisedButton from '../components/material/RaisedButton.js'
@@ -85,12 +85,12 @@ class MapScreen extends React.Component {
     return (
       <View style={{ flex: 1, alignItems: 'center' }}>
         <View style={{width: 360, height: 360}}>
-          <Map
+          {/* <Map
             width={360}
             height={360}
             yourLocation={yourLocation}
             otherUsers={otherUsers}
-          />
+          /> */}
         </View>
         {this.renderStatusText(yourRole)}
         {this.renderButton(yourRole)}

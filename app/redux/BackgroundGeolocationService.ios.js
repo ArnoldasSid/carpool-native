@@ -4,7 +4,7 @@ let isTracking = false
 let location$ = async()
 let watchId = null
 
-export const startTracking = (trackingInterval) => {
+export const startTracking = (distanceFilter = 20) => {
   if (isTracking) {
     return location$
   }
@@ -32,12 +32,12 @@ export const switchToSlowTracking = () => {
 
   stopTracking()
 
-  return startTracking()
+  return startTracking(30)
 }
 
 export const switchToFastTracking = () => {
 
   stopTracking()
 
-  return startTracking()
+  return startTracking(10)
 }

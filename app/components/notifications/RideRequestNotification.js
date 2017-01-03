@@ -67,14 +67,19 @@ class RideRequestNotification extends React.Component {
   render () {
     return (
       <View style={{
-        maxHeight: this.props.height,
+        height: 200,
         opacity: this.props.opacity,
       }}>
         <View style={{
           padding: 10,
+          height: 200,
         }}>
           <View
-            style={theme.cardStyle}
+            style={{
+              ...theme.cardStyle,
+              flex: 1,
+              height: 200,
+            }}
           >
             <Text style={{
               left: 10,

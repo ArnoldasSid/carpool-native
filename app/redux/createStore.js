@@ -14,6 +14,8 @@ import tripSaga from './modules/trip/saga'
 import snackbar from './modules/snackbar/reducer'
 import devLog from './modules/devLog/reducer.js'
 
+import { APP_INIT } from './modules/app/constants.js'
+
 export function createAppStore () {
 
   const rootEpic = combineEpics(
@@ -43,7 +45,7 @@ export function createAppStore () {
   sagaMiddleware.run(tripSaga)
 
   store.dispatch({
-    type: 'APP_INIT',
+    type: APP_INIT,
   })
 
   return store

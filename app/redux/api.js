@@ -6,6 +6,7 @@ import store from './createStore.js'
 import { addLogMessage } from './modules/devLog/actions.js'
 import type { Location } from '../models.js'
 
+import { DDP_CONNECTED, DDP_DISCONNECTED } from './modules/app/constants.js'
 const ddp = new DDP({
   // endpoint: 'http://localhost:3000/sockjs',
   endpoint: 'http://stg.arciau.lt/sockjs',
@@ -16,11 +17,11 @@ const ddp = new DDP({
 })
 
 ddp.on('connected', () => {
-  store.dispatch(addLogMessage('Connected to ddp'))
+  store.dispatch({ type: DDP_CONNECTED })
 })
 
 ddp.on('disconnected', () => {
-  store.dispatch(addLogMessage('Disconnected from ddp'))
+  store.dispatch({ type: DDP_DISCONNECTED })
 })
 
 let subs = []

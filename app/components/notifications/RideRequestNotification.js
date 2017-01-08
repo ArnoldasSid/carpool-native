@@ -1,31 +1,16 @@
 import React from 'react'
-import {
-  View,
-  Text,
-  StyleSheet,
-} from 'react-native'
 import { connect } from 'react-redux'
-import { getTheme } from 'react-native-material-kit'
 import moment from 'moment'
 import { markNotificationAsRead } from '../../redux/modules/notifications/actions'
 
 import { acceptRideRequest } from '../../redux/modules/trip/actions'
 import authInfoSelector from '../../redux/selectors/authInfo'
-import NotificationActionButton from './NotificationActionButton'
 
-const theme = getTheme()
-
-const styles = StyleSheet.create({
-  actionsWrap: {
-    borderStyle: "solid",
-    borderTopColor: "rgba(0, 0, 0, 0.1)",
-    borderTopWidth: 1,
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-  },
-})
-
+import NotificationTitle from './NotificationTitle.js'
+import NotificationTime from './NotificationTime.js'
+import NotificationContent from './NotificationContent.js'
+import NotificationActions from './NotificationActions.js'
+import NotificationWrap from './NotificationWrap.js'
 
 class RideRequestNotification extends React.Component {
 
@@ -66,55 +51,29 @@ class RideRequestNotification extends React.Component {
 
   render () {
     return (
-      <View style={{
-        height: 200,
-        opacity: this.props.opacity,
-      }}>
-        <View style={{
-          padding: 10,
-          height: 200,
-        }}>
-          <View
-            style={{
-              ...theme.cardStyle,
-              flex: 1,
-              height: 200,
-            }}
-          >
-            <Text style={{
-              left: 10,
-              padding: 16,
-              paddingBottom: 0,
-            }}>
-              <Text
-                style={{
-                  backgroundColor: "transparent",
-                  color: "#000000",
-                  fontSize: 24,
-                }}
-              >
-                Ride request received
-              </Text>
-              {` (${this.getTimeDiff(this.props.timestamp)})`}
-            </Text>
-            <Text style={theme.cardContentStyle}>
-              {this.props.requesterName} is requesting a ride
-            </Text>
-            <View style={styles.actionsWrap}>
-              <NotificationActionButton onPress={this.acceptRideRequest}>
-                <Text style={{ color: '#3f51b5' }}>
-                  Accept
-                </Text>
-              </NotificationActionButton>
-              <NotificationActionButton onPress={this.declineRideRequest}>
-                <Text style={{ color: '#3f51b5' }}>
-                  Decline
-                </Text>
-              </NotificationActionButton>
-            </View>
-          </View>
-        </View>
-      </View>
+      <NotificationWrap
+        height={this.props.height * 115}
+        opacity={this.props.opacity}
+      >
+        <NotificationTitle>
+          RideRequestReceived
+        </NotificationTitle>
+        <NotificationTime>
+          ({this.getTimeDiff(this.props.timestamp)})
+        </NotificationTime>
+        <NotificationContent>
+          {this.props.requesterName} is requesting a ride
+        </NotificationContent>
+        <NotificationActions
+          actions={[{
+            onPress: this.acceptRideRequest,
+            text: 'Accept',
+          }, {
+            onPress: this.declineRideRequest,
+            text: 'Decline',
+          }]}
+        />
+      </NotificationWrap>
     )
   }
 }

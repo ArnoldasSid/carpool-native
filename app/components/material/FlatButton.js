@@ -1,8 +1,8 @@
-import React from 'react';
-import { View, Text } from 'react-native';
-import { MKButton } from 'react-native-material-kit';
+import React from 'react'
+import { View, Text } from 'react-native'
+import { MKButton, MKSpinner } from 'react-native-material-kit'
 
-import settings from './settings.js';
+import settings from './settings.js'
 
 export default class FlatButton extends React.Component {
   static propTypes  = {
@@ -16,32 +16,32 @@ export default class FlatButton extends React.Component {
   }
 
   constructor (props) {
-    super(props);
+    super(props)
 
-    this.handlePress = this.handlePress.bind(this);
+    this.handlePress = this.handlePress.bind(this)
   }
 
   getButtonBackgroundColor () {
-    return null;
+    return null
   }
 
   getLabelTextColor () {
     if (this.props.disabled) {
       if (this.props.colored) {
-        return '#9FA8DA';
+        return '#9FA8DA'
       }
     } else if (this.props.accent) {
-      return settings.accentColor;
+      return settings.accentColor
     } else if (this.props.colored) {
-      return settings.mainColor;
+      return settings.mainColor
     } else {
-      return 'white';
+      return '#444'
     }
   }
 
   handlePress (...args) {
     if (!this.props.disabled) {
-      this.props.onPress(...args);
+      this.props.onPress(...args)
     }
   }
 
@@ -54,7 +54,7 @@ export default class FlatButton extends React.Component {
           width: 100,
           height: 36,
           backgroundColor: this.getButtonBackgroundColor(),
-          ...(this.props.style || {})
+          ...(this.props.style || {}),
         }}
       >
         <View

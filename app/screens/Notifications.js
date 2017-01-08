@@ -33,8 +33,8 @@ class Notifications extends React.Component {
         key: notification.id,
         data: notification,
         style: {
-          height: spring(200, { stiffness: 25, damping: 3 }),
-          opacity: spring(1, { stiffness: 25, damping: 3 }),
+          height: spring(1, { stiffness: 200, damping: 30 }),
+          opacity: spring(1, { stiffness: 200, damping: 30 }),
         },
       }
     })

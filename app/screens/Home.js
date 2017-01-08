@@ -29,10 +29,6 @@ class Home extends React.Component {
     super(props)
 
     this.tabChanged = this.tabChanged.bind(this)
-
-    this.state = {
-      page: 0,
-    }
   }
 
   tabChanged (tabChangeInfo) {

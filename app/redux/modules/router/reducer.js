@@ -12,7 +12,7 @@ import {
 
 const initialState = {
   route: 'landing',
-  tabInd: 1,
+  tabInd: 0,
 }
 
 export default function routerReducer (state = initialState, action) {

@@ -4,6 +4,9 @@ import { ofType } from 'redux-observable-adapter-most'
 import moment from 'moment'
 
 import {
+  DDP_CONNECTED,
+} from '../app/constants.js'
+import {
   LOGIN_SUCCEEDED,
   REGISTRATION_SUCCEEDED,
   AUTH_INFO_LOADED,
@@ -22,8 +25,9 @@ export default function notificationsEpic (action$, store) {
 
   const authSuccess$ = ofType(LOGIN_SUCCEEDED, REGISTRATION_SUCCEEDED, AUTH_INFO_LOADED, action$)
   const logoutSuccess$ = ofType(LOGOUT_SUCCEEDED, action$)
+  const reconnect$ = ofType(DDP_CONNECTED, action$).skip(1)
 
-  const notificationsSubscription$ = authSuccess$
+  const notificationsSubscription$ = merge(authSuccess$, reconnect$)
     .chain(action =>
       subscribeToNotifications()
         .chain(msg => {

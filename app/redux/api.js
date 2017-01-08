@@ -138,7 +138,6 @@ export const unsub = (subId: number) => {
 
 export const unsubAll = () => {
   for (let sub of subs) {
-    console.log('Unsubing sub', sub)
     ddp.unsub(sub)
   }
   subs = []

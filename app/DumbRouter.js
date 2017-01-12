@@ -1,4 +1,5 @@
-import React from 'react';
+// @flow
+import React from 'react'
 import {
   View,
   Dimensions,
@@ -18,16 +19,16 @@ class DumbRouter extends React.Component {
     routerState: React.PropTypes.object.isRequired,
   };
 
-  getCurrentRoute () {
+  getCurrentRoute (width: number, height: number) {
     const { route } = this.props.routerState
     if (route === 'login') {
-      return <Login />
+      return <Login width={width} height={height} />
     } else if (route === 'register') {
-      return <Register />
+      return <Register width={width} height={height} />
     } else if (route === 'home') {
-      return <Home />
+      return <Home width={width} height={height} />
     } else if (route === 'landing') {
-      return <Landing />
+      return <Landing width={width} height={height} />
     }
   }
 
@@ -50,7 +51,7 @@ class DumbRouter extends React.Component {
             flexDirection: 'column',
           }}
         >
-          {this.getCurrentRoute()}
+          {this.getCurrentRoute(width, height)}
         </View>
         <Snackbar
           screenWidth={width}

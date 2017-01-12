@@ -12,6 +12,8 @@ import authInfoSelector from '../redux/selectors/authInfo.js'
 import { changeTab } from '../redux/modules/router/actions'
 
 type Props = {
+  width: number,
+  height: number,
   dispatch: Function,
   activeTabIndex: number,
   authInfo: Object,
@@ -40,14 +42,19 @@ class Home extends React.Component {
       <ScrollableTabView
         page={this.props.activeTabIndex}
         onChangeTab={this.tabChanged}
-        tabBarTextStyle={{
-          paddingTop: 22,
-        }}
       >
-        <MapScreen tabLabel="Trip" />
-        <NotificationsScreen tabLabel="Notifications" />
-        <SettingsScreen tabLabel="Settings" />
-        <DevLogScreen tabLabel="Log" />
+        <MapScreen width={this.props.width} height={this.props.height - 50} tabLabel="Trip" />
+        <NotificationsScreen
+          width={this.props.width}
+          height={this.props.height - 50}
+          tabLabel="Notifications"
+        />
+        <SettingsScreen
+          width={this.props.width}
+          height={this.props.height - 50}
+          tabLabel="Settings"
+        />
+        <DevLogScreen width={this.props.width} height={this.props.height - 50} tabLabel="Log" />
       </ScrollableTabView>
     )
   }

@@ -18,6 +18,8 @@ import otherTripUsersSelector from '../redux/selectors/otherTripUsers.js'
 
 class MapScreen extends React.Component {
   props: {
+    width: number,
+    height: number,
     authInfo: Object,
     dispatch: Function,
     yourRole: UsersRole,
@@ -38,7 +40,7 @@ class MapScreen extends React.Component {
     }
 
     return (
-      <View>
+      <View style={{ paddingTop: 5 }}>
         <Text>{statusText}!</Text>
       </View>
     )
@@ -80,14 +82,17 @@ class MapScreen extends React.Component {
   }
 
   render () {
-    const { yourLocation, yourRole, otherUsers } = this.props
+    const { width, height, yourLocation, yourRole, otherUsers } = this.props
+    const mapWidth = width
+    const mapHeight = height - 120
+    console.log(height, mapHeight)
 
     return (
       <View style={{ flex: 1, alignItems: 'center' }}>
-        <View style={{width: 360, height: 360}}>
+        <View style={{width: mapWidth , height: mapHeight}}>
           <Map
-            width={360}
-            height={360}
+            width={mapWidth}
+            height={mapHeight}
             yourLocation={yourLocation}
             otherUsers={otherUsers}
           />

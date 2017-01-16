@@ -1,5 +1,6 @@
 // @flow
 import { race, take, fork, put, select } from 'redux-saga/effects'
+import { delay } from 'redux-saga'
 
 // import { subscribeToUsersLoc } from './requestReceived.js'
 import otherTripUsersSelector from '../../../selectors/otherTripUsers.js'
@@ -51,6 +52,7 @@ function* requesterFlow (): any {
     userWithdrawnRequest: take(USER_WITHDRAWN_RIDE_REQUEST),
     usersRequestGotAccepted: take(USERS_RIDE_REQUEST_GOT_ACCEPTED),
     userAcceptedRideRequest: take(USER_ACCEPTED_RIDE_REQUEST),
+    timeout: delay(15 * 60 * 1000),
   })
 
   if (r2 && r2.userWithdrawnRequest) {
@@ -62,6 +64,10 @@ function* requesterFlow (): any {
   } else if (r2 && r2.userAcceptedRideRequest) {
     yield put(updateYourRole('DRIVER'))
     yield* driverFlow()
+  } else if (r2 && r2.timeout) {
+    alert('Your request has been withdrawn because more than 15 minutes passed')
+    yield put(updateYourRole('NONE'))
+    yield* idleFlow()
   }
 }
 

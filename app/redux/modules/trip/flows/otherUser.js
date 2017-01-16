@@ -41,36 +41,21 @@ function* otherDriversFlow (id, locationTrackingTask) {
   yield cancel(locationTrackingTask)
 }
 
-function streamToChannel (stream) {
-  return eventChannel(emitter => {
-    const sub = stream.subscribe({
-      next (msg) {
-        if (msg.msg === 'added') {
-          emitter(msg.fields.loc)
-        }
-      },
-      complete () {
-        emitter(END)
-      },
-    })
-
-    return () => {
-      sub.unsubscribe()
-    }
-  })
-}
-
 function* trackUsersLocation (id: string) {
-  const { subId, location$ } = subscribeToUsersLocation(id)
-  const locationsChan = yield call(streamToChannel, location$)
-  try {
-    while (true) {
-      const newLocation: any = yield take(locationsChan)
-      yield put(updateOtherUsersLocation(id, newLocation))
-    }
-  } finally {
-    if (yield cancelled()) {
-      unsub(subId)
+  const r = yield* subscribeToUsersLocation(id)
+  if (r) {
+    const { task, chan } = r
+    try {
+      while (true) {
+        const msg: any = yield take(chan)
+        if (msg.msg === 'added') {
+          yield put(updateOtherUsersLocation(id, msg.fields.loc))
+        }
+      }
+    } finally {
+      if (yield cancelled()) {
+        yield cancel(task)
+      }
     }
   }
 }

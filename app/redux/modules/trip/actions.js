@@ -1,4 +1,5 @@
 // @flow
+import { ddp } from '../../api.js'
 import type { UsersRole, Location } from '../../../models.js'
 import {
   USER_REQUESTED_RIDE,

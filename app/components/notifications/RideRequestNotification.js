@@ -39,6 +39,7 @@ class RideRequestNotification extends React.Component {
       this.props.requesterId,
       this.props.id,
     ))
+    this.props.dispatch(markNotificationAsRead(this.props.id))
   }
 
   declineRideRequest () {

@@ -85,7 +85,6 @@ class MapScreen extends React.Component {
     const { width, height, yourLocation, yourRole, otherUsers } = this.props
     const mapWidth = width
     const mapHeight = height - 120
-    console.log(height, mapHeight)
 
     return (
       <View style={{ flex: 1, alignItems: 'center' }}>

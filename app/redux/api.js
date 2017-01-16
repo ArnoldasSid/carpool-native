@@ -5,9 +5,12 @@ import { fromPromise, fromEvent, merge, empty } from 'most'
 import store from './createStore.js'
 import { addLogMessage } from './modules/devLog/actions.js'
 import type { Location } from '../models.js'
+import { eventChannel, channel } from 'redux-saga'
+import { take, race, put, fork } from 'redux-saga/effects'
 
 import { DDP_CONNECTED, DDP_DISCONNECTED } from './modules/app/constants.js'
-const ddp = new DDP({
+import { LOGIN_SUCCEEDED } from './modules/auth/constants.js'
+export const ddp = new DDP({
   // endpoint: 'http://localhost:3000/sockjs',
   endpoint: 'http://stg.arciau.lt/sockjs',
   SocketConstructor: SockJS,
@@ -67,14 +70,58 @@ const subscribe = (subName, ...params) => {
   const subReady$ = ready$.filter(msg => msg.subs.indexOf(subId) !== -1)
   const stream = merge(subAdd$, subChange$, subReady$)
 
-  if (subName === 'locations') {
-    return {
-      stream,
-      subId,
+  return {
+    stream,
+    subId,
+  }
+}
+
+function streamToChan (stream) {
+  return  eventChannel(emitter => {
+    const sub = stream.subscribe({
+      next: emitter,
+    })
+
+    return () => {
+      sub.unsubscribe()
+    }
+  })
+}
+
+function* subChan (chan, ...params) {
+  let stream, subId, streamChan
+  try {
+    while (true) {
+      let sub = subscribe(...params)
+      stream = sub.stream
+      subId = sub.subId
+      streamChan = streamToChan(stream)
+      while (true) {
+        const rez = yield race({
+          ddpConn: take(LOGIN_SUCCEEDED),
+          val: take(streamChan),
+        })
+        if (rez.ddpConn) {
+          break
+        } else if (rez.val) {
+          yield put(chan, rez.val)
+        }
+      }
+    }
+  } finally {
+    if (subId) {
+      unsub(subId)
     }
   }
+}
 
-  return stream
+function* subGen (...params) {
+  const chan = channel()
+  const task = yield fork(subChan, chan, ...params)
+  return {
+    chan,
+    task,
+  }
 }
 
 export const login = (email: string, password: string) => {
@@ -120,7 +167,7 @@ export function sendLocation (location: ?Location): void {}
 //   return call('api.v1.addUserToGroup', groupName, userId)
 // }
 
-export const subscribeToUsersLocation = (userId: string, numLocations: number = 1) => {
+export const _subscribeToUsersLocation = (userId: string, numLocations: number = 1) => {
   const { stream, subId } = subscribe('locations', userId, numLocations)
   return {
     subId,
@@ -128,11 +175,19 @@ export const subscribeToUsersLocation = (userId: string, numLocations: number = 
   }
 }
 
-export const subscribeToNotifications = () => {
+export function* subscribeToUsersLocation (userId: string, numLocations: number = 1): Generator<any, *, *> {
+  return yield* subGen('locations', userId, numLocations)
+}
+
+export const _subscribeToNotifications = () => {
   return subscribe('notifications')
 }
 
-export const unsub = (subId: number) => {
+export function* subscribeToNotifications (): Generator<any, *, *> {
+  return yield* subGen('notifications')
+}
+
+function unsub (subId: number) {
   ddp.unsub(subId)
 }
 

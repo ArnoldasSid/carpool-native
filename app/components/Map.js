@@ -82,7 +82,6 @@ export default class Map extends React.Component {
 
   render () {
     const { yourLocation, otherUsers } = this.props
-    console.log('MAP', otherUsers)
 
     return (
       <View style={[styles.container, { width: this.props.width, height: this.props.height }]}>

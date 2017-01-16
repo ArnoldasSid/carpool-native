@@ -34,7 +34,6 @@ class DumbRouter extends React.Component {
 
   render () {
     const { width, height } = Dimensions.get('window')
-    console.log(width, height)
     return (
       <View
         style={{

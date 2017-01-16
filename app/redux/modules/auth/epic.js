@@ -3,7 +3,7 @@ import { AsyncStorage } from 'react-native'
 import { just, merge, fromPromise, never } from 'most'
 import { login, logout, register, registerDevice, unsubAll } from '../../api'
 
-import { APP_INIT } from '../app/constants.js'
+import { APP_INIT, DDP_CONNECTED } from '../app/constants.js'
 import {
   LOGIN_REQUESTED,
   LOGIN_SUCCEEDED,
@@ -28,7 +28,7 @@ export default function authEpic (action$) {
   const registrationRequest$ = ofType(REGISTRATION_REQUESTED, action$)
   const loginSuccess$ = ofType(LOGIN_SUCCEEDED, action$)
   const registrationSuccess$ = ofType(REGISTRATION_SUCCEEDED, action$)
-  const appInit$ = ofType(APP_INIT, action$)
+  const appInit$ = ofType(APP_INIT, DDP_CONNECTED, action$)
   const logoutRequest$ = ofType(LOGOUT_REQUESTED, action$)
 
   const loadAuthToken$ = appInit$

@@ -1,10 +1,11 @@
 // @flow
-import { race, take, fork, put, select } from 'redux-saga/effects'
+import { race, take, fork, put } from 'redux-saga/effects'
 import { delay } from 'redux-saga'
+const maxTripDuration = 15 * 60 * 1000
 
 // import { subscribeToUsersLoc } from './requestReceived.js'
-import otherTripUsersSelector from '../../../selectors/otherTripUsers.js'
 import { requestRide, acceptRequest } from '../../../api.js'
+import { completeTrip } from '../actions.js'
 import {
   USER_REQUESTED_RIDE,
   USER_ACCEPTED_RIDE_REQUEST,
@@ -12,20 +13,8 @@ import {
   USERS_RIDE_REQUEST_GOT_ACCEPTED,
   TRIP_COMPLETED,
 } from '../constants.js'
-import { updateYourRole, addOtherUser, updateOtherUsersRole } from '../actions.js'
+import { updateYourRole } from '../actions.js'
 import { changeTab } from '../../router/actions.js'
-
-function* otherRequestersFlow (userId: string): any {
-
-}
-
-function* otherRidersFlow (userId: string): any {
-
-}
-
-function* otherDriversFlow (userId: string): any {
-
-}
 
 function* idleFlow (): any {
   const r = yield race({
@@ -52,7 +41,7 @@ function* requesterFlow (): any {
     userWithdrawnRequest: take(USER_WITHDRAWN_RIDE_REQUEST),
     usersRequestGotAccepted: take(USERS_RIDE_REQUEST_GOT_ACCEPTED),
     userAcceptedRideRequest: take(USER_ACCEPTED_RIDE_REQUEST),
-    timeout: delay(15 * 60 * 1000),
+    timeout: delay(maxTripDuration),
   })
 
   if (r2 && r2.userWithdrawnRequest) {
@@ -65,31 +54,36 @@ function* requesterFlow (): any {
     yield put(updateYourRole('DRIVER'))
     yield* driverFlow()
   } else if (r2 && r2.timeout) {
-    alert('Your request has been withdrawn because more than 15 minutes passed')
+    alert(`Your trip request has been automatically withdrawn because ${maxTripDuration / 60000} minutes after its start have passed`)
     yield put(updateYourRole('NONE'))
     yield* idleFlow()
   }
 }
 
 function* riderFlow (driverId: string): any {
-  // TODO: if rider in otherUsers changeRole if not add him and sub to location
-  const otherTripUsers = yield select(otherTripUsersSelector)
-  if (!otherTripUsers || !otherTripUsers.map(user => user.id).includes(driverId)) {
-    addOtherUser('id', 'DRIVER')
-    // Add user and sub to location
-  } else {
-    updateOtherUsersRole('id', 'DRIVER')
-    // Change that users role to driver
+  const r = yield race({
+    completed: take(TRIP_COMPLETED),
+    timeout: delay(maxTripDuration),
+  })
+  if (r && r.timeout) {
+    yield put(completeTrip())
+    alert(`Your trip has been automatically completed because ${maxTripDuration / 60000} minutes after its start have passed`)
   }
 
-  yield take(TRIP_COMPLETED)
-  // Should cancel driver location sub
-
   yield put(updateYourRole('NONE'))
+  yield* idleFlow()
 }
 
 function* driverFlow (): any {
-  yield take(TRIP_COMPLETED)
+  const r = yield race({
+    completed: take(TRIP_COMPLETED),
+    timeout: delay(maxTripDuration),
+  })
+  if (r && r.timeout) {
+    yield put(completeTrip())
+    alert(`Your trip has been automatically completed because ${maxTripDuration / 60000} minutes after its start have passed`)
+  }
+
   yield put(updateYourRole('NONE'))
   yield* idleFlow()
 }

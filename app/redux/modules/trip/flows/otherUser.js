@@ -10,7 +10,7 @@ import {
 } from '../constants.js'
 import { addOtherUser, updateOtherUsersLocation, updateOtherUsersRole } from '../actions.js'
 import otherTripUsersSelector from '../../../selectors/otherTripUsers.js'
-import { subscribeToUsersLocation, unsub } from '../../../api.js'
+import { subscribeToUsersLocation } from '../../../api.js'
 
 function* otherRequestersFlow (id, locationTrackingTask) {
   const r = yield race({

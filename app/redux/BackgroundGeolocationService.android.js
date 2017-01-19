@@ -5,8 +5,9 @@ let initialized = false
 let isTracking = false
 let shouldStart = false
 let location$ = async()
+let slowTrackingInterval
 
-const commonConfig = {
+const fastTrackingConfig = {
   desiredAccuracy: 0,
   // stationaryRadius: 50,
   // distanceFilter: 50,
@@ -21,9 +22,9 @@ const commonConfig = {
   maxLocations: 10,
 }
 
-export const initBackgroundGeolocation = () => {
+export const initFastTracking = () => {
   if (!initialized) {
-    BackgroundGeolocation.configure(commonConfig)
+    BackgroundGeolocation.configure(fastTrackingConfig)
 
     BackgroundGeolocation.on('location', (location) => {
       console.log('Location detected', location)
@@ -55,64 +56,82 @@ function startGeolocation () {
   }
 }
 
-export const startTracking = () => {
-  if (isTracking) {
-    return location$
-  }
+function checkIfGeolocationAvailable () {
+  return new Promise((resolve, reject) => {
+    BackgroundGeolocation.isLocationEnabled((enabled) => {
+      if (enabled) {
+        resolve()
+      } else {
+        // Location services are disabled
+        BackgroundGeolocation.showLocationSettings()
 
-  if (!initialized) {
-    initBackgroundGeolocation()
-  }
-
-
-  BackgroundGeolocation.isLocationEnabled((enabled) => {
-    if (enabled) {
-      startGeolocation()
-    } else {
-      // Location services are disabled
-      BackgroundGeolocation.showLocationSettings()
-
-      shouldStart = true
-      BackgroundGeolocation.watchLocationMode(geolocationEnabled => {
-        if (geolocationEnabled && shouldStart) {
-          shouldStart = false
-          startGeolocation()
-        }
-      })
-    }
+        shouldStart = true
+        BackgroundGeolocation.watchLocationMode(geolocationEnabled => {
+          if (geolocationEnabled && shouldStart) {
+            shouldStart = false
+            resolve()
+          }
+        })
+      }
+    })
   })
-
-  return location$
 }
 
-export const stopTracking = () => {
+export function stopTracking () {
   // if (!isTracking) { return }
+
+  clearInterval(slowTrackingInterval)
 
   shouldStart = false
   BackgroundGeolocation.stop()
   isTracking = false
 }
 
+export function getCurrLocation () {
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      location$.next(position.coords)
+    },
+    (error) => alert(JSON.stringify(error)),
+    {enableHighAccuracy: false, timeout: 20000, maximumAge: 1000}
+  )
+}
+
+export function startSlowTracking () {
+  checkIfGeolocationAvailable().then(() => {
+    getCurrLocation()
+    slowTrackingInterval = setInterval(() => {
+      getCurrLocation()
+    }, 2 * 60 * 1000)
+  })
+  return location$
+}
+
 export const switchToSlowTracking = () => {
-
   stopTracking()
+  startSlowTracking()
+  return location$
+}
 
-  BackgroundGeolocation.configure({
-    ...commonConfig,
+export function startFastTracking () {
+  BackgroundGeolocation.configure(fastTrackingConfig)
+  if (isTracking) {
+    return location$
+  }
+
+  if (!initialized) {
+    initFastTracking()
+  }
+
+  checkIfGeolocationAvailable().then(() => {
+    startGeolocation()
   })
 
-  startTracking()
+  return location$
 }
 
 export const switchToFastTracking = () => {
-
   stopTracking()
-
-  BackgroundGeolocation.configure({
-    ...commonConfig,
-    interval: 10 * 1000,
-    fastestInterval: 5 * 1000,
-  })
-
-  startTracking()
+  startFastTracking()
+  return location$
 }

@@ -3,7 +3,7 @@ import { delay } from 'redux-saga'
 import { take, race, fork, cancel, put, cancelled, TakeEffect } from 'redux-saga/effects'
 
 import {
-  startTracking,
+  startSlowTracking,
   stopTracking,
   switchToFastTracking,
   switchToSlowTracking,
@@ -30,7 +30,7 @@ import {
 
 function* trackLocation () {
   try {
-    const location$ = startTracking()
+    const location$ = startSlowTracking()
     let prevLocation = null
     let currLocation = null
 

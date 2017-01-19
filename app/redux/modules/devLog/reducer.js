@@ -15,25 +15,27 @@ const initialState = {
 
 export default function devLogReducer (state: any = initialState, action: any) {
   if (action.type === LOG_MESSAGE_ADDED) {
-    const { title, message } = action.payload
+    const { type, title, message } = action.payload
+    const fullTitle = type ? `[${type}] ${title}` : title
+    const stringMsg = (typeof message !== 'string') ? JSON.stringify(message, null, 2) : message
     return R.evolve({
       messages: R.append({
-        title,
-        message,
+        title: fullTitle,
+        message: stringMsg,
         timestamp: new Date().valueOf(),
       }),
     }, state)
   } else if (action.type === DDP_CONNECTED) {
     return R.evolve({
       messages: R.append({
-        title: 'DDP Connected',
+        title: '[DDP] DDP Connected',
         timestamp: new Date().valueOf(),
       }),
     }, state)
   } else if (action.type === DDP_DISCONNECTED) {
     return R.evolve({
       messages: R.append({
-        title: 'DDP Disconnected',
+        title: '[DDP] DDP Disconnected',
         timestamp: new Date().valueOf(),
       }),
     }, state)

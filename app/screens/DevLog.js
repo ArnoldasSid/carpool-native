@@ -27,15 +27,16 @@ class DevLog extends React.Component {
             style={{ borderBottomWidth: 1,
               borderStyle: 'solid',
               borderBottomColor: '#333',
+              padding: 6,
             }}
           >
             {message.title ? (
               <Text style={{ fontWeight: 'bold' }}>{message.title}</Text>
             ): null}
+            <Text>{format(new Date(message.timestamp), 'MM-DD HH:mm:ss')}</Text>
             {message.message ? (
               <Text>{message.message}</Text>
             ): null}
-            <Text>{format(new Date(message.timestamp), 'MM-DD HH:mm:ss')}</Text>
           </View>
         ))}
       </ScrollView>

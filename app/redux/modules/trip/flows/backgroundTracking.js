@@ -24,6 +24,9 @@ import {
 import {
   updateYourLocation,
 } from '../actions.js'
+import {
+  addLogMessage,
+} from '../../devLog/actions.js'
 
 function* trackLocation () {
   try {
@@ -36,6 +39,7 @@ function* trackLocation () {
     while (true) {
       if (currLocation !== prevLocation) {
         prevLocation = currLocation
+        yield put(addLogMessage('Geolocation', 'Detected new location', JSON.stringify(currLocation, null, 2)))
         yield put(updateYourLocation(currLocation))
         yield fork(saveLocation, currLocation)
         console.log('Got location', currLocation)

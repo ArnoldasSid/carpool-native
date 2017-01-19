@@ -9,6 +9,8 @@ import { take, race, put, fork } from 'redux-saga/effects'
 
 import { DDP_CONNECTED, DDP_DISCONNECTED } from './modules/app/constants.js'
 import { LOGIN_SUCCEEDED } from './modules/auth/constants.js'
+import { addLogMessage } from './modules/devLog/actions.js'
+
 export const ddp = new DDP({
   // endpoint: 'http://localhost:3000/sockjs',
   endpoint: 'http://stg.arciau.lt/sockjs',
@@ -36,9 +38,17 @@ const call = (cmd, ...params) =>
       if (message.id === methodId) {
         if (message.error) {
           // console.log('ERROR', message.error)
+          store.dispatch(addLogMessage('Api', 'Api call error', {
+            _cmd: cmd,
+            ...message.error,
+          }))
           reject(message.error)
         } else {
           // console.log('Success', message)
+          store.dispatch(addLogMessage('Api', 'Api call success', {
+            _cmd: cmd,
+            ...message,
+          }))
           resolve(message.result)
         }
       }
@@ -68,6 +78,12 @@ const subscribe = (subName, ...params) => {
   const subChange$ = changed$.filter(msg => msg.collection === collectionName)
   const subReady$ = ready$.filter(msg => msg.subs.indexOf(subId) !== -1)
   const stream = merge(subAdd$, subChange$, subReady$)
+
+  stream.subscribe({
+    next (val) {
+      store.dispatch(addLogMessage('Sub', 'Sub message', val))
+    },
+  })
 
   return {
     stream,

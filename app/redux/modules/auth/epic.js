@@ -28,10 +28,11 @@ export default function authEpic (action$) {
   const registrationRequest$ = ofType(REGISTRATION_REQUESTED, action$)
   const loginSuccess$ = ofType(LOGIN_SUCCEEDED, action$)
   const registrationSuccess$ = ofType(REGISTRATION_SUCCEEDED, action$)
-  const appInit$ = ofType(APP_INIT, DDP_CONNECTED, action$)
+  const appInit$ = ofType(APP_INIT, action$)
+  const ddpReconnect$ = ofType(DDP_CONNECTED, action$).skip(1)
   const logoutRequest$ = ofType(LOGOUT_REQUESTED, action$)
 
-  const loadAuthToken$ = appInit$
+  const loadAuthToken$ = merge(appInit$, ddpReconnect$)
     .chain(() =>
       fromPromise(AsyncStorage.getItem('authInfo'))
         .chain(res => {

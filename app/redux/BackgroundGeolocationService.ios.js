@@ -1,14 +1,20 @@
 import { async } from 'most-subject'
 
-let isTracking = false
 let location$ = async()
 let watchId = null
+let slowTrackingInterval
+
+export function getCurrLocation () {
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      location$.next(position.coords)
+    },
+    (error) => alert(JSON.stringify(error)),
+    {enableHighAccuracy: false, timeout: 20000, maximumAge: 1000}
+  )
+}
 
 export const startTracking = (distanceFilter = 20) => {
-  if (isTracking) {
-    return location$
-  }
-
   watchId = navigator.geolocation.watchPosition((loc) => {
     location$.next(loc.coords)
   }, (err) => {
@@ -19,25 +25,36 @@ export const startTracking = (distanceFilter = 20) => {
     enableHighAccuracy: false,
     distanceFilter: 10,
   })
-  isTracking = false
 
   return location$
 }
 
 export const stopTracking = () => {
+  clearInterval(slowTrackingInterval)
   navigator.geolocation.clearWatch(watchId)
 }
 
+export const startSlowTracking = () => {
+  getCurrLocation()
+  slowTrackingInterval = setInterval(() => {
+    getCurrLocation()
+  }, 2 * 60 * 1000)
+  return location$
+}
+
+export const startFastTracking = () => {
+  startTracking(10)
+  return location$
+}
+
 export const switchToSlowTracking = () => {
-
   stopTracking()
-
-  return startTracking(30)
+  startSlowTracking()
+  return location$
 }
 
 export const switchToFastTracking = () => {
-
   stopTracking()
-
-  return startTracking(10)
+  startFastTracking()
+  return location$
 }

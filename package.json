@@ -20,7 +20,7 @@
     "react-native-maps": "^0.12.2",
     "react-native-material-kit": "^0.3.3",
     "react-native-mauron85-background-geolocation": "^0.2.0-alpha.5",
-    "react-native-onesignal": "^1.2.1",
+    "react-native-onesignal": "^2.0.0",
     "react-native-scrollable-tab-view": "^0.7.0",
     "react-native-vector-icons": "3.0.0",
     "react-redux": "^5.0.1",

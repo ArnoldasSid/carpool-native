@@ -10,6 +10,19 @@ import { Provider } from 'react-redux'
 import DumbRouter from './app/DumbRouter'
 import store from './app/redux/createStore'
 
+import OneSignal from 'react-native-onesignal' // Import package from node modules
+
+import { ONESIGNAL_ID_AVAILABLE } from './app/redux/modules/auth/constants'
+
+OneSignal.configure({
+  onIdsAvailable: (device) => {
+    store.dispatch({
+      type: ONESIGNAL_ID_AVAILABLE,
+      payload: device,
+    })
+  },
+})
+
 export default class CarpoolNative extends Component {
   render () {
     return (

@@ -22,8 +22,8 @@ export const startTracking = (distanceFilter = 20) => {
   }, {
     timeout: 1000,
     maximumAge: 60000,
-    enableHighAccuracy: false,
-    distanceFilter: 10,
+    enableHighAccuracy: true,
+    distanceFilter: distanceFilter,
   })
 
   return location$

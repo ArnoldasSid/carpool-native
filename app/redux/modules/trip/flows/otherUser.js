@@ -1,12 +1,12 @@
 // @flow
 import type { UsersRole } from '../../../../models.js'
-import { take, race, put, fork, select, call, cancel, cancelled } from 'redux-saga/effects'
-import { delay, eventChannel, END } from 'redux-saga'
+import { take, race, put, fork, select, cancel, cancelled } from 'redux-saga/effects'
 import {
   USER_ACCEPTED_RIDE_REQUEST,
   USER_RECEIVED_RIDE_REQUEST,
   USERS_RIDE_REQUEST_GOT_ACCEPTED,
   TRIP_COMPLETED,
+  OTHER_USER_WITHDRAWN_RIDE_REQUEST,
 } from '../constants.js'
 import { addOtherUser, updateOtherUsersLocation, updateOtherUsersRole } from '../actions.js'
 import otherTripUsersSelector from '../../../selectors/otherTripUsers.js'
@@ -20,6 +20,9 @@ function* otherRequestersFlow (id, locationTrackingTask) {
     usersRideRequestGotAccepted:
       take(action => action.type === USERS_RIDE_REQUEST_GOT_ACCEPTED
         && action.payload.userId === id),
+    otherUserWithdrawnRideRequest:
+      take(action => action.type === OTHER_USER_WITHDRAWN_RIDE_REQUEST
+        && action.payload.userId === id),
   })
 
   if (r && r.userAcceptedRideRequest) {
@@ -28,6 +31,8 @@ function* otherRequestersFlow (id, locationTrackingTask) {
   } else if (r && r.usersRideRequestGotAccepted) {
     yield put(updateOtherUsersRole(id, 'DRIVER'))
     yield* otherDriversFlow(id, locationTrackingTask)
+  } else if (r.otherUserWithdrawnRideRequest) {
+    yield cancel(locationTrackingTask)
   }
 }
 

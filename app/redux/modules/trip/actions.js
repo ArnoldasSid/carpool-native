@@ -14,6 +14,7 @@ import {
   OTHER_USER_ADDED,
   OTHER_USERS_ROLE_UPDATED,
   OTHER_USERS_LOCATION_UPDATED,
+  OTHER_USER_WITHDRAWN_RIDE_REQUEST,
 } from './constants'
 
 export function requestRide (email: string, id: string) {
@@ -114,6 +115,15 @@ export function updateOtherUsersLocation (userId: string, newLocation: Location)
     payload: {
       userId,
       newLocation,
+    },
+  }
+}
+
+export function otherUserWithdrawnRideRequest (otherUsersId: string) {
+  return {
+    type: OTHER_USER_WITHDRAWN_RIDE_REQUEST,
+    payload: {
+      userId: otherUsersId,
     },
   }
 }

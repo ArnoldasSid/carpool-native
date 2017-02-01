@@ -21,3 +21,4 @@ export const OTHER_USERS_LOCATION_UPDATED = '[Trip] Other users location updated
 export const OTHER_USERS_ROLE_UPDATED = '[Trip] Other users role updated'
 export const OTHER_USER_ADDED = '[Trip] Other user added'
 export const OTHER_USER_REMOVED = '[Trip] Other user removed'
+export const OTHER_USER_WITHDRAWN_RIDE_REQUEST = '[Trip] Other user withdrawn ride request'

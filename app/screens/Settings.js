@@ -1,16 +1,16 @@
-import React from 'react';
+import React from 'react'
 import {
   View,
   Text,
-} from 'react-native';
-import { connect } from 'react-redux';
-import { logout } from '../redux/modules/auth/actions';
-import { MKButton } from 'react-native-material-kit';
-import authInfoSelector from '../redux/selectors/authInfo';
+} from 'react-native'
+import { connect } from 'react-redux'
+import { logout } from '../redux/modules/auth/actions'
+import { MKButton } from 'react-native-material-kit'
+import authInfoSelector from '../redux/selectors/authInfo'
 
 const LogoutButton = MKButton.coloredButton()
   .withStyle({ marginTop: 15 })
-  .build();
+  .build()
 
 class Settings extends React.Component {
 
@@ -19,13 +19,13 @@ class Settings extends React.Component {
   };
 
   constructor (props) {
-    super(props);
+    super(props)
 
-    this.logout = this.logout.bind(this);
+    this.logout = this.logout.bind(this)
   }
 
   logout () {
-    this.props.dispatch(logout());
+    this.props.dispatch(logout())
   }
 
   render () {
@@ -44,6 +44,11 @@ class Settings extends React.Component {
             Log Out
           </Text>
         </LogoutButton>
+        <View style={{ paddingTop: 15 }}>
+          <Text>
+            Version 0.2.2
+          </Text>
+        </View>
       </View>
     )
   }
@@ -51,4 +56,4 @@ class Settings extends React.Component {
 
 export default connect(state => ({
   authInfo: authInfoSelector(state),
-}))(Settings);
+}))(Settings)

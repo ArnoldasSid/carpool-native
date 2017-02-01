@@ -16,6 +16,7 @@ import {
   OTHER_USERS_ROLE_UPDATED,
   OTHER_USER_ADDED,
   OTHER_USER_REMOVED,
+  OTHER_USER_WITHDRAWN_RIDE_REQUEST,
 } from './constants'
 
 type TripState = {
@@ -72,6 +73,11 @@ function getTripUpdates (state: TripState, action: any): ((tripState: TripState)
     return R.identity
   } else if (action.type === LOGOUT_SUCCEEDED) {
     return R.always(initialState)
+  } else if (action.type === OTHER_USER_WITHDRAWN_RIDE_REQUEST) {
+    const { userId } = action.payload
+    return R.evolve({
+      otherUsers: R.dissoc(userId),
+    })
   }
   return R.identity
 }

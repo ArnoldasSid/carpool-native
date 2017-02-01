@@ -79,11 +79,11 @@ const subscribe = (subName, ...params) => {
   const subReady$ = ready$.filter(msg => msg.subs.indexOf(subId) !== -1)
   const stream = merge(subAdd$, subChange$, subReady$)
 
-  stream.subscribe({
-    next (val) {
-      store.dispatch(addLogMessage('Sub', 'Sub message', val))
-    },
-  })
+  // stream.subscribe({
+  //   next (val) {
+  //     store.dispatch(addLogMessage('Sub', 'Sub message', val))
+  //   },
+  // })
 
   return {
     stream,

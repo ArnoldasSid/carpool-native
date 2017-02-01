@@ -1,7 +1,7 @@
 import {
   USER_ACCEPTED_RIDE_REQUEST,
   MARK_NOTIFICATION_AS_READ_REQUESTED,
-} from './constants';
+} from './constants'
 
 export const acceptRideRequest = (payload, requesterId) => {
   return {
@@ -10,14 +10,14 @@ export const acceptRideRequest = (payload, requesterId) => {
       payload,
       requesterId,
     },
-  };
-};
+  }
+}
 
 export const markNotificationAsRead = (notificationId) => {
   return {
     type: MARK_NOTIFICATION_AS_READ_REQUESTED,
     payload: {
       notificationId,
-    }
+    },
   }
-};
+}

@@ -1,5 +1,5 @@
 // @flow
-import { fork, take, call, race, cancel, put } from 'redux-saga/effects'
+import { fork, take, call, race, cancel, put, select } from 'redux-saga/effects'
 import { channel } from 'redux-saga'
 import moment from 'moment'
 
@@ -13,7 +13,7 @@ import {
   AUTH_INFO_LOADED,
   LOGOUT_SUCCEEDED,
 } from '../auth/constants'
-import { receiveRideRequest } from '../trip/actions'
+import { receiveRideRequest, otherUserWithdrawnRideRequest } from '../trip/actions'
 import { acceptUsersRideRequest } from '../trip/actions.js'
 import {
   NOTIFICATIONS_SUB_READY,
@@ -52,6 +52,13 @@ function* handleNotificationMsg (msg) {
       yield put(acceptUsersRideRequest(msg.fields.payload))
     }
   } else if(msg.msg === 'changed') {
+    if (msg.fields.recievedAt) {
+      const notifications = yield select (state => state.notifications.notifications)
+      const notification = notifications.filter(notification => notification.id === msg.id)[0]
+      if (notification.action === 'requestRide') {
+        yield put(otherUserWithdrawnRideRequest(notification.fromUserId))
+      }
+    }
     yield put({
       type: NOTIFICATION_UPDATED,
       payload: {
@@ -71,9 +78,6 @@ function* notificationsSubFlow () {
 
     // const r = yield call(subscribeToNotifications)
     const r = yield* subscribeToNotifications()
-    const chan = yield call(channel)
-    console.log('chan2', chan)
-    console.log('R', r)
     if (r) {
       const { chan, task } = r
       while (true) {

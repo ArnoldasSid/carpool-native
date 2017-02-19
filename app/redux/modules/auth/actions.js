@@ -1,10 +1,7 @@
-import {
-  LOGIN_REQUESTED,
-  REGISTRATION_REQUESTED,
-  LOGOUT_REQUESTED,
-} from './constants';
+// @flow
+import { LOGIN_REQUESTED, REGISTRATION_REQUESTED, LOGOUT_REQUESTED } from './constants';
 
-export const login = (email, password) => {
+export const login = (email: string, password: string) => {
   return {
     type: LOGIN_REQUESTED,
     payload: {
@@ -14,13 +11,13 @@ export const login = (email, password) => {
   };
 };
 
-export const register = (email, password) => {
+export const register = (email: string, password: string) => {
   return {
     type: REGISTRATION_REQUESTED,
     payload: {
       email,
       password,
-    }
+    },
   };
 };
 

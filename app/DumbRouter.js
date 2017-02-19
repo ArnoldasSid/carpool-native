@@ -1,39 +1,35 @@
 // @flow
-import React from 'react'
-import {
-  View,
-  Dimensions,
-} from 'react-native'
-import { connect } from 'react-redux'
+import React from 'react';
+import { View, Dimensions } from 'react-native';
+import { connect } from 'react-redux';
 
-import Snackbar from './components/Snackbar'
-import Home from './screens/Home'
-import Login from './screens/Login'
-import Register from './screens/Register'
-import Landing from './screens/Landing.js'
-import routerStateSelector from './redux/selectors/routerState'
+import Snackbar from './components/Snackbar';
+import Home from './screens/Home';
+import Login from './screens/Login';
+import Register from './screens/Register';
+import Landing from './screens/Landing.js';
+import routerStateSelector from './redux/selectors/routerState';
 
 class DumbRouter extends React.Component {
-
   static propTypes = {
     routerState: React.PropTypes.object.isRequired,
   };
 
-  getCurrentRoute (width: number, height: number) {
-    const { route } = this.props.routerState
+  getCurrentRoute(width: number, height: number) {
+    const { route } = this.props.routerState;
     if (route === 'login') {
-      return <Login width={width} height={height} />
+      return <Login width={width} height={height} />;
     } else if (route === 'register') {
-      return <Register width={width} height={height} />
+      return <Register width={width} height={height} />;
     } else if (route === 'home') {
-      return <Home width={width} height={height} />
+      return <Home width={width} height={height} />;
     } else if (route === 'landing') {
-      return <Landing width={width} height={height} />
+      return <Landing width={width} height={height} />;
     }
   }
 
-  render () {
-    const { width, height } = Dimensions.get('window')
+  render() {
+    const { width, height } = Dimensions.get('window');
     return (
       <View
         style={{
@@ -52,14 +48,12 @@ class DumbRouter extends React.Component {
         >
           {this.getCurrentRoute(width, height)}
         </View>
-        <Snackbar
-          screenWidth={width}
-        />
+        <Snackbar screenWidth={width} />
       </View>
-    )
+    );
   }
 }
 
 export default connect(state => ({
   routerState: routerStateSelector(state),
-}))(DumbRouter)
+}))(DumbRouter);

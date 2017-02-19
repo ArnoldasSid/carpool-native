@@ -1,48 +1,50 @@
-import React from 'react'
-import { View, Text } from 'react-native'
-import { MKButton, MKSpinner } from 'react-native-material-kit'
+// @flow
+import React from 'react';
+import { View, Text } from 'react-native';
+import { MKButton, MKSpinner } from 'react-native-material-kit';
 
-import settings from './settings.js'
+import settings from './settings.js';
+
+type Props = {
+  label: string,
+  onPress: Function,
+  accent?: boolean,
+  colored?: boolean,
+  disabled?: boolean,
+  loading?: boolean,
+  style?: Object,
+};
 
 export default class RaisedButton extends React.Component {
+  props: Props;
+  handlePress: Function;
+  constructor(props: Props) {
+    super(props);
 
-  static propTypes = {
-    label: React.PropTypes.string.isRequired,
-    onPress: React.PropTypes.func.isRequired,
-    accent: React.PropTypes.bool,
-    colored: React.PropTypes.bool,
-    disabled: React.PropTypes.bool,
-    loading: React.PropTypes.bool,
-    style: React.PropTypes.object,
+    this.handlePress = this.handlePress.bind(this);
   }
 
-  constructor (props) {
-    super(props)
-
-    this.handlePress = this.handlePress.bind(this)
-  }
-
-  getButtonBackgroundColor () {
+  getButtonBackgroundColor() {
     if (this.props.disabled) {
       if (this.props.colored) {
-        return '#9FA8DA'
+        return '#9FA8DA';
       }
     } else if (this.props.accent) {
-      return settings.accentColor
+      return settings.accentColor;
     } else if (this.props.colored) {
-      return settings.mainColor
+      return settings.mainColor;
     } else {
-      return 'white'
+      return 'white';
     }
   }
 
-  handlePress (...args) {
+  handlePress(...args: any[]) {
     if (!this.props.disabled) {
-      this.props.onPress(...args)
+      this.props.onPress(...args);
     }
   }
 
-  render () {
+  render() {
     return (
       <MKButton
         onPress={this.handlePress}
@@ -67,18 +69,18 @@ export default class RaisedButton extends React.Component {
             justifyContent: 'center',
           }}
         >
-          {this.props.loading ? (
-            <MKSpinner
-              style={{
-                width: 17,
-                height: 17,
-                marginRight: 5,
-                marginLeft: -(17 + 5), // width + marginRight
-              }}
-              strokeColor="white"
-              strokeWidth={3}
-            />
-          ) : null}
+          {this.props.loading
+            ? <MKSpinner
+                style={{
+                  width: 17,
+                  height: 17,
+                  marginRight: 5,
+                  marginLeft: -(17 + 5), // width + marginRight
+                }}
+                strokeColor="white"
+                strokeWidth={3}
+              />
+            : null}
           <Text
             style={{
               fontWeight: 'bold',
@@ -90,6 +92,6 @@ export default class RaisedButton extends React.Component {
           </Text>
         </View>
       </MKButton>
-    )
+    );
   }
 }

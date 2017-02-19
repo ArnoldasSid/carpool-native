@@ -1,11 +1,7 @@
+// @flow
 import React from 'react';
-import {
-  View,
-  Text,
-} from 'react-native';
-import {
-  MKSpinner,
-} from 'react-native-material-kit';
+import { View, Text } from 'react-native';
+import { MKSpinner } from 'react-native-material-kit';
 
 const LoadingSpinner = MKSpinner.spinner()
   .withStyle({
@@ -18,7 +14,7 @@ const LoadingSpinner = MKSpinner.spinner()
   .build();
 
 export default class Landing extends React.Component {
-  render () {
+  render() {
     return (
       <View
         style={{
@@ -33,6 +29,6 @@ export default class Landing extends React.Component {
         </Text>
         <LoadingSpinner />
       </View>
-    )
+    );
   }
 }

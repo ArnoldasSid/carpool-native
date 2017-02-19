@@ -1,10 +1,7 @@
+// @flow
 import React from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-} from 'react-native';
-import { MKTextField, MKButton, MKColor } from 'react-native-material-kit';
+import { View, Text } from 'react-native';
+import { MKTextField } from 'react-native-material-kit';
 import { login } from '../redux/modules/auth/actions';
 import { connect } from 'react-redux';
 import authInfoSelector from '../redux/selectors/authInfo';
@@ -13,15 +10,21 @@ import { replaceRoute } from '../redux/modules/router/actions';
 import RaisedButton from '../components/material/RaisedButton.js';
 import FlatButton from '../components/material/FlatButton.js';
 
+type Props = {
+  dispatch: Function,
+  authInfo: Object,
+  loginStatus: Object,
+};
+
 class Login extends React.Component {
-
-  static propTypes = {
-    dispatch: React.PropTypes.func.isRequired,
-    authInfo: React.PropTypes.object.isRequired,
-    loginStatus: React.PropTypes.object.isRequired,
+  props: Props;
+  state: {
+    email: string,
+    password: string,
   };
-
-  constructor (props) {
+  login: Function;
+  switchToRegister: Function;
+  constructor(props) {
     super(props);
 
     this.login = this.login.bind(this);
@@ -30,18 +33,18 @@ class Login extends React.Component {
     this.state = {
       email: '',
       password: '',
-    }
+    };
   }
 
-  login () {
+  login() {
     this.props.dispatch(login(this.state.email, this.state.password));
   }
 
-  switchToRegister () {
+  switchToRegister() {
     this.props.dispatch(replaceRoute('register'));
   }
 
-  render () {
+  render() {
     console.log(this.props.loginStatus.inProgress);
     const width = 226;
     return (
@@ -60,18 +63,18 @@ class Login extends React.Component {
             alignItems: 'center',
           }}
         >
-          {this.props.loginStatus.error ? (
-            <View>
-              <Text style={{ color: 'red' }}>
-                Error: {this.props.loginStatus.error}
-              </Text>
-            </View>
-          ) : null}
+          {this.props.loginStatus.error
+            ? <View>
+                <Text style={{ color: 'red' }}>
+                  Error: {this.props.loginStatus.error}
+                </Text>
+              </View>
+            : null}
           <MKTextField
             style={{ width: width, height: 45 }}
             textInputStyle={{ flex: 1 }}
             floatingLabelEnabled={true}
-            onChangeText={(email) => this.setState({ email })}
+            onChangeText={email => this.setState({ email })}
             value={this.state.email}
             placeholder="Email"
           />
@@ -79,7 +82,7 @@ class Login extends React.Component {
             style={{ width: width, height: 45, marginTop: 5 }}
             textInputStyle={{ flex: 1 }}
             floatingLabelEnabled={true}
-            onChangeText={(password) => this.setState({ password })}
+            onChangeText={password => this.setState({ password })}
             value={this.state.password}
             placeholder="Password"
             password
@@ -92,7 +95,6 @@ class Login extends React.Component {
               width,
               marginTop: 25,
             }}
-
             loading={this.props.loginStatus.inProgress}
           />
           <FlatButton
@@ -106,7 +108,7 @@ class Login extends React.Component {
           />
         </View>
       </View>
-    )
+    );
   }
 }
 

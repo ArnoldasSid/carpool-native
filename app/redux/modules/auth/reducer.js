@@ -1,3 +1,4 @@
+// @flow
 import {
   LOGIN_REQUESTED,
   LOGIN_SUCCEEDED,
@@ -11,8 +12,23 @@ import {
   AUTH_INFO_LOADED,
   LOGOUT_SUCCEEDED,
 } from './constants';
+import type { Action } from '../../../models.js';
 
-const initialState = {
+export type AuthState = {
+  loggedIn: boolean,
+  loginInProgress: boolean,
+  loginError: any,
+  registrationInProgress: boolean,
+  registrationError: any,
+  authToken: ?string,
+  userId: ?string,
+  userEmail: ?string,
+  oneSignalUserId: ?string,
+  oneSignalPushToken: ?string,
+  oneSignalIdRegistered: boolean,
+};
+
+const initialState: AuthState = {
   loggedIn: false,
   loginInProgress: false,
   loginError: null,
@@ -26,7 +42,7 @@ const initialState = {
   oneSignalIdRegistered: false,
 };
 
-export default function authReducer (state = initialState, action) {
+export default function authReducer(state: AuthState = initialState, action: Action): AuthState {
   if (action.type === LOGIN_REQUESTED) {
     return {
       ...state,
@@ -48,7 +64,7 @@ export default function authReducer (state = initialState, action) {
       loginInProgress: false,
       loggedIn: false,
       loginError: action.payload.reason,
-    }
+    };
   } else if (action.type === REGISTRATION_REQUESTED) {
     return {
       ...state,
@@ -81,7 +97,7 @@ export default function authReducer (state = initialState, action) {
     return {
       ...state,
       oneSignalIdRegistered: true,
-    }
+    };
   } else if (action.type === ONESIGNAL_ID_REGISTRATION_FAILED) {
     alert('Could not register device');
     return state;
@@ -92,14 +108,14 @@ export default function authReducer (state = initialState, action) {
       userId: action.payload.id,
       loggedIn: true,
       userEmail: action.payload.email,
-    }
+    };
   } else if (action.type === LOGOUT_SUCCEEDED) {
     return {
       ...state,
       authToken: null,
       userId: null,
       loggedIn: false,
-    }
+    };
   }
   return state;
 }

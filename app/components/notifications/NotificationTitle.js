@@ -1,5 +1,6 @@
-import React from 'react'
-import { Text, StyleSheet } from 'react-native'
+// @flow
+import React from 'react';
+import { Text, StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
   titleWrap: {
@@ -8,12 +9,16 @@ const styles = StyleSheet.create({
     paddingLeft: 5,
     color: '#444',
   },
-})
+});
 
-export default function NotificationTitle ({ children }) {
+type Props = {
+  children?: ReactElement<*>,
+};
+
+export default function NotificationTitle({ children }: Props) {
   return (
     <Text style={styles.titleWrap}>
-      { children }
+      {children}
     </Text>
-  )
+  );
 }

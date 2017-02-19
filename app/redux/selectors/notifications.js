@@ -1,1 +1,3 @@
-export default state => state.notifications.notifications;
+// @flow
+import type { AppState } from '../rootReducer.js';
+export default (state: AppState) => state.notifications.notifications;

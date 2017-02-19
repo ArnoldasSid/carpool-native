@@ -1,2 +1,3 @@
+// @flow
 export const ROUTE_REPLACE_REQUESTED = 'ROUTE_REPLACE_REQUESTED';
 export const TAB_IND_UPDATED = 'TAB_IND_UPDATED';

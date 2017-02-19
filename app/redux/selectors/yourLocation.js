@@ -1,3 +1,3 @@
 // @flow
-import type { Location } from '../../models.js'
-export default (state: any): Location => state.trip.yourLocation
+import type { AppState } from '../rootReducer.js';
+export default (state: AppState) => state.trip.yourLocation;

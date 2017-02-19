@@ -28,6 +28,7 @@
     "redux-observable": "^0.12.2",
     "redux-observable-adapter-most": "0.0.2",
     "redux-saga": "^0.13.0",
+    "reselect": "^2.5.4",
     "rxjs": "5.0.0-rc.1",
     "sockjs-client": "^1.1.1"
   },

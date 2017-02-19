@@ -1,11 +1,12 @@
-import BackgroundGeolocation from 'react-native-mauron85-background-geolocation'
-import { async } from 'most-subject'
+// @flow
+import BackgroundGeolocation from 'react-native-mauron85-background-geolocation';
+import { async } from 'most-subject';
 
-let initialized = false
-let isTracking = false
-let shouldStart = false
-let location$ = async()
-let slowTrackingInterval
+let initialized = false;
+let isTracking = false;
+let shouldStart = false;
+let location$ = async();
+let slowTrackingInterval;
 
 const fastTrackingConfig = {
   desiredAccuracy: 0,
@@ -14,54 +15,54 @@ const fastTrackingConfig = {
   debug: false, // Enable/disable sounds
   startForeground: false,
   locationProvider: BackgroundGeolocation.provider.ANDROID_ACTIVITY_PROVIDER,
-  interval:  2 * 60 * 1000,
+  interval: 2 * 60 * 1000,
   fastestInterval: 2 * 60 * 1000,
   stopOnStillActivity: false,
   stopOnTerminate: true,
   syncThreshold: 50,
   maxLocations: 10,
-}
+};
 
 export const initFastTracking = () => {
-  console.log('Init fast tracking')
+  console.log('Init fast tracking');
   if (!initialized) {
-    BackgroundGeolocation.configure(fastTrackingConfig)
+    BackgroundGeolocation.configure(fastTrackingConfig);
 
-    BackgroundGeolocation.on('location', (location) => {
-      console.log('Location detected', location)
-      location$.next(location)
-    })
-    initialized = true
+    BackgroundGeolocation.on('location', location => {
+      console.log('Location detected', location);
+      location$.next(location);
+    });
+    initialized = true;
   }
-  return location$
-}
+  return location$;
+};
 
-function startGeolocation () {
-  console.log('Start geol')
+function startGeolocation() {
+  console.log('Start geol');
   if (!isTracking) {
     BackgroundGeolocation.start(
       () => {
-        isTracking = true
+        isTracking = true;
       },
-      (error) => {
+      error => {
         // Tracking has not started because of error
         // you should adjust your app UI for example change switch element to indicate
         // that service is not running
         if (error.code === 2) {
-          BackgroundGeolocation.showAppSettings()
+          BackgroundGeolocation.showAppSettings();
         } else {
-          console.log('[ERROR] Start failed: ' + error.message)
+          console.log('[ERROR] Start failed: ' + error.message);
         }
-        isTracking = false
-      }
-    )
+        isTracking = false;
+      },
+    );
   }
 }
 
-function checkIfGeolocationAvailable () {
-  console.log('Should check if geo avail')
+function checkIfGeolocationAvailable() {
+  console.log('Should check if geo avail');
   return new Promise((resolve, reject) => {
-    resolve()
+    resolve();
     // BackgroundGeolocation.isLocationEnabled((enabled) => {
     //   if (enabled) {
     //     resolve()
@@ -78,64 +79,67 @@ function checkIfGeolocationAvailable () {
     //     })
     //   }
     // }, () => {})
-  })
+  });
 }
 
-export function stopTracking () {
+export function stopTracking() {
   // if (!isTracking) { return }
 
-  clearInterval(slowTrackingInterval)
+  clearInterval(slowTrackingInterval);
 
-  shouldStart = false
-  BackgroundGeolocation.stop()
-  isTracking = false
+  shouldStart = false;
+  BackgroundGeolocation.stop();
+  isTracking = false;
 }
 
-export function getCurrLocation () {
+export function getCurrLocation() {
   navigator.geolocation.getCurrentPosition(
-    (position) => {
-      location$.next(position.coords)
+    position => {
+      location$.next(position.coords);
     },
-    (error) => alert(JSON.stringify(error)),
-    {enableHighAccuracy: false, timeout: 20000, maximumAge: 1000}
-  )
+    error => alert(JSON.stringify(error)),
+    { enableHighAccuracy: false, timeout: 20000, maximumAge: 1000 },
+  );
 }
 
-export function startSlowTracking () {
+export function startSlowTracking() {
   checkIfGeolocationAvailable().then(() => {
-    getCurrLocation()
-    slowTrackingInterval = setInterval(() => {
-      getCurrLocation()
-    }, 2 * 60 * 1000)
-  })
-  return location$
+    getCurrLocation();
+    slowTrackingInterval = setInterval(
+      () => {
+        getCurrLocation();
+      },
+      2 * 60 * 1000,
+    );
+  });
+  return location$;
 }
 
 export const switchToSlowTracking = () => {
-  stopTracking()
-  startSlowTracking()
-  return location$
-}
+  stopTracking();
+  startSlowTracking();
+  return location$;
+};
 
-export function startFastTracking () {
-  BackgroundGeolocation.configure(fastTrackingConfig)
+export function startFastTracking() {
+  BackgroundGeolocation.configure(fastTrackingConfig);
   if (isTracking) {
-    return location$
+    return location$;
   }
 
   if (!initialized) {
-    initFastTracking()
+    initFastTracking();
   }
 
   checkIfGeolocationAvailable().then(() => {
-    startGeolocation()
-  })
+    startGeolocation();
+  });
 
-  return location$
+  return location$;
 }
 
 export const switchToFastTracking = () => {
-  stopTracking()
-  startFastTracking()
-  return location$
-}
+  stopTracking();
+  startFastTracking();
+  return location$;
+};

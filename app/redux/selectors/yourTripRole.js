@@ -1,3 +1,3 @@
 // @flow
-import type { UsersRole } from '../../models.js'
-export default (state: any): UsersRole => state.trip.yourRole
+import type { AppState } from '../rootReducer.js';
+export default (state: AppState) => state.trip.yourRole;

@@ -1,7 +1,14 @@
-import React from 'react'
-import { View } from 'react-native'
+// @flow
+import React from 'react';
+import { View } from 'react-native';
 
-export default function NotificationWrap ({ children, height, opacity }) {
+type Props = {
+  children?: ReactElement<*>,
+  height: number,
+  opacity: number,
+};
+
+export default function NotificationWrap({ children, height, opacity }: Props) {
   return (
     <View
       style={{
@@ -15,7 +22,7 @@ export default function NotificationWrap ({ children, height, opacity }) {
         opacity,
       }}
     >
-      { children }
+      {children}
     </View>
-  )
+  );
 }

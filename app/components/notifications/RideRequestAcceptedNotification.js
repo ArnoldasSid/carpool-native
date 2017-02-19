@@ -1,17 +1,17 @@
-import React from 'react'
-import { connect } from 'react-redux'
+// @flow
+import React from 'react';
+import { connect } from 'react-redux';
 
-import { markNotificationAsRead } from '../../redux/modules/notifications/actions'
-import moment from 'moment'
+import { markNotificationAsRead } from '../../redux/modules/notifications/actions';
+import moment from 'moment';
 
-import NotificationTitle from './NotificationTitle.js'
-import NotificationTime from './NotificationTime.js'
-import NotificationContent from './NotificationContent.js'
-import NotificationActions from './NotificationActions.js'
-import NotificationWrap from './NotificationWrap.js'
+import NotificationTitle from './NotificationTitle.js';
+import NotificationTime from './NotificationTime.js';
+import NotificationContent from './NotificationContent.js';
+import NotificationActions from './NotificationActions.js';
+import NotificationWrap from './NotificationWrap.js';
 
 class RideRequestAcceptedNotification extends React.Component {
-
   static propTypes = {
     requesterName: React.PropTypes.string.isRequired,
     requesterId: React.PropTypes.string.isRequired,
@@ -21,26 +21,24 @@ class RideRequestAcceptedNotification extends React.Component {
     opacity: React.PropTypes.number.isRequired,
   };
 
-  constructor (props) {
-    super(props)
+  markAsRead: Function;
+  constructor(props) {
+    super(props);
 
-    this.markAsRead = this.markAsRead.bind(this)
+    this.markAsRead = this.markAsRead.bind(this);
   }
 
-  markAsRead () {
-    this.props.dispatch(markNotificationAsRead(this.props.id))
+  markAsRead() {
+    this.props.dispatch(markNotificationAsRead(this.props.id));
   }
 
-  getTimeDiff (notificationTimestamp) {
-    return moment().from(notificationTimestamp)
+  getTimeDiff(notificationTimestamp) {
+    return moment().from(notificationTimestamp);
   }
 
-  render () {
+  render() {
     return (
-      <NotificationWrap
-        height={this.props.height * 115}
-        opacity={this.props.opacity}
-      >
+      <NotificationWrap height={this.props.height * 115} opacity={this.props.opacity}>
         <NotificationTitle>
           Ride request accepted
         </NotificationTitle>
@@ -51,14 +49,16 @@ class RideRequestAcceptedNotification extends React.Component {
           {this.props.requesterName} has accepted your ride request
         </NotificationContent>
         <NotificationActions
-          actions={[{
-            onPress: this.markAsRead,
-            text: 'Hide',
-          }]}
+          actions={[
+            {
+              onPress: this.markAsRead,
+              text: 'Hide',
+            },
+          ]}
         />
       </NotificationWrap>
-    )
+    );
   }
 }
 
-export default connect()(RideRequestAcceptedNotification)
+export default connect()(RideRequestAcceptedNotification);

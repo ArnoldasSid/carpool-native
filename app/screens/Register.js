@@ -1,9 +1,6 @@
+// @flow
 import React from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-} from 'react-native';
+import { View, Text, TextInput } from 'react-native';
 import { MKTextField } from 'react-native-material-kit';
 import { connect } from 'react-redux';
 import { replaceRoute } from '../redux/modules/router/actions';
@@ -14,15 +11,24 @@ import registrationStatusSelector from '../redux/selectors/registrationStatus';
 import RaisedButton from '../components/material/RaisedButton.js';
 import FlatButton from '../components/material/FlatButton.js';
 
-class Register extends React.Component {
+type Props = {
+  authInfo: Object,
+  dispatch: Function,
+  registrationStatus: Object,
+};
 
-  static propTypes = {
-    authInfo: React.PropTypes.object.isRequired,
-    dispatch: React.PropTypes.func.isRequired,
-    registrationStatus: React.PropTypes.object.isRequired,
+class Register extends React.Component {
+  props: Props;
+  state: {
+    email: string,
+    name: string,
+    password: string,
+    password2: string,
   };
 
-  constructor (props) {
+  register: Function;
+  switchToLogin: Function;
+  constructor(props) {
     super(props);
 
     this.register = this.register.bind(this);
@@ -33,23 +39,22 @@ class Register extends React.Component {
       name: '',
       password: '',
       password2: '',
-    }
-
+    };
   }
 
-  switchToLogin () {
+  switchToLogin() {
     this.props.dispatch(replaceRoute('login'));
   }
 
-  register () {
+  register() {
     if (this.state.password !== this.state.password2) {
-      return alert('Passwords don\'t match');
+      return alert("Passwords don't match");
     }
 
     this.props.dispatch(register(this.state.email, this.state.password));
   }
 
-  render () {
+  render() {
     const width = 226;
     return (
       <View
@@ -67,13 +72,13 @@ class Register extends React.Component {
             alignItems: 'center',
           }}
         >
-          {this.props.registrationStatus.error ? (
-            <View>
-              <Text style={{ color: 'red' }}>
-                Error: {this.props.registrationStatus.error}
-              </Text>
-            </View>
-          ) : null}
+          {this.props.registrationStatus.error
+            ? <View>
+                <Text style={{ color: 'red' }}>
+                  Error: {this.props.registrationStatus.error}
+                </Text>
+              </View>
+            : null}
           <MKTextField
             style={{ width: width, height: 45 }}
             textInputStyle={{ flex: 1 }}
@@ -121,7 +126,7 @@ class Register extends React.Component {
           />
         </View>
       </View>
-    )
+    );
   }
 }
 

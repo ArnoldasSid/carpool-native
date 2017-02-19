@@ -1,41 +1,37 @@
-import { createStore, applyMiddleware } from 'redux'
-import { combineEpics, createEpicMiddleware } from 'redux-observable'
-import mostAdapter from 'redux-observable-adapter-most'
-import { composeWithDevTools } from 'remote-redux-devtools'
-import createSagaMiddleware from 'redux-saga'
+// @flow
+import { createStore, applyMiddleware } from 'redux';
+import { combineEpics, createEpicMiddleware } from 'redux-observable';
+import mostAdapter from 'redux-observable-adapter-most';
+import { composeWithDevTools } from 'remote-redux-devtools';
+import createSagaMiddleware from 'redux-saga';
 
-import rootReducer from './rootReducer.js'
-import rootSaga from './rootSaga.js'
+import rootReducer from './rootReducer.js';
+import rootSaga from './rootSaga.js';
 
-import authEpic from './modules/auth/epic'
+import authEpic from './modules/auth/epic';
 
-import { APP_INIT } from './modules/app/constants.js'
+import { APP_INIT } from './modules/app/constants.js';
 
-export function createAppStore () {
+export function createAppStore() {
+  const rootEpic = combineEpics(authEpic);
 
-  const rootEpic = combineEpics(
-    authEpic,
-  )
-
-  const sagaMiddleware = createSagaMiddleware()
-
+  const sagaMiddleware = createSagaMiddleware();
 
   const store = createStore(
     rootReducer,
-    composeWithDevTools(applyMiddleware(
-      sagaMiddleware,
-      createEpicMiddleware(rootEpic, { adapter: mostAdapter })
-    ))
-  )
+    composeWithDevTools(
+      applyMiddleware(sagaMiddleware, createEpicMiddleware(rootEpic, { adapter: mostAdapter })),
+    ),
+  );
 
-  sagaMiddleware.run(rootSaga)
+  sagaMiddleware.run(rootSaga);
 
   store.dispatch({
     type: APP_INIT,
-  })
+  });
 
-  return store
+  return store;
 }
 
-const store = createAppStore()
-export default store
+const store = createAppStore();
+export default store;

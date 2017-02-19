@@ -1,5 +1,6 @@
-import React from 'react'
-import { Text, StyleSheet } from 'react-native'
+// @flow
+import React from 'react';
+import { Text, StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
   timeWrap: {
@@ -8,12 +9,16 @@ const styles = StyleSheet.create({
     fontSize: 12,
     paddingTop: -2,
   },
-})
+});
 
-export default function NotificationTime ({ children }) {
+type Props = {
+  children?: ReactElement<*>,
+};
+
+export default function NotificationTime({ children }: Props) {
   return (
     <Text style={styles.timeWrap}>
-      { children }
+      {children}
     </Text>
-  )
+  );
 }

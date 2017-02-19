@@ -1,4 +1,4 @@
 // @flow
-import R from 'ramda'
-import type { User } from '../../models.js'
-export default (state: any): User[] => R.values(state.trip.otherUsers)
+import type { AppState } from '../rootReducer.js';
+import R from 'ramda';
+export default (state: AppState) => R.values(state.trip.otherUsers);

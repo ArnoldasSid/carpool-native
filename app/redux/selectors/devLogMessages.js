@@ -1,2 +1,3 @@
 // @flow
-export default (state: any): Object[] => state.devLog.messages
+import type { AppState } from '../rootReducer.js';
+export default (state: AppState) => state.devLog.messages;

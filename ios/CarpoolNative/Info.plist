@@ -32,7 +32,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>4</string>
+	<string>7</string>
 	<key>CodePushDeploymentKey</key>
 	<string>7TiJj6utVmVelWfHq9jq0PYbpLoZ41byXqHoGx</string>
 	<key>LSRequiresIPhoneOS</key>
@@ -56,7 +56,7 @@
 		</dict>
 	</dict>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string></string>
+	<string>App requires background location</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
 	<key>UIAppFonts</key>

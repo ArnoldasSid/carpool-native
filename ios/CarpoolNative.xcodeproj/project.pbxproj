@@ -22,9 +22,11 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		140ED2AC1D01E1AD002B40FF /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
+		2FF8DDF81DF94E9D9FBD232F /* libRCTOneSignal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A42B6D9E70742288F97A3F4 /* libRCTOneSignal.a */; };
+		5213276A1E505E210053E69C /* libRCTBackgroundGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 521327691E505E140053E69C /* libRCTBackgroundGeolocation.a */; };
+		5213276C1E5060B30053E69C /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 5213276B1E5060B30053E69C /* libsqlite3.tbd */; };
 		5260FB841E4113130099F02E /* OneSignal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5260FB831E4113130099F02E /* OneSignal.framework */; };
 		5286355C1E3F0816007305A8 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5286355B1E3F0816007305A8 /* MapKit.framework */; };
-		528635861E410F4C007305A8 /* libRCTOneSignal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5286357C1E4104A3007305A8 /* libRCTOneSignal.a */; };
 		5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		887496191F804C04842A37E4 /* libCodePush.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 54B458F92CB44356B37414AC /* libCodePush.a */; };
@@ -97,9 +99,16 @@
 			remoteGlobalIDString = 83CBBA2E1A601D0E00E9B192;
 			remoteInfo = React;
 		};
-		5286357B1E4104A3007305A8 /* PBXContainerItemProxy */ = {
+		521327681E505E140053E69C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = AF7C301DC6864A8083669D2A /* RCTOneSignal.xcodeproj */;
+			containerPortal = 521327641E505E130053E69C /* RCTBackgroundGeolocation.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 418F75461D02DC3D0045FEA0;
+			remoteInfo = RCTBackgroundGeolocation;
+		};
+		52DC1E401E50BDBB00050A21 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 789CB08600FC4C59942579E9 /* RCTOneSignal.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 3245CDED1BFEE35C00EABF68;
 			remoteInfo = RCTOneSignal;
@@ -214,6 +223,7 @@
 		00E356EE1AD99517003FC87E /* CarpoolNativeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CarpoolNativeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* CarpoolNativeTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CarpoolNativeTests.m; sourceTree = "<group>"; };
+		0A42B6D9E70742288F97A3F4 /* libRCTOneSignal.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRCTOneSignal.a; sourceTree = "<group>"; };
 		0F84CCC7E1D941EB92FDAEE0 /* CodePush.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = CodePush.xcodeproj; path = "../node_modules/react-native-code-push/ios/CodePush.xcodeproj"; sourceTree = "<group>"; };
 		139105B61AF99BAD00B5F7CC /* RCTSettings.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTSettings.xcodeproj; path = "../node_modules/react-native/Libraries/Settings/RCTSettings.xcodeproj"; sourceTree = "<group>"; };
 		139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTWebSocket.xcodeproj; path = "../node_modules/react-native/Libraries/WebSocket/RCTWebSocket.xcodeproj"; sourceTree = "<group>"; };
@@ -227,18 +237,20 @@
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
 		15114C0637AA43A3AA1DAF43 /* libRCTMaterialKit.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRCTMaterialKit.a; sourceTree = "<group>"; };
 		18295D7EC69BB4432228B425 /* Pods-CarpoolNative.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CarpoolNative.release.xcconfig"; path = "Pods/Target Support Files/Pods-CarpoolNative/Pods-CarpoolNative.release.xcconfig"; sourceTree = "<group>"; };
+		521327641E505E130053E69C /* RCTBackgroundGeolocation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBackgroundGeolocation.xcodeproj; path = "../node_modules/react-native-mauron85-background-geolocation/ios/RCTBackgroundGeolocation.xcodeproj"; sourceTree = "<group>"; };
+		5213276B1E5060B30053E69C /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		5260FB831E4113130099F02E /* OneSignal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OneSignal.framework; path = Pods/OneSignal/iOS_SDK/Framework/OneSignal.framework; sourceTree = "<group>"; };
 		5286355A1E3F080C007305A8 /* CarpoolNative.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = CarpoolNative.entitlements; path = CarpoolNative/CarpoolNative.entitlements; sourceTree = "<group>"; };
 		5286355B1E3F0816007305A8 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		52EB65BF1E17D96300858F6B /* roboto.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = roboto.ttf; path = ../../../Downloads/roboto/roboto.ttf; sourceTree = "<group>"; };
 		54B458F92CB44356B37414AC /* libCodePush.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libCodePush.a; sourceTree = "<group>"; };
 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
+		789CB08600FC4C59942579E9 /* RCTOneSignal.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RCTOneSignal.xcodeproj; path = "../node_modules/react-native-onesignal/ios/RCTOneSignal.xcodeproj"; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		829FE388C8B3465BB5BD4520 /* libz.tbd */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 		83E9ACAD0A9147B3BA8D28A4 /* libAirMaps.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libAirMaps.a; sourceTree = "<group>"; };
 		A298B66E5963A615E378DE50 /* Pods-CarpoolNative.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CarpoolNative.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CarpoolNative/Pods-CarpoolNative.debug.xcconfig"; sourceTree = "<group>"; };
-		AF7C301DC6864A8083669D2A /* RCTOneSignal.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RCTOneSignal.xcodeproj; path = "../node_modules/react-native-onesignal/ios/RCTOneSignal.xcodeproj"; sourceTree = "<group>"; };
 		F340D0C0C3CE4C6D9CD427F0 /* AirMaps.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = AirMaps.xcodeproj; path = "../node_modules/react-native-maps/ios/AirMaps.xcodeproj"; sourceTree = "<group>"; };
 		F35650A8BFB94A16AC1471A9 /* RCTMaterialKit.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RCTMaterialKit.xcodeproj; path = "../node_modules/react-native-material-kit/iOS/RCTMaterialKit.xcodeproj"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -256,7 +268,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				528635861E410F4C007305A8 /* libRCTOneSignal.a in Frameworks */,
+				5213276C1E5060B30053E69C /* libsqlite3.tbd in Frameworks */,
+				5213276A1E505E210053E69C /* libRCTBackgroundGeolocation.a in Frameworks */,
 				5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */,
 				146834051AC3E58100842450 /* libReact.a in Frameworks */,
 				5286355C1E3F0816007305A8 /* MapKit.framework in Frameworks */,
@@ -274,6 +287,7 @@
 				D826C13250FE4BE28B4092A1 /* libz.tbd in Frameworks */,
 				CD4BCA2218D1451B9030F554 /* libRCTMaterialKit.a in Frameworks */,
 				B6E0785A55764FDB9BB1C8DA /* libAirMaps.a in Frameworks */,
+				2FF8DDF81DF94E9D9FBD232F /* libRCTOneSignal.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -390,10 +404,18 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		5286356B1E4104A3007305A8 /* Products */ = {
+		521327651E505E130053E69C /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				5286357C1E4104A3007305A8 /* libRCTOneSignal.a */,
+				521327691E505E140053E69C /* libRCTBackgroundGeolocation.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		52DC1E2F1E50BDBB00050A21 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				52DC1E411E50BDBB00050A21 /* libRCTOneSignal.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -451,6 +473,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				521327641E505E130053E69C /* RCTBackgroundGeolocation.xcodeproj */,
 				5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */,
 				146833FF1AC3E56700842450 /* React.xcodeproj */,
 				00C302A71ABCB8CE00DB3ED1 /* RCTActionSheet.xcodeproj */,
@@ -465,7 +488,7 @@
 				0F84CCC7E1D941EB92FDAEE0 /* CodePush.xcodeproj */,
 				F35650A8BFB94A16AC1471A9 /* RCTMaterialKit.xcodeproj */,
 				F340D0C0C3CE4C6D9CD427F0 /* AirMaps.xcodeproj */,
-				AF7C301DC6864A8083669D2A /* RCTOneSignal.xcodeproj */,
+				789CB08600FC4C59942579E9 /* RCTOneSignal.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -506,6 +529,7 @@
 		F716215A1A614A01B48BAA59 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5213276B1E5060B30053E69C /* libsqlite3.tbd */,
 				5260FB831E4113130099F02E /* OneSignal.framework */,
 				5286355B1E3F0816007305A8 /* MapKit.framework */,
 				829FE388C8B3465BB5BD4520 /* libz.tbd */,
@@ -614,6 +638,10 @@
 					ProjectRef = 5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */;
 				},
 				{
+					ProductGroup = 521327651E505E130053E69C /* Products */;
+					ProjectRef = 521327641E505E130053E69C /* RCTBackgroundGeolocation.xcodeproj */;
+				},
+				{
 					ProductGroup = 00C302B61ABCB90400DB3ED1 /* Products */;
 					ProjectRef = 00C302B51ABCB90400DB3ED1 /* RCTGeolocation.xcodeproj */;
 				},
@@ -634,8 +662,8 @@
 					ProjectRef = 00C302D31ABCB9D200DB3ED1 /* RCTNetwork.xcodeproj */;
 				},
 				{
-					ProductGroup = 5286356B1E4104A3007305A8 /* Products */;
-					ProjectRef = AF7C301DC6864A8083669D2A /* RCTOneSignal.xcodeproj */;
+					ProductGroup = 52DC1E2F1E50BDBB00050A21 /* Products */;
+					ProjectRef = 789CB08600FC4C59942579E9 /* RCTOneSignal.xcodeproj */;
 				},
 				{
 					ProductGroup = 139105B71AF99BAD00B5F7CC /* Products */;
@@ -723,11 +751,18 @@
 			remoteRef = 146834031AC3E56700842450 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		5286357C1E4104A3007305A8 /* libRCTOneSignal.a */ = {
+		521327691E505E140053E69C /* libRCTBackgroundGeolocation.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRCTBackgroundGeolocation.a;
+			remoteRef = 521327681E505E140053E69C /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		52DC1E411E50BDBB00050A21 /* libRCTOneSignal.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libRCTOneSignal.a;
-			remoteRef = 5286357B1E4104A3007305A8 /* PBXContainerItemProxy */;
+			remoteRef = 52DC1E401E50BDBB00050A21 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		52EB65981E17D6C500858F6B /* libCodePush.a */ = {
@@ -1089,6 +1124,7 @@
 					"$(SRCROOT)/../node_modules/react-native-code-push/ios/CodePush/**",
 					"$(SRCROOT)/../node_modules/react-native-material-kit/iOS/RCTMaterialKit",
 					"$(SRCROOT)/../node_modules/react-native-maps/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-mauron85-background-geolocation/ios/RCTBackgroundGeolocation",
 					"$(SRCROOT)/../node_modules/react-native-onesignal/ios/RCTOneSignal/**",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -1134,6 +1170,7 @@
 					"$(SRCROOT)/../node_modules/react-native-code-push/ios/CodePush/**",
 					"$(SRCROOT)/../node_modules/react-native-material-kit/iOS/RCTMaterialKit",
 					"$(SRCROOT)/../node_modules/react-native-maps/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-mauron85-background-geolocation/ios/RCTBackgroundGeolocation",
 					"$(SRCROOT)/../node_modules/react-native-onesignal/ios/RCTOneSignal/**",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;

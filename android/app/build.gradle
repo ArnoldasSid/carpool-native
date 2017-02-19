@@ -139,9 +139,9 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-onesignal')
     compile project(':react-native-code-push')
     compile project(':react-native-vector-icons')
-    compile project(':react-native-onesignal')
     compile project(':react-native-mauron85-background-geolocation')
     compile project(':react-native-material-kit')
     compile project(':react-native-maps')

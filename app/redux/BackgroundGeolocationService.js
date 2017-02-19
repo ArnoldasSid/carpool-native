@@ -23,6 +23,7 @@ const fastTrackingConfig = {
 }
 
 export const initFastTracking = () => {
+  console.log('Init fast tracking')
   if (!initialized) {
     BackgroundGeolocation.configure(fastTrackingConfig)
 
@@ -36,6 +37,7 @@ export const initFastTracking = () => {
 }
 
 function startGeolocation () {
+  console.log('Start geol')
   if (!isTracking) {
     BackgroundGeolocation.start(
       () => {
@@ -57,23 +59,25 @@ function startGeolocation () {
 }
 
 function checkIfGeolocationAvailable () {
+  console.log('Should check if geo avail')
   return new Promise((resolve, reject) => {
-    BackgroundGeolocation.isLocationEnabled((enabled) => {
-      if (enabled) {
-        resolve()
-      } else {
-        // Location services are disabled
-        BackgroundGeolocation.showLocationSettings()
-
-        shouldStart = true
-        BackgroundGeolocation.watchLocationMode(geolocationEnabled => {
-          if (geolocationEnabled && shouldStart) {
-            shouldStart = false
-            resolve()
-          }
-        })
-      }
-    })
+    resolve()
+    // BackgroundGeolocation.isLocationEnabled((enabled) => {
+    //   if (enabled) {
+    //     resolve()
+    //   } else {
+    //     // Location services are disabled
+    //     BackgroundGeolocation.showLocationSettings()
+    //
+    //     shouldStart = true
+    //     BackgroundGeolocation.watchLocationMode(geolocationEnabled => {
+    //       if (geolocationEnabled && shouldStart) {
+    //         shouldStart = false
+    //         resolve()
+    //       }
+    //     })
+    //   }
+    // }, () => {})
   })
 }
 

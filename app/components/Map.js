@@ -82,6 +82,7 @@ export default class Map extends React.Component {
 
   render () {
     const { yourLocation, otherUsers } = this.props
+    console.log(yourLocation, otherUsers)
 
     return (
       <View style={[styles.container, { width: this.props.width, height: this.props.height }]}>
@@ -102,9 +103,9 @@ export default class Map extends React.Component {
               anchor={{x: 0.5, y: 0.5}}
             />
           ) : null}
-          {otherUsers.map(user => user.location ? (
+          {otherUsers.map((user, i) => user.location ? (
             <MapView.Marker
-              key={user.id}
+              key={i}
               coordinate={user.location}
               image={this.getMarkerIcon(user.role, user.location.time)}
               centerOffset={{x: 0, y: 24}}

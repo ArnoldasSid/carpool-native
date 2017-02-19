@@ -46,7 +46,7 @@ class Settings extends React.Component {
         </LogoutButton>
         <View style={{ paddingTop: 15 }}>
           <Text>
-            Version 0.2.2
+            Version 0.2.3
           </Text>
         </View>
       </View>

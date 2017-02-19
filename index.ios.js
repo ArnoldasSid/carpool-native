@@ -33,6 +33,6 @@ export default class CarpoolNative extends Component {
   }
 }
 
-CarpoolNative = codePush({ checkFrequency: codePush.CheckFrequency.ON_APP_RESUME })(CarpoolNative)
+// CarpoolNative = codePush({ checkFrequency: codePush.CheckFrequency.ON_APP_RESUME })(CarpoolNative)
 
 AppRegistry.registerComponent('CarpoolNative', () => CarpoolNative)

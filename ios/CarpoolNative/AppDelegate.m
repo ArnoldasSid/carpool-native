@@ -42,10 +42,12 @@
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
   
-  //self.oneSignal = [[RCTOneSignal alloc] initWithLaunchOptions:launchOptions
-  //                                                       appId:@"545cd90b-40b2-49ef-964a-888e15415286"];
-  
   return YES;
+}
+
+// Required for the notification event.
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)notification {
+  [RCTOneSignal didReceiveRemoteNotification:notification];
 }
 
 @end

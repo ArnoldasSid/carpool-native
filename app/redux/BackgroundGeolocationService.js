@@ -15,7 +15,7 @@ const fastTrackingConfig = {
   desiredAccuracy: 10,
   stationaryRadius: 0,
   distanceFilter: 0.1,
-  debug: true, // Enable/disable sounds
+  debug: false, // Enable/disable sounds
   startForeground: false,
   locationProvider: BackgroundGeolocation.provider.ANDROID_ACTIVITY_PROVIDER,
   interval: 10 * 1000,
@@ -67,6 +67,7 @@ function startGeolocation() {
 function checkIfGeolocationAvailable() {
   return new Promise((resolve, reject) => {
     resolve();
+    // Doesnt work on ios
     // BackgroundGeolocation.isLocationEnabled(
     //   enabled => {
     //     if (enabled) {
@@ -129,13 +130,11 @@ export const switchToSlowTracking = () => {
 };
 
 export function startFastTracking(userId: string) {
-  console.log(userId, lastUserId);
   if (userId && userId !== lastUserId) {
-    console.log('Seting up fast tracking');
     lastUserId = userId;
     BackgroundGeolocation.configure({
       ...fastTrackingConfig,
-      url: `http://stg.arciau.lt/api/user/${userId}/location`,
+      // url: `http://stg.arciau.lt/api/user/${userId}/location`,
     });
   }
   if (isTracking) {

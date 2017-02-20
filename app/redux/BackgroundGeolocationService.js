@@ -64,25 +64,27 @@ function startGeolocation() {
 
 function checkIfGeolocationAvailable() {
   return new Promise((resolve, reject) => {
-    BackgroundGeolocation.isLocationEnabled(
-      enabled => {
-        if (enabled) {
-          resolve();
-        } else {
-          // Location services are disabled
-          BackgroundGeolocation.showLocationSettings();
-
-          shouldStart = true;
-          BackgroundGeolocation.watchLocationMode(geolocationEnabled => {
-            if (geolocationEnabled && shouldStart) {
-              shouldStart = false;
-              resolve();
-            }
-          });
-        }
-      },
-      () => {},
-    );
+    resolve();
+    // Doesnt work on ios
+    // BackgroundGeolocation.isLocationEnabled(
+    //   enabled => {
+    //     if (enabled) {
+    //       resolve();
+    //     } else {
+    //       // Location services are disabled
+    //       BackgroundGeolocation.showLocationSettings();
+    //
+    //       shouldStart = true;
+    //       BackgroundGeolocation.watchLocationMode(geolocationEnabled => {
+    //         if (geolocationEnabled && shouldStart) {
+    //           shouldStart = false;
+    //           resolve();
+    //         }
+    //       });
+    //     }
+    //   },
+    //   () => {},
+    // );
   });
 }
 
@@ -126,13 +128,11 @@ export const switchToSlowTracking = () => {
 };
 
 export function startFastTracking(userId: string) {
-  console.log(userId, lastUserId);
   if (userId && userId !== lastUserId) {
-    console.log('Seting up fast tracking');
     lastUserId = userId;
     BackgroundGeolocation.configure({
       ...fastTrackingConfig,
-      url: `http://stg.arciau.lt/api/user/${userId}/location`,
+      // url: `http://stg.arciau.lt/api/user/${userId}/location`,
     });
   }
   if (isTracking) {

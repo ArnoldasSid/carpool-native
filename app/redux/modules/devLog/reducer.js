@@ -1,54 +1,49 @@
 // @flow
 import R from 'ramda';
 
-import { DDP_CONNECTED, DDP_DISCONNECTED } from '../app/constants.js';
 import { LOG_MESSAGE_ADDED } from './constants.js';
-import type { Action } from '../../../models.js';
+import type { Action, LogType } from '../../../models.js';
 
-type Message = {
+type LogMessage = {
+  type: LogType,
   title: string,
   message: string,
   timestamp: number,
 };
 
 export type DevLogState = {
-  messages: Message[],
+  messages: LogMessage[],
 };
 
 const initialState: DevLogState = {
   messages: [],
 };
 
+const getMsgPrefix = (type: LogType): string => {
+  if (type === 'GEOLOCATION') {
+    return 'Geolocation';
+  } else if (type === 'DDP') {
+    return 'DDP';
+  } else if (type === 'NOTIFICAITON') {
+    return 'Notification';
+  } else if (type === 'TRIP_UPDATE') {
+    return 'Trip Update';
+  }
+  // Shouldnt happen
+  return '--No Type--';
+};
+
 export default function devLogReducer(state: DevLogState = initialState, action: Action): DevLogState {
   if (action.type === LOG_MESSAGE_ADDED) {
     const { type, title, message } = action.payload;
-    const fullTitle = type ? `[${type}] ${title}` : title;
+    const prefix = getMsgPrefix(type);
+    const fullTitle = `[${prefix}] ${title}`;
     const stringMsg = typeof message !== 'string' ? JSON.stringify(message, null, 2) : message;
     return R.evolve(
       {
         messages: R.prepend({
           title: fullTitle,
           message: stringMsg,
-          timestamp: new Date().valueOf(),
-        }),
-      },
-      state,
-    );
-  } else if (action.type === DDP_CONNECTED) {
-    return R.evolve(
-      {
-        messages: R.prepend({
-          title: '[DDP] DDP Connected',
-          timestamp: new Date().valueOf(),
-        }),
-      },
-      state,
-    );
-  } else if (action.type === DDP_DISCONNECTED) {
-    return R.evolve(
-      {
-        messages: R.prepend({
-          title: '[DDP] DDP Disconnected',
           timestamp: new Date().valueOf(),
         }),
       },

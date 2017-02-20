@@ -1,12 +1,15 @@
 // @flow
 import BackgroundGeolocation from 'react-native-mauron85-background-geolocation';
 import { async } from 'most-subject';
+import store from './createStore.js';
+import { addLogMessage } from './modules/devLog/actions.js';
 
 let initialized = false;
 let isTracking = false;
 let shouldStart = false;
 let location$ = async();
 let slowTrackingInterval;
+let lastUserId = null;
 
 const fastTrackingConfig = {
   desiredAccuracy: 0,
@@ -15,8 +18,8 @@ const fastTrackingConfig = {
   debug: false, // Enable/disable sounds
   startForeground: false,
   locationProvider: BackgroundGeolocation.provider.ANDROID_ACTIVITY_PROVIDER,
-  interval: 2 * 60 * 1000,
-  fastestInterval: 2 * 60 * 1000,
+  interval: 10 * 1000,
+  fastestInterval: 10 * 1000,
   stopOnStillActivity: false,
   stopOnTerminate: true,
   syncThreshold: 50,
@@ -60,25 +63,26 @@ function startGeolocation() {
 }
 
 function checkIfGeolocationAvailable() {
-  console.log('Should check if geo avail');
   return new Promise((resolve, reject) => {
-    resolve();
-    // BackgroundGeolocation.isLocationEnabled((enabled) => {
-    //   if (enabled) {
-    //     resolve()
-    //   } else {
-    //     // Location services are disabled
-    //     BackgroundGeolocation.showLocationSettings()
-    //
-    //     shouldStart = true
-    //     BackgroundGeolocation.watchLocationMode(geolocationEnabled => {
-    //       if (geolocationEnabled && shouldStart) {
-    //         shouldStart = false
-    //         resolve()
-    //       }
-    //     })
-    //   }
-    // }, () => {})
+    BackgroundGeolocation.isLocationEnabled(
+      enabled => {
+        if (enabled) {
+          resolve();
+        } else {
+          // Location services are disabled
+          BackgroundGeolocation.showLocationSettings();
+
+          shouldStart = true;
+          BackgroundGeolocation.watchLocationMode(geolocationEnabled => {
+            if (geolocationEnabled && shouldStart) {
+              shouldStart = false;
+              resolve();
+            }
+          });
+        }
+      },
+      () => {},
+    );
   });
 }
 
@@ -98,7 +102,6 @@ export function getCurrLocation() {
       location$.next(position.coords);
     },
     error => alert(JSON.stringify(error)),
-    { enableHighAccuracy: false, timeout: 20000, maximumAge: 1000 },
   );
 }
 
@@ -118,11 +121,20 @@ export function startSlowTracking() {
 export const switchToSlowTracking = () => {
   stopTracking();
   startSlowTracking();
+  store.dispatch(addLogMessage('GEOLOCATION', 'Stopped active tracking'));
   return location$;
 };
 
-export function startFastTracking() {
-  BackgroundGeolocation.configure(fastTrackingConfig);
+export function startFastTracking(userId: string) {
+  console.log(userId, lastUserId);
+  if (userId && userId !== lastUserId) {
+    console.log('Seting up fast tracking');
+    lastUserId = userId;
+    BackgroundGeolocation.configure({
+      ...fastTrackingConfig,
+      url: `http://stg.arciau.lt/api/user/${userId}/location`,
+    });
+  }
   if (isTracking) {
     return location$;
   }
@@ -135,11 +147,13 @@ export function startFastTracking() {
     startGeolocation();
   });
 
+  store.dispatch(addLogMessage('GEOLOCATION', 'Started active tracking'));
+
   return location$;
 }
 
-export const switchToFastTracking = () => {
+export const switchToFastTracking = (userId: string) => {
   stopTracking();
-  startFastTracking();
+  startFastTracking(userId);
   return location$;
 };

@@ -6,6 +6,7 @@ import { subscribeToNotifications, markNotificationAsRead } from '../../api';
 import { LOGIN_SUCCEEDED, REGISTRATION_SUCCEEDED, LOGOUT_SUCCEEDED } from '../auth/constants';
 import { receiveRideRequest, otherUserWithdrawnRideRequest } from '../trip/actions';
 import { acceptUsersRideRequest } from '../trip/actions.js';
+import { addLogMessage } from '../devLog/actions.js';
 import {
   NOTIFICATIONS_SUB_READY,
   NOTIFICATION_RECEIVED,
@@ -37,10 +38,12 @@ function* handleNotificationMsg(msg) {
 
     if (msg.fields.action === 'requestRide' && !msg.fields.recievedAt) {
       yield put(receiveRideRequest(msg.fields.payload));
+      yield put(addLogMessage('NOTIFICAITON', 'Received a ride request'));
     }
     //  && store.getState().notifications.subReady
     if (msg.fields.action === 'acceptRideRequest' && !msg.fields.recievedAt) {
       yield put(acceptUsersRideRequest(msg.fields.payload));
+      yield put(addLogMessage('NOTIFICAITON', 'Your ride request has been accepted'));
     }
   } else if (msg.msg === 'changed') {
     if (msg.fields.recievedAt) {

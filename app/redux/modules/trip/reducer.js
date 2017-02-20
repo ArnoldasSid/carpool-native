@@ -74,7 +74,12 @@ function getTripUpdates(state: TripState, action: Action): (tripState: TripState
   } else if (action.type === OTHER_USER_WITHDRAWN_RIDE_REQUEST) {
     const { userId } = action.payload;
     return R.evolve({
-      otherUsers: R.dissoc(userId),
+      otherUsers: otherUsers => {
+        if (otherUsers[userId] && otherUsers[userId].role === 'REQUESTER') {
+          return R.dissoc(userId, otherUsers);
+        }
+        return otherUsers;
+      },
     });
   }
   return R.identity;

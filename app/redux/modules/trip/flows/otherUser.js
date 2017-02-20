@@ -25,6 +25,8 @@ function* otherRequestersFlow(id, locationTrackingTask) {
     ),
   });
 
+  console.log(r);
+
   if (r && r.userAcceptedRideRequest) {
     yield put(updateOtherUsersRole(id, 'RIDER'));
     yield* otherRidersFlow(id, locationTrackingTask);
@@ -32,6 +34,7 @@ function* otherRequestersFlow(id, locationTrackingTask) {
     yield put(updateOtherUsersRole(id, 'DRIVER'));
     yield* otherDriversFlow(id, locationTrackingTask);
   } else if (r.otherUserWithdrawnRideRequest) {
+    console.log('Other user withdrawn ride request?');
     yield cancel(locationTrackingTask);
   }
 }
@@ -53,8 +56,10 @@ function* trackUsersLocation(id: string) {
     try {
       while (true) {
         const msg: any = yield take(chan);
+        console.log(msg);
         if (msg.msg === 'added') {
-          yield put(updateOtherUsersLocation(id, msg.fields.loc));
+          // yield put(updateOtherUsersLocation(id, msg.fields.loc));
+          yield put(updateOtherUsersLocation(id, msg.fields[0]));
         }
       }
     } finally {

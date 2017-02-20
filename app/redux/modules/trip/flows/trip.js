@@ -15,6 +15,7 @@ import {
 } from '../constants.js';
 import { updateYourRole } from '../actions.js';
 import { changeTab } from '../../router/actions.js';
+import { addLogMessage } from '../../devLog/actions.js';
 
 function* idleFlow(): any {
   const r = yield race({
@@ -25,6 +26,7 @@ function* idleFlow(): any {
   if (r && r.userRequestedRide) {
     yield fork(requestRide, r.userRequestedRide.payload.email, r.userRequestedRide.payload.id);
     yield put(updateYourRole('REQUESTER'));
+    yield put(addLogMessage('TRIP_UPDATE', 'You are now requesting a ride'));
     yield* requesterFlow();
   } else if (r && r.userAcceeptedRideRequest) {
     yield fork(
@@ -35,6 +37,7 @@ function* idleFlow(): any {
     yield put(updateYourRole('DRIVER'));
 
     yield put(changeTab(0));
+    yield put(addLogMessage('TRIP_UPDATE', 'You are now a driver'));
     yield* driverFlow();
   }
 }
@@ -49,12 +52,15 @@ function* requesterFlow(): any {
 
   if (r2 && r2.userWithdrawnRequest) {
     yield put(updateYourRole('NONE'));
+    yield put(addLogMessage('TRIP_UPDATE', 'You are now inactive'));
     yield* idleFlow();
   } else if (r2 && r2.usersRequestGotAccepted) {
     yield put(updateYourRole('RIDER'));
+    yield put(addLogMessage('TRIP_UPDATE', 'You are now a rider'));
     yield* riderFlow('driverId');
   } else if (r2 && r2.userAcceptedRideRequest) {
     yield put(updateYourRole('DRIVER'));
+    yield put(addLogMessage('TRIP_UPDATE', 'You are now a driver'));
     yield* driverFlow();
   } else if (r2 && r2.timeout) {
     alert(
@@ -62,6 +68,7 @@ function* requesterFlow(): any {
         60000} minutes after its start have passed`,
     );
     yield put(updateYourRole('NONE'));
+    yield put(addLogMessage('TRIP_UPDATE', 'You are now inactive'));
     yield* idleFlow();
   }
 }
@@ -80,6 +87,7 @@ function* riderFlow(driverId: string): any {
   }
 
   yield put(updateYourRole('NONE'));
+  yield put(addLogMessage('TRIP_UPDATE', 'You are now inactive'));
   yield* idleFlow();
 }
 

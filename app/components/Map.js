@@ -55,7 +55,7 @@ export default class Map extends React.Component {
           currTime: new Date().valueOf(),
         });
       },
-      5000,
+      10000,
     );
     this.setState({
       timeUpdateInterval,

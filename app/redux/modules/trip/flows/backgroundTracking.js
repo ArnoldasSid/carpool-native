@@ -31,12 +31,18 @@ function* trackLocation() {
     while (true) {
       if (currLocation !== prevLocation) {
         prevLocation = currLocation;
-        yield put(
-          addLogMessage('Geolocation', 'Detected new location', JSON.stringify(currLocation, null, 2)),
-        );
+        if (currLocation) {
+          yield put(
+            addLogMessage(
+              'GEOLOCATION',
+              'Detected new location',
+              `Long: ${currLocation.longitude}, Lat: ${currLocation.latitude}`,
+            ),
+          );
+        }
         yield put(updateYourLocation(currLocation));
-        yield fork(saveLocation, currLocation);
-        console.log('Got location', currLocation);
+        // yield fork(saveLocation, currLocation);
+        // console.log('Got location', currLocation);
       }
       yield delay(500);
     }
@@ -49,10 +55,13 @@ function* trackLocation() {
 
 export default function* backgroundTrackingFlow(): Generator<TakeEffect, *, *> {
   while (true) {
-    yield race({
+    const rez = yield race({
       login: take(LOGIN_SUCCEEDED),
       register: take(REGISTRATION_SUCCEEDED),
     });
+
+    const realRez = rez.login || rez.register;
+    const userId = realRez.payload.id;
 
     const trackingTask = yield fork(trackLocation);
 
@@ -69,7 +78,7 @@ export default function* backgroundTrackingFlow(): Generator<TakeEffect, *, *> {
         break;
       }
 
-      switchToFastTracking();
+      switchToFastTracking(userId);
 
       const r2 = yield race({
         tripCompleted: take(TRIP_COMPLETED),

@@ -1,41 +1,41 @@
-import { async } from 'most-subject'
-import { eventChannel, channel } from 'redux-saga'
-import { race, put, fork, take } from 'redux-saga/effects'
+import { async } from 'most-subject';
+import { eventChannel, channel } from 'redux-saga';
+import { race, put, fork, take } from 'redux-saga/effects';
 
-import { LOGIN_SUCCEEDED } from '../modules/auth/constants.js'
+import { LOGIN_SUCCEEDED } from '../modules/auth/constants.js';
 
-export const requestRide = jest.fn()
-export const acceptRequest = jest.fn()
+export const requestRide = jest.fn();
+export const acceptRequest = jest.fn();
 
-const location$ = async()
+const location$ = async();
 
-function streamToChan (stream) {
-  return  eventChannel(emitter => {
+function streamToChan(stream) {
+  return eventChannel(emitter => {
     const sub = stream.subscribe({
       next: emitter,
-    })
+    });
 
     return () => {
-      sub.unsubscribe()
-    }
-  })
+      sub.unsubscribe();
+    };
+  });
 }
 
-function* subChan (chan, ...params) {
-  let stream
+function* subChan(chan, ...params) {
+  let stream;
   try {
     while (true) {
-      stream = location$
-      const streamChan = streamToChan(stream)
+      stream = location$;
+      const streamChan = streamToChan(stream);
       while (true) {
         const rez = yield race({
           ddpConn: take(LOGIN_SUCCEEDED),
           val: take(streamChan),
-        })
+        });
         if (rez.ddpConn) {
-          break
+          break;
         } else if (rez.val) {
-          yield put(chan, rez.val)
+          yield put(chan, rez.val);
         }
       }
     }
@@ -43,23 +43,23 @@ function* subChan (chan, ...params) {
   }
 }
 
-export function* subscribeToUsersLocation () {
-  const chan = channel()
-  const task = yield fork(subChan, chan)
+export function* subscribeToUsersLocation() {
+  const chan = channel();
+  const task = yield fork(subChan, chan);
   return {
     chan,
     task,
-  }
+  };
 }
 
-export function sendLocation (location = {latitude: Math.random(), longitude: Math.random()}) {
+export function sendLocation(location = { latitude: Math.random(), longitude: Math.random() }) {
   location$.next({
     msg: 'added',
     fields: {
-      loc: location,
+      0: location,
     },
-  })
-  return location
+  });
+  return location;
 }
 
-export const unsub = jest.fn()
+export const unsub = jest.fn();

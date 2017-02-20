@@ -12,18 +12,20 @@ let slowTrackingInterval;
 let lastUserId = null;
 
 const fastTrackingConfig = {
-  desiredAccuracy: 0,
-  // stationaryRadius: 50,
-  // distanceFilter: 50,
-  debug: false, // Enable/disable sounds
+  desiredAccuracy: 10,
+  stationaryRadius: 0,
+  distanceFilter: 0.1,
+  debug: true, // Enable/disable sounds
   startForeground: false,
   locationProvider: BackgroundGeolocation.provider.ANDROID_ACTIVITY_PROVIDER,
   interval: 10 * 1000,
   fastestInterval: 10 * 1000,
   stopOnStillActivity: false,
   stopOnTerminate: true,
-  syncThreshold: 50,
-  maxLocations: 10,
+  syncThreshold: 1,
+  maxLocations: 1,
+  saveBatteryOnBackground: false,
+  activityType: 'OtherNavigation',
 };
 
 export const initFastTracking = () => {
@@ -64,25 +66,26 @@ function startGeolocation() {
 
 function checkIfGeolocationAvailable() {
   return new Promise((resolve, reject) => {
-    BackgroundGeolocation.isLocationEnabled(
-      enabled => {
-        if (enabled) {
-          resolve();
-        } else {
-          // Location services are disabled
-          BackgroundGeolocation.showLocationSettings();
-
-          shouldStart = true;
-          BackgroundGeolocation.watchLocationMode(geolocationEnabled => {
-            if (geolocationEnabled && shouldStart) {
-              shouldStart = false;
-              resolve();
-            }
-          });
-        }
-      },
-      () => {},
-    );
+    resolve();
+    // BackgroundGeolocation.isLocationEnabled(
+    //   enabled => {
+    //     if (enabled) {
+    //       resolve();
+    //     } else {
+    //       // Location services are disabled
+    //       BackgroundGeolocation.showLocationSettings();
+    //
+    //       shouldStart = true;
+    //       BackgroundGeolocation.watchLocationMode(geolocationEnabled => {
+    //         if (geolocationEnabled && shouldStart) {
+    //           shouldStart = false;
+    //           resolve();
+    //         }
+    //       });
+    //     }
+    //   },
+    //   () => {},
+    // );
   });
 }
 

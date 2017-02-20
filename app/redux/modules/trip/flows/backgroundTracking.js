@@ -41,7 +41,7 @@ function* trackLocation() {
           );
         }
         yield put(updateYourLocation(currLocation));
-        // yield fork(saveLocation, currLocation);
+        yield fork(saveLocation, currLocation);
         // console.log('Got location', currLocation);
       }
       yield delay(500);

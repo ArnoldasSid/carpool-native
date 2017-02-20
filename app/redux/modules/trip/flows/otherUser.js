@@ -58,8 +58,8 @@ function* trackUsersLocation(id: string) {
         const msg: any = yield take(chan);
         console.log(msg);
         if (msg.msg === 'added') {
-          // yield put(updateOtherUsersLocation(id, msg.fields.loc));
-          yield put(updateOtherUsersLocation(id, msg.fields[0]));
+          yield put(updateOtherUsersLocation(id, msg.fields.loc));
+          // yield put(updateOtherUsersLocation(id, msg.fields[0]));
         }
       }
     } finally {

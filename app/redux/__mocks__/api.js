@@ -56,7 +56,7 @@ export function sendLocation(location = { latitude: Math.random(), longitude: Ma
   location$.next({
     msg: 'added',
     fields: {
-      0: location,
+      loc: location,
     },
   });
   return location;

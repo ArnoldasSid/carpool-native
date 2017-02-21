@@ -15,7 +15,7 @@ export default function NotificationWrap({ children, height, heightAnim, opacity
       style={{
         height: height * heightAnim,
         opacity,
-        borderWidth: 1,
+        borderWidth: 1 * heightAnim,
         borderColor: '#333',
         borderStyle: 'solid',
         backgroundColor: '#fafafa',

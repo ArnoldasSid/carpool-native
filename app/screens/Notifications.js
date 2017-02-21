@@ -99,8 +99,8 @@ class Notifications extends React.Component {
           )}
         />
         {this.props.notifications.length === 0
-          ? <View>
-              <Text>You currently have no notifications</Text>
+          ? <View style={{ padding: 8 }}>
+              <Text style={{ textAlign: 'center', fontSize: 16 }}>You currently have no notifications</Text>
             </View>
           : null}
       </ScrollView>

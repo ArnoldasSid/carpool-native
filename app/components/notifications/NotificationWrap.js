@@ -5,21 +5,25 @@ import { View } from 'react-native';
 type Props = {
   children?: ReactElement<*>,
   height: number,
+  heightAnim: number,
   opacity: number,
 };
 
-export default function NotificationWrap({ children, height, opacity }: Props) {
+export default function NotificationWrap({ children, height, heightAnim, opacity }: Props) {
   return (
     <View
       style={{
-        height: height,
-        padding: 8,
-        margin: 12,
+        height: height * heightAnim,
+        opacity,
         borderWidth: 1,
         borderColor: '#333',
         borderStyle: 'solid',
         backgroundColor: '#fafafa',
-        opacity,
+        padding: 8 * heightAnim,
+        marginLeft: 12,
+        marginRight: 12,
+        marginTop: 12 * heightAnim,
+        marginBottom: 12 * heightAnim,
       }}
     >
       {children}

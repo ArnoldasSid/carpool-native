@@ -30,8 +30,8 @@ class Notifications extends React.Component {
         key: notification.id,
         data: notification,
         style: {
-          height: spring(1, { stiffness: 200, damping: 30 }),
-          opacity: spring(1, { stiffness: 200, damping: 30 }),
+          height: spring(1),
+          opacity: spring(1),
         },
       };
     });
@@ -46,8 +46,8 @@ class Notifications extends React.Component {
 
   willLeave() {
     return {
-      height: spring(0, { stiffness: 200, damping: 25 }),
-      opacity: spring(0, { stiffness: 200, damping: 25 }),
+      height: spring(0),
+      opacity: spring(0),
     };
   }
 
@@ -58,11 +58,6 @@ class Notifications extends React.Component {
         {!this.props.notificationsLoaded
           ? <View>
               <Text>Loading notifications...</Text>
-            </View>
-          : null}
-        {this.props.notifications.length === 0
-          ? <View>
-              <Text>You currently have no notifications</Text>
             </View>
           : null}
         <TransitionMotion
@@ -103,6 +98,11 @@ class Notifications extends React.Component {
             </View>
           )}
         />
+        {this.props.notifications.length === 0
+          ? <View>
+              <Text>You currently have no notifications</Text>
+            </View>
+          : null}
       </ScrollView>
     );
   }

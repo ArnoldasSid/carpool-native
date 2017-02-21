@@ -58,7 +58,7 @@ class RideRequestNotification extends React.Component {
 
   render() {
     return (
-      <NotificationWrap height={this.props.height * 115} opacity={this.props.opacity}>
+      <NotificationWrap height={115} heightAnim={this.props.height} opacity={this.props.opacity}>
         <NotificationTitle>
           RideRequestReceived
         </NotificationTitle>

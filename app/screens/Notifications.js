@@ -52,7 +52,6 @@ class Notifications extends React.Component {
   }
 
   render() {
-    console.log('Notifications', this.props.notifications);
     return (
       <ScrollView>
         {!this.props.notificationsLoaded

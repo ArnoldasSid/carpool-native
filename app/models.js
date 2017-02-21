@@ -18,4 +18,4 @@ export type Action = {
   payload: any,
 };
 
-export type LogType = 'GEOLOCATION' | 'DDP' | 'NOTIFICAITON' | 'TRIP_UPDATE';
+export type LogType = 'GEOLOCATION' | 'DDP' | 'NOTIFICATION' | 'TRIP_UPDATE';

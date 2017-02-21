@@ -45,7 +45,6 @@ class Login extends React.Component {
   }
 
   render() {
-    console.log(this.props.loginStatus.inProgress);
     const width = 226;
     return (
       <View

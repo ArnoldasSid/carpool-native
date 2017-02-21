@@ -24,7 +24,7 @@ const getMsgPrefix = (type: LogType): string => {
     return 'Geolocation';
   } else if (type === 'DDP') {
     return 'DDP';
-  } else if (type === 'NOTIFICAITON') {
+  } else if (type === 'NOTIFICATION') {
     return 'Notification';
   } else if (type === 'TRIP_UPDATE') {
     return 'Trip Update';
@@ -42,6 +42,7 @@ export default function devLogReducer(state: DevLogState = initialState, action:
     return R.evolve(
       {
         messages: R.prepend({
+          type,
           title: fullTitle,
           message: stringMsg,
           timestamp: new Date().valueOf(),

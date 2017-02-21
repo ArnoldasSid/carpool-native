@@ -38,12 +38,12 @@ function* handleNotificationMsg(msg) {
 
     if (msg.fields.action === 'requestRide' && !msg.fields.recievedAt) {
       yield put(receiveRideRequest(msg.fields.payload));
-      yield put(addLogMessage('NOTIFICAITON', 'Received a ride request'));
+      yield put(addLogMessage('NOTIFICATION', 'Received a ride request'));
     }
     //  && store.getState().notifications.subReady
     if (msg.fields.action === 'acceptRideRequest' && !msg.fields.recievedAt) {
       yield put(acceptUsersRideRequest(msg.fields.payload));
-      yield put(addLogMessage('NOTIFICAITON', 'Your ride request has been accepted'));
+      yield put(addLogMessage('NOTIFICATION', 'Your ride request has been accepted'));
     }
   } else if (msg.msg === 'changed') {
     if (msg.fields.recievedAt) {

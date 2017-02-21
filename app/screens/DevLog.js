@@ -69,12 +69,13 @@ class DevLog extends React.Component {
               : null,
           )}
         </ScrollView>
-        <View style={{ flex: 1, maxHeight: 40, flexDirection: 'row' }}>
+        <View style={{ flex: 1, maxHeight: 40, flexDirection: 'row', justifyContent: 'space-around' }}>
           <Button
             color={this.state.showDdp ? 'rgb(63, 81, 181)' : '#888'}
             title="DDP"
             onPress={() => this.setState({ showDdp: !this.state.showDdp })}
           />
+
           <Button
             title="Geolocation"
             onPress={() => this.setState({ showGeolocation: !this.state.showGeolocation })}

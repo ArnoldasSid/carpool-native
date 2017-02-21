@@ -12,9 +12,9 @@ let slowTrackingInterval;
 let lastUserId = null;
 
 const fastTrackingConfig = {
-  desiredAccuracy: 0,
-  // stationaryRadius: 50,
-  // distanceFilter: 50,
+  desiredAccuracy: 10,
+  stationaryRadius: 0,
+  distanceFilter: 0.1,
   debug: false, // Enable/disable sounds
   startForeground: false,
   locationProvider: BackgroundGeolocation.provider.ANDROID_ACTIVITY_PROVIDER,
@@ -22,8 +22,10 @@ const fastTrackingConfig = {
   fastestInterval: 10 * 1000,
   stopOnStillActivity: false,
   stopOnTerminate: true,
-  syncThreshold: 50,
-  maxLocations: 10,
+  syncThreshold: 1,
+  maxLocations: 1,
+  saveBatteryOnBackground: false,
+  activityType: 'OtherNavigation',
 };
 
 export const initFastTracking = () => {
